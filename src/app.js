@@ -1,4 +1,5 @@
-import { drawCombo, formatStraight, rambolitoCombos, randomInt, shareText } from './lucky.js';
+import { rambolitoCombos, randomInt, shareText } from './lucky.js';
+import { DEFAULT_GAME, drawNumbers, formatNumbers, getGame } from './games.js';
 import { validateProfile, pickMoodReasons } from './profile.js';
 
 // Register service worker if supported
@@ -8,23 +9,15 @@ if ('serviceWorker' in navigator) {
     .catch(() => {}); // Silently fail - page still works
 }
 
-const digitElements = [
-  document.getElementById('digit-0'),
-  document.getElementById('digit-1'),
-  document.getElementById('digit-2')
-];
-const reasonElements = [
-  document.getElementById('reason-0'),
-  document.getElementById('reason-1'),
-  document.getElementById('reason-2')
-];
-const miniElements = [
-  document.getElementById('mini-0'),
-  document.getElementById('mini-1'),
-  document.getElementById('mini-2')
-];
+let digitElements = [];
+let reasonElements = [];
+let miniElements = [];
 const reasonsList = document.querySelector('.reasons');
+const ballsEl = document.querySelector('.balls');
+const eyebrow = document.querySelector('.eyebrow');
+const modeGroup = document.getElementById('mode-group');
 const comboOutput = document.getElementById('combo-output');
+const PROMPT = comboOutput.textContent;
 const drawButton = document.getElementById('draw');
 const shareButton = document.getElementById('share');
 const shareStatus = document.getElementById('share-status');
@@ -37,6 +30,62 @@ const formStatus = document.getElementById('form-status');
 const forName = document.getElementById('for-name');
 
 let currentCombo = null;
+let currentGame = getGame(DEFAULT_GAME);
+let drawing = false;
+
+function ballText(game, n) {
+  return game.kind === 'digit' ? String(n) : String(n).padStart(2, '0');
+}
+
+function pickedGame() {
+  const checked = form.querySelector('input[name="game"]:checked');
+  return getGame(checked ? checked.value : DEFAULT_GAME);
+}
+
+function currentMode() {
+  if (!currentGame.rambolito) return 'straight';
+  return document.querySelector('input[name="mode"]:checked').value;
+}
+
+function buildSlots(game) {
+  ballsEl.textContent = '';
+  reasonsList.textContent = '';
+  ballsEl.dataset.count = String(game.count);
+  for (let i = 0; i < game.count; i++) {
+    const ball = document.createElement('div');
+    ball.className = 'digit';
+    ball.id = `digit-${i}`;
+    ballsEl.appendChild(ball);
+
+    const li = document.createElement('li');
+    const mini = document.createElement('span');
+    mini.className = 'mini';
+    mini.id = `mini-${i}`;
+    const reason = document.createElement('span');
+    reason.className = 'reason';
+    reason.id = `reason-${i}`;
+    li.appendChild(mini);
+    li.appendChild(reason);
+    reasonsList.appendChild(li);
+  }
+  digitElements = Array.from(ballsEl.children);
+  reasonElements = Array.from(reasonsList.querySelectorAll('.reason'));
+  miniElements = Array.from(reasonsList.querySelectorAll('.mini'));
+}
+
+function applyGame(game) {
+  currentGame = game;
+  currentCombo = null;
+  buildSlots(game);
+  reasonsList.hidden = true;
+  forName.hidden = true;
+  comboOutput.textContent = PROMPT;
+  comboOutput.classList.add('prompt');
+  shareButton.disabled = true;
+  shareStatus.textContent = '';
+  modeGroup.hidden = !game.rambolito;
+  eyebrow.textContent = game.id === '3d' ? 'Swertres · 3D' : game.name;
+}
 let currentName = '';
 let moodTouched = false;
 
@@ -47,7 +96,7 @@ function readProfile() {
 
 function checkForm() {
   const result = readProfile();
-  drawButton.disabled = !result.ok;
+  drawButton.disabled = drawing || !result.ok;
   if (result.ok) {
     formStatus.textContent = '';
   } else if (result.field === 'mood' && !moodTouched) {
@@ -60,11 +109,10 @@ function checkForm() {
 function updateDisplay() {
   if (!currentCombo) return;
 
-  const mode = document.querySelector('input[name="mode"]:checked').value;
-  if (mode === 'straight') {
-    comboOutput.textContent = formatStraight(currentCombo);
+  if (currentMode() === 'straight') {
+    comboOutput.textContent = formatNumbers(currentGame, currentCombo);
   } else {
-    const combos = rambolitoCombos(currentCombo);
+    const combos = rambolitoCombos(currentCombo, currentGame.id);
     comboOutput.textContent = combos.join(', ');
   }
 }
@@ -76,55 +124,55 @@ async function draw() {
     return;
   }
   drawButton.disabled = true;
-  const moodReasons = pickMoodReasons(profile.mood, 3);
+  drawing = true;
+  const game = currentGame;
+  const n = game.count;
+  const moodReasons = pickMoodReasons(profile.mood, n);
   currentName = profile.name;
   forName.hidden = true;
-  
-  // Clear reasons before starting
-  for (let i = 0; i < 3; i++) {
-    reasonElements[i].textContent = '';
-    miniElements[i].textContent = '';
-  }
+  buildSlots(game);
   reasonsList.hidden = true;
 
   try {
     const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    
+    const span = game.max - game.min + 1;
+
     if (isReducedMotion) {
-      currentCombo = drawCombo();
-      for (let i = 0; i < 3; i++) {
-        digitElements[i].textContent = currentCombo[i];
+      currentCombo = drawNumbers(game);
+      for (let i = 0; i < n; i++) {
+        digitElements[i].textContent = ballText(game, currentCombo[i]);
         reasonElements[i].textContent = moodReasons[i];
-        miniElements[i].textContent = currentCombo[i];
+        miniElements[i].textContent = ballText(game, currentCombo[i]);
       }
     } else {
       // Roll animation
-      for (let i = 0; i < 8; i++) {
-        const tempCombo = [randomInt(10), randomInt(10), randomInt(10)];
-        
-        for (let j = 0; j < 3; j++) {
-          digitElements[j].textContent = tempCombo[j];
+      for (let r = 0; r < 8; r++) {
+        for (let j = 0; j < n; j++) {
+          digitElements[j].textContent = ballText(game, game.min + randomInt(span));
           digitElements[j].classList.add('rolling');
-          reasonElements[j].textContent = '';
-          miniElements[j].textContent = '';
         }
-        
-        await new Promise(r => setTimeout(r, 70));
+        await new Promise(res => setTimeout(res, 70));
       }
 
-      currentCombo = drawCombo();
-      
+      currentCombo = drawNumbers(game);
+
       // Settle left to right
-      for (let i = 0; i < 3; i++) {
-        digitElements[i].textContent = currentCombo[i];
+      for (let i = 0; i < n; i++) {
+        digitElements[i].textContent = ballText(game, currentCombo[i]);
         digitElements[i].classList.remove('rolling');
         reasonElements[i].textContent = moodReasons[i];
-        miniElements[i].textContent = currentCombo[i];
-        await new Promise(r => setTimeout(r, 100));
+        miniElements[i].textContent = ballText(game, currentCombo[i]);
+        await new Promise(res => setTimeout(res, 100));
       }
     }
   } finally {
+    drawing = false;
     checkForm();
+  }
+
+  if (pickedGame().id !== game.id) {
+    applyGame(pickedGame());
+    return;
   }
 
   comboOutput.classList.remove('prompt');
@@ -140,8 +188,7 @@ async function draw() {
 }
 
 async function handleShare() {
-  const mode = document.querySelector('input[name="mode"]:checked').value;
-  const text = shareText(currentCombo, mode, currentName);
+  const text = shareText(currentCombo, currentMode(), currentName, currentGame.id);
 
   try {
     if (navigator.share) {
@@ -174,6 +221,8 @@ form.addEventListener('submit', (e) => e.preventDefault());
 form.addEventListener('input', checkForm);
 form.addEventListener('change', (e) => {
   if (e.target.name === 'mood') moodTouched = true;
+  if (e.target.name === 'game' && !drawing) applyGame(pickedGame());
   checkForm();
 });
+applyGame(pickedGame());
 checkForm();

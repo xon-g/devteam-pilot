@@ -1,4 +1,5 @@
 import { REASONS } from './reasons.js';
+import { getGame, formatNumbers, shortName } from './games.js';
 
 export { REASONS };
 
@@ -29,12 +30,13 @@ export function formatStraight(combo) {
   return combo.join('-');
 }
 
-export function rambolitoCombos(combo) {
+export function rambolitoCombos(combo, gameId = '3d') {
+  const game = getGame(gameId);
   const results = new Set();
   
   function permute(arr, m = []) {
     if (arr.length === 0) {
-      results.add(m.join('-'));
+      results.add(formatNumbers(game, m));
     } else {
       for (let i = 0; i < arr.length; i++) {
         const curr = arr.slice();
@@ -48,13 +50,16 @@ export function rambolitoCombos(combo) {
   return Array.from(results).sort();
 }
 
-export function shareText(combo, mode, name = '') {
-  const lead = name ? `Swertres lucky numbers ni ${name}: ` : 'Swertres lucky numbers ko: ';
-  const straight = formatStraight(combo);
-  if (mode === 'straight') {
-    return `${lead}${straight} (Straight) 🍀 For entertainment only. 18+.`;
-  } else {
-    const rambolito = rambolitoCombos(combo).join(', ');
-    return `${lead}${rambolito} (Rambolito) 🍀 For entertainment only. 18+.`;
+export function shareText(combo, mode, name = '', gameId = '3d') {
+  const game = getGame(gameId);
+  const short = shortName(game);
+  const lead = name ? `${short} lucky numbers ni ${name}: ` : `${short} lucky numbers ko: `;
+  const tail = ' 🍀 For entertainment only. 18+.';
+  if (!game.rambolito) {
+    return `${lead}${formatNumbers(game, combo)}${tail}`;
   }
+  if (mode === 'straight') {
+    return `${lead}${formatNumbers(game, combo)} (Straight)${tail}`;
+  }
+  return `${lead}${rambolitoCombos(combo, game.id).join(', ')} (Rambolito)${tail}`;
 }

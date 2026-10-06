@@ -1,10 +1,11 @@
-const CACHE = "swertres-v4";
+const CACHE = "swertres-v5";
 
 const ASSETS = [
   "./",
   "index.html",
   "styles.css",
   "src/lucky.js",
+  "src/games.js",
   "src/reasons.js",
   "src/profile.js",
   "src/app.js",

@@ -76,15 +76,30 @@ main {
   gap: 1.25rem;
 }
 
+.games span {
+  text-align: center;
+  line-height: 1.15;
+  padding: 0.25rem 0.4rem;
+  font-size: 0.85rem;
+}
+
 .balls {
+  --ball: clamp(84px, 24vw, 128px);
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(var(--n, 3), var(--ball));
+  justify-content: center;
   gap: clamp(0.75rem, 4vw, 1.5rem);
   justify-items: center;
 }
 
+.balls[data-count="2"] { --n: 2; }
+.balls[data-count="4"] { --n: 4; --ball: clamp(60px, 19vw, 100px); }
+.balls[data-count="6"] { --n: 6; --ball: clamp(44px, 13vw, 76px); gap: clamp(0.25rem, 1.5vw, 0.75rem); }
+.balls[data-count="6"] .digit { font-size: clamp(1.1rem, 5.2vw, 2.2rem); }
+.balls[data-count="4"] .digit { font-size: clamp(1.8rem, 8vw, 3rem); }
+
 .digit {
-  width: clamp(84px, 24vw, 128px);
+  width: var(--ball);
   aspect-ratio: 1;
   border-radius: 50%;
   display: grid;
@@ -237,6 +252,7 @@ main {
 }
 
 .field span,
+.games legend,
 .moods legend {
   display: block;
   margin-bottom: 0.35rem;
@@ -271,6 +287,7 @@ main {
   outline: 2px solid var(--gold);
 }
 
+.games,
 .moods {
   border: 0;
   padding: 0;
@@ -281,11 +298,13 @@ main {
   gap: 0.5rem;
 }
 
+.games legend,
 .moods legend {
   grid-column: 1 / -1;
   padding: 0;
 }
 
+.games input,
 .moods input {
   position: absolute;
   opacity: 0;
@@ -293,6 +312,7 @@ main {
   height: 1px;
 }
 
+.games span,
 .moods span {
   min-height: 44px;
   display: flex;
@@ -305,11 +325,13 @@ main {
   cursor: pointer;
 }
 
+.games input:checked + span,
 .moods input:checked + span {
   background: var(--gold);
   color: var(--bg);
 }
 
+.games input:focus-visible + span,
 .moods input:focus-visible + span {
   outline: 2px solid var(--gold);
   outline-offset: 2px;
@@ -417,4 +439,8 @@ footer#disclaimer {
   main {
     padding-top: 3rem;
   }
+}
+
+.segmented[hidden] {
+  display: none;
 }
