@@ -37,7 +37,10 @@ Write `test/lucky.test.js` and `test/serve.test.js` with `node:test` covering:
   `siguradong panalo`, `tsansa`, `odds`, `better chance`, `sure win`, `jackpot ka na`.
 - server test: start `scripts/serve.js` on a free port as a child process, `GET /` → 200 HTML,
   `GET /src/lucky.js` → 200 with a JavaScript content type, `GET /nope.txt` → 404,
-  `GET /../package.json` (raw path) → not 200. Kill the server after.
+  traversal: send a raw request with `http.request({ path: '/..%2fpackage.json' })` (URL
+  parsing collapses a literal `/../`, so encode the slash) → 403 or 404; `GET /.git/config`
+  → 403 or 404 (the server must refuse any path segment starting with `.`). Kill the server
+  after.
 Also must pass: `dt-smoke /home/node/projects/swertres` → `"ok": true`.
 
 ## Report back
