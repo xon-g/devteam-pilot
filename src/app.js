@@ -1,4 +1,4 @@
-import { drawCombo, formatStraight, rambolitoCombos, pickReason, randomInt } from './lucky.js';
+import { drawCombo, formatStraight, rambolitoCombos, pickReason, randomInt, shareText } from './lucky.js';
 
 const digitElements = [
   document.getElementById('digit-0'),
@@ -12,6 +12,8 @@ const reasonElements = [
 ];
 const comboOutput = document.getElementById('combo-output');
 const drawButton = document.getElementById('draw');
+const shareButton = document.getElementById('share');
+const shareStatus = document.getElementById('share-status');
 const modeRadios = document.querySelectorAll('input[name="mode"]');
 
 let currentCombo = null;
@@ -72,9 +74,35 @@ async function draw() {
   }
 
   updateDisplay();
+  shareButton.disabled = false;
+}
+
+async function handleShare() {
+  const mode = document.querySelector('input[name="mode"]:checked').value;
+  const text = shareText(currentCombo, mode);
+
+  try {
+    if (navigator.share) {
+      await navigator.share({
+        text: text
+      });
+      shareStatus.textContent = 'Naibahagi na!';
+    } else {
+      await navigator.clipboard.writeText(text);
+      shareStatus.textContent = 'Nakopya na!';
+    }
+  } catch (err) {
+    if (err.name === 'AbortError') {
+      // User cancelled, do nothing
+    } else {
+      shareStatus.textContent = 'Hindi maibahagi';
+      console.error('Share error:', err);
+    }
+  }
 }
 
 drawButton.addEventListener('click', draw);
+shareButton.addEventListener('click', handleShare);
 
 modeRadios.forEach(radio => {
   radio.addEventListener('change', updateDisplay);
