@@ -366,6 +366,24 @@ main {
   font-weight: 800;
   text-align: center;
   margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.roast {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: var(--pink);
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: grid;
+  gap: 0.25rem;
+  overflow-wrap: anywhere;
+}
+
+.roast[hidden] {
+  display: none;
 }
 
 #draw:disabled {
