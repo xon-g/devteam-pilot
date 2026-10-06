@@ -45,6 +45,18 @@
         <label class="field"><span>Age <small>(optional)</small></span>
           <input id="age" name="age" type="text" inputmode="numeric" maxlength="3"></label>
       </div>
+      <fieldset class="games">
+        <legend>Anong laro?</legend>
+      <label><input type="radio" name="game" value="2d"><span>EZ2 (2D)</span></label>
+      <label><input type="radio" name="game" value="3d" checked><span>Swertres (3D)</span></label>
+      <label><input type="radio" name="game" value="4d"><span>4D Lotto</span></label>
+      <label><input type="radio" name="game" value="6d"><span>6D Lotto</span></label>
+      <label><input type="radio" name="game" value="6-42"><span>Lotto 6/42</span></label>
+      <label><input type="radio" name="game" value="6-45"><span>Mega Lotto 6/45</span></label>
+      <label><input type="radio" name="game" value="6-49"><span>Super Lotto 6/49</span></label>
+      <label><input type="radio" name="game" value="6-55"><span>Grand Lotto 6/55</span></label>
+      <label><input type="radio" name="game" value="6-58"><span>Ultra Lotto 6/58</span></label>
+      </fieldset>
       <fieldset class="moods">
         <legend>Kumusta ka? <small>(required)</small></legend>
       <label><input type="radio" name="mood" value="masaya"><span>Masaya</span></label>
@@ -82,7 +94,7 @@
 
     <div id="combo-output" class="prompt">G ka na? Pindutin ang Bunot na!</div>
 
-    <div class="segmented" role="radiogroup">
+    <div class="segmented" id="mode-group" role="radiogroup">
       <label>
         <input type="radio" name="mode" value="straight" checked>
         <span>Straight</span>
