@@ -444,3 +444,11 @@ footer#disclaimer {
 .segmented[hidden] {
   display: none;
 }
+
+/* Not-affiliated note (last child of main; clear of the fixed footer) */
+.fine-print {
+  margin: 1.5rem 0 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-align: center;
+}

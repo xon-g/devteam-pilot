@@ -152,7 +152,21 @@ test('game picker', { timeout: 120000 }, async () => {
     assert.strictEqual(await page.locator('#combo-output.prompt').count(), 1);
     assert.strictEqual(await page.locator('#share').isDisabled(), true);
     assert.strictEqual(await page.locator('#mode-group').isVisible(), true);
-    await page.screenshot({ path: '.smoke/swertres-360x740.png', fullPage: true });
+    await page.screenshot({ path: '.smoke/swertres-360x740.png', fullPage: false });
+
+    // rename: title, not-affiliated note clear of the footer, no sideways scroll
+    assert.strictEqual(await page.evaluate(() => document.title), 'PCSO Lucky Numbers');
+    await page.locator('#not-affiliated').scrollIntoViewIfNeeded();
+    assert.strictEqual(await page.locator('#not-affiliated').isVisible(), true);
+    const boxes = await page.evaluate(() => {
+      const r = (s) => { const b = document.querySelector(s).getBoundingClientRect(); return { top: b.top, bottom: b.bottom }; };
+      return { note: r('#not-affiliated'), foot: r('footer#disclaimer'),
+        scrollW: document.documentElement.scrollWidth, clientW: document.documentElement.clientWidth };
+    });
+    assert.ok(boxes.note.bottom <= boxes.foot.top, 'note does not overlap footer');
+    assert.ok(boxes.scrollW <= boxes.clientW, 'no sideways scroll');
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.screenshot({ path: '.smoke/swertres-360x740.png', fullPage: false });
 
     // switch game during an animated draw
     await page.click('#draw');

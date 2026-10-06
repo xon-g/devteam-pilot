@@ -28,8 +28,8 @@ test('manifest.webmanifest exists and is valid JSON', () => {
   const content = fs.readFileSync(manifestPath, 'utf8');
   const manifest = JSON.parse(content);
   
-  assert.strictEqual(manifest.name, 'Swertres Lucky Numbers', 'name should be "Swertres Lucky Numbers"');
-  assert.strictEqual(manifest.short_name, 'Swertres', 'short_name should be "Swertres"');
+  assert.strictEqual(manifest.name, 'PCSO Lucky Numbers', 'name should be "PCSO Lucky Numbers"');
+  assert.strictEqual(manifest.short_name, 'PCSO Lucky', 'short_name should be "PCSO Lucky"');
   assert.strictEqual(manifest.start_url, './', 'start_url should be "./"');
   assert.strictEqual(manifest.scope, './', 'scope should be "./"');
   assert.strictEqual(manifest.display, 'standalone', 'display should be "standalone"');
