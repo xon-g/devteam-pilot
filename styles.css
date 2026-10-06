@@ -1,25 +1,126 @@
+:root {
+  --bg-color: #4a148c;
+  --text-color: #ffffff;
+  --primary-color: #ffeb3b;
+  --secondary-color: #f50057;
+  --digit-bg: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-    font-family: sans-serif;
-    text-align: center;
-    padding: 20px;
+  margin: 0;
+  font-family: sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: grid;
+  grid-template-areas:
+    "header"
+    "main"
+    "banner"
+    "disclaimer";
+  grid-template-rows: auto 1fr auto auto;
+  min-height: 100vh;
 }
 
-#draw-btn {
-    padding: 10px 20px;
-    font-size: 1.2rem;
-    cursor: pointer;
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-#result-container {
-    margin-top: 20px;
+header {
+  grid-area: header;
+  text-align: center;
+  padding: 1rem;
 }
 
-#combo-display {
-    font-size: 2rem;
-    font-weight: bold;
+.title {
+  margin: 0;
+  font-size: 2rem;
 }
 
-#reason-display {
-    font-style: italic;
-    color: #555;
+main {
+  grid-area: main;
+  padding-bottom: 5rem;
+  text-align: center;
+}
+
+.digit-container {
+  display: inline-block;
+  margin: 0 5px;
+  text-align: center;
+}
+
+.digit {
+  display: block;
+  width: 72px;
+  height: 72px;
+  line-height: 72px;
+  font-size: 2.75rem;
+  font-weight: bold;
+  background-color: var(--digit-bg);
+  color: #333;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.reason {
+  font-size: 0.875rem;
+  min-height: 1.25rem;
+}
+
+#combo-output {
+  margin: 1.5rem 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.controls {
+  margin-top: 1rem;
+}
+
+.mode-selector {
+  margin-bottom: 1rem;
+}
+
+.mode-selector label {
+  margin: 0 0.5rem;
+}
+
+button#draw {
+  padding: 1rem 2rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+  background-color: var(--primary-color);
+  color: #333;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+button#draw:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+aside.ad-slot {
+  grid-area: banner;
+  height: 0;
+  overflow: hidden;
+  /* To enable later: remove 'hidden' attribute from element and set height */
+}
+
+footer#disclaimer {
+  grid-area: disclaimer;
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.75rem;
+  position: sticky;
+  bottom: 0;
+  width: 100%;
 }

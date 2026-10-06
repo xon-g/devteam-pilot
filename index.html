@@ -1,20 +1,52 @@
 <!DOCTYPE html>
 <html lang="fil">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Swertres Lucky Numbers</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swertres Lucky Numbers</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <div id="app">
-        <h1>Swertres Lucky Numbers</h1>
-        <button id="draw-btn">Draw Combo</button>
-        <div id="result-container">
-            <p id="combo-display"></p>
-            <p id="reason-display"></p>
-        </div>
+<body class="container">
+  <header id="header">
+    <h1 class="title">Swertres Lucky Numbers</h1>
+  </header>
+
+  <main id="main">
+    <div id="combo-display">
+      <div class="digit-container">
+        <div class="digit" id="digit-0"></div>
+        <div class="reason" id="reason-0"></div>
+      </div>
+      <div class="digit-container">
+        <div class="digit" id="digit-1"></div>
+        <div class="reason" id="reason-1"></div>
+      </div>
+      <div class="digit-container">
+        <div class="digit" id="digit-2"></div>
+        <div class="reason" id="reason-2"></div>
+      </div>
     </div>
-    <script type="module" src="src/app.js"></script>
+
+    <div id="combo-output">Pindutin ang Bunot na! para sa swerte mo</div>
+
+    <div class="controls">
+      <div class="mode-selector">
+        <label>
+          <input type="radio" name="mode" value="straight" checked> Straight
+        </label>
+        <label>
+          <input type="radio" name="mode" value="rambolito"> Rambolito
+        </label>
+      </div>
+
+      <button id="draw">Bunot na!</button>
+    </div>
+  </main>
+
+  <aside id="ad-slot" class="ad-slot" hidden aria-label="Advertisement"></aside>
+
+  <footer id="disclaimer">For entertainment only. Numbers are random and don't improve your odds. 18+. Play responsibly.</footer>
+
+  <script type="module" src="src/app.js"></script>
 </body>
 </html>
