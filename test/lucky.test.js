@@ -1,4 +1,5 @@
-import { randomInt, drawCombo, pickReason, formatStraight, rambolitoCombos, REASONS, shareText } from '../src/lucky.js';
+import { randomInt, drawCombo, pickReason, formatStraight, rambolitoCombos, shareText } from '../src/lucky.js';
+import { REASONS } from '../src/reasons.js';
 import fs from 'node:fs';
 import { test } from 'node:test';
 import assert from 'node:assert';
@@ -38,6 +39,11 @@ test('rambolitoCombos permutations', () => {
   assert.deepStrictEqual(rambolitoCombos([5, 5, 5]), ["5-5-5"]);
 });
 
+test('rambolitoCombos counts', () => {
+  assert.strictEqual(rambolitoCombos([7, 7, 7]).length, 1);
+  assert.strictEqual(rambolitoCombos([1, 1, 2]).length, 3);
+});
+
 test('rambolitoCombos is sorted for unsorted input', () => {
   assert.deepStrictEqual(rambolitoCombos([3, 2, 1]), ["1-2-3", "1-3-2", "2-1-3", "2-3-1", "3-1-2", "3-2-1"]);
   assert.deepStrictEqual(rambolitoCombos([2, 1, 1]), ["1-1-2", "1-2-1", "2-1-1"]);
@@ -56,12 +62,31 @@ test('formatStraight', () => {
 });
 
 test('REASONS content check', () => {
+  // Verify all digits 0-9 exist as keys
+  const keys = Object.keys(REASONS).sort();
+  assert.deepStrictEqual(keys, ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'], 'REASONS keys must be digits 0-9');
+  
+  // Verify required phrases exist
+  const allReasons = Object.values(REASONS).flat();
+  assert.ok(allReasons.includes('Pwede nang mangarap'), 'Missing "Pwede nang mangarap"');
+  assert.ok(allReasons.includes('Meron din naman palang ganda ang buhay'), 'Missing "Meron din naman palang ganda ang buhay"');
+  
+  // Validate each digit's reasons
   for (let d = 0; d <= 9; d++) {
     const list = REASONS[d];
-    assert.ok(Array.isArray(list) && list.length >= 3, `Digit ${d} must have >= 3 reasons`);
-    list.forEach(reason => {
-      assert.ok(typeof reason === 'string' && reason.length > 0, `Reason for ${d} must be a non-empty string`);
-    });
+    assert.ok(Array.isArray(list), `Digit ${d} reasons must be an array`);
+    assert.ok(list.length >= 4, `Digit ${d} must have >= 4 reasons, got ${list.length}`);
+    
+    // Check each reason
+    const seen = new Set();
+    for (const reason of list) {
+      assert.ok(typeof reason === 'string', `Digit ${d} reason must be a string`);
+      assert.ok(reason.length > 0, `Digit ${d} reason must be non-empty`);
+      assert.ok(reason.trim().length > 0, `Digit ${d} reason must not be whitespace-only`);
+      assert.ok(reason.length <= 48, `Digit ${d} reason too long (${reason.length} chars): ${reason}`);
+      assert.ok(!seen.has(reason), `Digit ${d} has duplicate reason: ${reason}`);
+      seen.add(reason);
+    }
   }
 });
 
