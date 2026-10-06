@@ -106,6 +106,12 @@ test('no absolute URLs in manifest.webmanifest', () => {
     assert.ok(!icon.src.startsWith('/'), `icon src should not be absolute: ${icon.src}`);
     assert.ok(!icon.src.startsWith('http'), `icon src should not be absolute: ${icon.src}`);
   }
+  
+  // Check start_url and scope
+  assert.ok(!manifest.start_url.startsWith('/'), `start_url should not be absolute: ${manifest.start_url}`);
+  assert.ok(!manifest.start_url.startsWith('http'), `start_url should not be absolute: ${manifest.start_url}`);
+  assert.ok(!manifest.scope.startsWith('/'), `scope should not be absolute: ${manifest.scope}`);
+  assert.ok(!manifest.scope.startsWith('http'), `scope should not be absolute: ${manifest.scope}`);
 });
 
 test('no absolute URLs in sw.js', () => {
@@ -117,8 +123,19 @@ test('no absolute URLs in sw.js', () => {
     const assets = assetsMatch[1];
     const urls = assets.match(/"[^"]*"/g) || [];
     for (const url of urls) {
-      assert.ok(!url.startsWith('/'), `sw.js asset should not be absolute: ${url}`);
-      assert.ok(!url.startsWith('http'), `sw.js asset should not be absolute: ${url}`);
+      const strippedUrl = url.slice(1, -1); // Strip quotes
+      assert.ok(!strippedUrl.startsWith('/'), `sw.js asset should not be absolute: ${strippedUrl}`);
+      assert.ok(!strippedUrl.startsWith('http'), `sw.js asset should not be absolute: ${strippedUrl}`);
+    }
+  }
+  
+  // Also check for any other quoted strings that look like paths or URLs
+  const allQuotedStrings = swJs.match(/"[^"]*"/g) || [];
+  for (const str of allQuotedStrings) {
+    const stripped = str.slice(1, -1);
+    // Skip if it's a URL pattern (http://, https://) or not a path-like string
+    if (stripped.startsWith('/') || stripped.startsWith('http')) {
+      assert.ok(false, `Found absolute URL in sw.js: ${stripped}`);
     }
   }
 });
@@ -129,9 +146,7 @@ test('service worker registration does not break page', () => {
   // Check that registration is wrapped in try-catch or has .catch()
   assert.ok(appJs.includes('navigator.serviceWorker.register'), 'should register service worker');
   assert.ok(
-    appJs.includes('.catch(() => {})') || 
-    appJs.includes('.catch(() => {})') ||
-    appJs.includes('catch(() => {})'),
+    appJs.includes('.catch(() => {})'),
     'service worker registration should have error handling'
   );
 });

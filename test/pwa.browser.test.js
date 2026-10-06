@@ -94,6 +94,8 @@ test('PWA browser test - offline mode', { timeout: 60000 }, async () => {
     await page.waitForFunction(() => navigator.serviceWorker && navigator.serviceWorker.controller !== null);
     
     // Set offline
+    // Wait for service worker to be ready before going offline
+    await page.evaluate(() => navigator.serviceWorker.ready);
     await context.setOffline(true);
     
     // Reload while offline
@@ -137,8 +139,8 @@ test('PWA browser test - offline mode', { timeout: 60000 }, async () => {
     assert.deepStrictEqual(foreignRequests, [], `requests to foreign hosts: ${foreignRequests.join('; ')}`);
     
   } finally {
-    if (browser) await browser.close();
     if (context) await context.close();
+    if (browser) await browser.close();
     proc.kill();
   }
 });

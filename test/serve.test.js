@@ -44,10 +44,12 @@ test('server serves index.html', async () => {
     env: { ...process.env, PORT: port.toString() }
   });
   
-  // Wait for "Server running"
-  await new Promise((resolve) => {
+  // Wait for "Server running" with 5s timeout
+  await new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => reject(new Error('Server did not start in 5s')), 5000);
     server.stdout.on('data', (data) => {
       if (data.toString().includes('Server running')) {
+        clearTimeout(timeout);
         resolve();
       }
     });
@@ -72,6 +74,10 @@ test('server serves index.html', async () => {
     const res5 = await httpRequest(port, '/.git/config');
     assert.ok(res5.status === 403 || res5.status === 404, `dot-file should be 403/404, got ${res5.status}`);
 
+    // Dotfile under base path (for BASE_PATH tests)
+    const res6 = await httpRequest(port, '/.gitignore');
+    assert.ok(res6.status === 403 || res6.status === 404, `dotfile should be 403/404, got ${res6.status}`);
+
   } finally {
     server.kill();
   }
@@ -84,10 +90,12 @@ test('server with BASE_PATH', async () => {
     env: { ...process.env, PORT: port.toString(), BASE_PATH: '/devteam-pilot/' }
   });
   
-  // Wait for "Server running"
-  await new Promise((resolve) => {
+  // Wait for "Server running" with 5s timeout
+  await new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => reject(new Error('Server did not start in 5s')), 5000);
     server.stdout.on('data', (data) => {
       if (data.toString().includes('Server running')) {
+        clearTimeout(timeout);
         resolve();
       }
     });
@@ -109,6 +117,10 @@ test('server with BASE_PATH', async () => {
     // Traversal test with BASE_PATH
     const res4 = await httpRequest(port, '/devteam-pilot/..%2fpackage.json');
     assert.ok(res4.status === 403 || res4.status === 404, `traversal with BASE_PATH should be 403/404, got ${res4.status}`);
+
+    // Dotfile check under base path
+    const res5 = await httpRequest(port, '/devteam-pilot/.gitignore');
+    assert.ok(res5.status === 403 || res5.status === 404, `dotfile under base path should be 403/404, got ${res5.status}`);
 
   } finally {
     server.kill();
