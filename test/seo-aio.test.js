@@ -116,3 +116,15 @@ test('no host paths in new files', () => {
   const host = new RegExp('/' + 'Users' + '/|/' + 'home' + '/');
   for (const f of ['sitemap.xml', 'robots.txt', 'llms.txt', 'index.html']) assert.ok(!host.test(read(f)), f);
 });
+
+test('about lore is parody, followed by the honest "Ang totoo:" paragraph; llms.txt stays factual', () => {
+  const m = about.match(/<p class="lore">([\s\S]*?)<\/p>\s*<p>([\s\S]*?)<\/p>/);
+  assert.ok(m, 'p.lore followed by a plain p');
+  const lore = norm(m[1]);
+  assert.ok(lore.includes('Kapreng Naka-tsinelas') && lore.includes('Lola Diwata'));
+  const truth = norm(m[2]);
+  assert.ok(truth.startsWith('Ang totoo:'));
+  assert.ok(truth.includes('hindi ito hula sa resulta ng bola'));
+  const llms = read('llms.txt');
+  assert.ok(!llms.includes('Kapre') && !llms.includes('Diwata'));
+});

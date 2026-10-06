@@ -526,3 +526,5 @@ footer#disclaimer {
 .about-games details p {
   margin: 0.5rem 0 0;
 }
+
+.about-games .lore { font-style: italic; }
