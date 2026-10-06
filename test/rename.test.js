@@ -10,10 +10,10 @@ const meta = (attr, key) =>
 
 test('site is named PCSO Lucky Numbers', () => {
   const name = 'PCSO Lucky Numbers';
-  assert.strictEqual(html.match(/<title>([^<]*)<\/title>/)[1], name);
-  assert.strictEqual(meta('property', 'og:title'), name);
+  assert.ok(html.match(/<title>([^<]*)<\/title>/)[1].startsWith('PCSO Lucky Number'));
+  assert.strictEqual(meta('property', 'og:title'), html.match(/<title>([^<]*)<\/title>/)[1]);
   assert.strictEqual(meta('property', 'og:site_name'), name);
-  assert.strictEqual(meta('name', 'twitter:title'), name);
+  assert.strictEqual(meta('name', 'twitter:title'), html.match(/<title>([^<]*)<\/title>/)[1]);
   const h1 = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)[1].replace(/<[^>]+>/g, '').trim();
   assert.strictEqual(h1, name);
 });

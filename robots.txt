@@ -1,2 +1,4 @@
 User-agent: *
 Disallow:
+
+Sitemap: https://xon-g.github.io/devteam-pilot/sitemap.xml
