@@ -23,14 +23,18 @@ body {
   background-attachment: fixed;
   min-height: 100dvh;
   color: var(--text);
+  display: grid;
+  grid-template-areas: "header" "main" "banner" "disclaimer";
+  grid-template-rows: auto 1fr auto auto;
 }
 
-header, main {
+header, main, #ad-slot {
   width: min(100% - 2rem, 34rem);
   margin-inline: auto;
 }
 
 header {
+  grid-area: header;
   text-align: center;
   padding: 1rem;
 }
@@ -63,6 +67,7 @@ header {
 }
 
 main {
+  grid-area: main;
   padding-top: 1rem;
   padding-bottom: calc(5rem + env(safe-area-inset-bottom));
   display: flex;
@@ -170,17 +175,18 @@ main {
 }
 
 .segmented {
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: min(100%, 22rem);
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 4px;
   gap: 4px;
-  flex-direction: row;
 }
 
 .segmented label {
-  display: inline-flex;
+  display: block;
 }
 
 .segmented input {
@@ -222,6 +228,7 @@ main {
 }
 
 #draw {
+  font: inherit;
   min-height: 60px;
   border-radius: 999px;
   background: linear-gradient(180deg, var(--gold), var(--gold-2));
@@ -230,7 +237,6 @@ main {
   font-weight: 900;
   box-shadow: 0 10px 24px rgba(255, 159, 28, 0.35);
   cursor: pointer;
-  font: inherit;
   border: none;
 }
 
@@ -243,6 +249,7 @@ main {
 }
 
 #share {
+  font: inherit;
   min-height: 48px;
   border-radius: 999px;
   background: transparent;
@@ -250,7 +257,6 @@ main {
   color: var(--text);
   font-weight: 700;
   cursor: pointer;
-  font: inherit;
 }
 
 #share:disabled {
@@ -269,7 +275,15 @@ main {
   font-size: 0.875rem;
 }
 
+/* Ad slot */
+.ad-slot {
+  grid-area: banner;
+  height: 0;
+  overflow: hidden;
+}
+
 footer#disclaimer {
+  grid-area: disclaimer;
   position: fixed;
   inset-inline: 0;
   bottom: 0;

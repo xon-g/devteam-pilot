@@ -93,6 +93,7 @@ async function draw() {
     drawButton.disabled = false;
   }
 
+  comboOutput.classList.remove('prompt');
   reasonsList.hidden = false;
   updateDisplay();
   shareButton.disabled = false;
