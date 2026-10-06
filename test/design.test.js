@@ -57,6 +57,7 @@ function startServer(port) {
 }
 
 async function draw(page) {
+  await page.locator('.moods span', { hasText: /^Chill$/ }).click();
   await page.click('#draw');
   await page.locator('#draw:not([disabled])').waitFor();
   await page.waitForFunction(() => /^\d-\d-\d$/.test(document.querySelector('#combo-output').textContent.trim()));

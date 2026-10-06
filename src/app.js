@@ -1,4 +1,5 @@
-import { drawCombo, formatStraight, rambolitoCombos, pickReason, randomInt, shareText } from './lucky.js';
+import { drawCombo, formatStraight, rambolitoCombos, randomInt, shareText } from './lucky.js';
+import { validateProfile, pickMoodReasons } from './profile.js';
 
 // Register service worker if supported
 if ('serviceWorker' in navigator) {
@@ -29,7 +30,32 @@ const shareButton = document.getElementById('share');
 const shareStatus = document.getElementById('share-status');
 const modeRadios = document.querySelectorAll('input[name="mode"]');
 
+const form = document.getElementById('about-you');
+const nameInput = document.getElementById('name');
+const ageInput = document.getElementById('age');
+const formStatus = document.getElementById('form-status');
+const forName = document.getElementById('for-name');
+
 let currentCombo = null;
+let currentName = '';
+let moodTouched = false;
+
+function readProfile() {
+  const checked = form.querySelector('input[name="mood"]:checked');
+  return validateProfile({ name: nameInput.value, age: ageInput.value, mood: checked ? checked.value : '' });
+}
+
+function checkForm() {
+  const result = readProfile();
+  drawButton.disabled = !result.ok;
+  if (result.ok) {
+    formStatus.textContent = '';
+  } else if (result.field === 'mood' && !moodTouched) {
+    formStatus.textContent = 'Pumili ng mood para makabunot.';
+  } else {
+    formStatus.textContent = result.message;
+  }
+}
 
 function updateDisplay() {
   if (!currentCombo) return;
@@ -44,7 +70,15 @@ function updateDisplay() {
 }
 
 async function draw() {
+  const profile = readProfile();
+  if (!profile.ok) {
+    checkForm();
+    return;
+  }
   drawButton.disabled = true;
+  const moodReasons = pickMoodReasons(profile.mood, 3);
+  currentName = profile.name;
+  forName.hidden = true;
   
   // Clear reasons before starting
   for (let i = 0; i < 3; i++) {
@@ -60,7 +94,7 @@ async function draw() {
       currentCombo = drawCombo();
       for (let i = 0; i < 3; i++) {
         digitElements[i].textContent = currentCombo[i];
-        reasonElements[i].textContent = pickReason(currentCombo[i]);
+        reasonElements[i].textContent = moodReasons[i];
         miniElements[i].textContent = currentCombo[i];
       }
     } else {
@@ -84,16 +118,22 @@ async function draw() {
       for (let i = 0; i < 3; i++) {
         digitElements[i].textContent = currentCombo[i];
         digitElements[i].classList.remove('rolling');
-        reasonElements[i].textContent = pickReason(currentCombo[i]);
+        reasonElements[i].textContent = moodReasons[i];
         miniElements[i].textContent = currentCombo[i];
         await new Promise(r => setTimeout(r, 100));
       }
     }
   } finally {
-    drawButton.disabled = false;
+    checkForm();
   }
 
   comboOutput.classList.remove('prompt');
+  if (currentName) {
+    forName.textContent = `Para kay ${currentName}`;
+    forName.hidden = false;
+  } else {
+    forName.hidden = true;
+  }
   reasonsList.hidden = false;
   updateDisplay();
   shareButton.disabled = false;
@@ -101,7 +141,7 @@ async function draw() {
 
 async function handleShare() {
   const mode = document.querySelector('input[name="mode"]:checked').value;
-  const text = shareText(currentCombo, mode);
+  const text = shareText(currentCombo, mode, currentName);
 
   try {
     if (navigator.share) {
@@ -129,3 +169,11 @@ shareButton.addEventListener('click', handleShare);
 modeRadios.forEach(radio => {
   radio.addEventListener('change', updateDisplay);
 });
+
+form.addEventListener('submit', (e) => e.preventDefault());
+form.addEventListener('input', checkForm);
+form.addEventListener('change', (e) => {
+  if (e.target.name === 'mood') moodTouched = true;
+  checkForm();
+});
+checkForm();
