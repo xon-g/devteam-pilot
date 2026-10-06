@@ -1,0 +1,17 @@
+.git
+.github
+.gitignore
+.assetsignore
+.wrangler
+.smoke
+.review
+node_modules
+tasks
+test
+scripts
+PLAN.md
+STACK.md
+README.md
+package.json
+package-lock.json
+wrangler.jsonc
