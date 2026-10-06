@@ -63,6 +63,21 @@ async function draw(page) {
   await page.waitForFunction(() => /^\d-\d-\d$/.test(document.querySelector('#combo-output').textContent.trim()));
 }
 
+function assertDisclaimerOnScreen(rect, vpWidth, vpHeight) {
+  const left = rect.left;
+  const top = rect.top;
+  const bottom = rect.bottom;
+  const width = rect.width;
+  const vw = vpWidth;
+  const vh = vpHeight;
+  
+  assert.ok(top >= 0, `viewport ${vpWidth}x${vpHeight}: disclaimer top ${top} < 0 (off screen)`);
+  assert.ok(bottom <= vh + 0.5, `viewport ${vpWidth}x${vpHeight}: disclaimer bottom ${bottom} > ${vh + 0.5} (below viewport)`);
+  assert.ok(bottom >= vh - 1, `viewport ${vpWidth}x${vpHeight}: disclaimer bottom ${bottom} < ${vh - 1} (not pinned to bottom)`);
+  assert.ok(left <= 0.5, `viewport ${vpWidth}x${vpHeight}: disclaimer left ${left} > 0.5`);
+  assert.ok(width >= vw - 1, `viewport ${vpWidth}x${vpHeight}: disclaimer width ${width} < ${vw - 1}`);
+}
+
 test('design acceptance across viewports', { timeout: 120000 }, async () => {
   const port = await getFreePort();
   const { proc, ready } = startServer(port);
@@ -119,12 +134,11 @@ test('design acceptance across viewports', { timeout: 120000 }, async () => {
         assert.ok(spanRects[i].height >= 44, `viewport ${vp.width}x${vp.height}: span ${i} height ${spanRects[i].height} < 44`);
       }
 
-      // 4. Disclaimer full width, bottom fixed, share above it after scroll
+      // 4. Disclaimer full width, bottom fixed, on screen
       const disclaimerRect = await page.evaluate(() => document.querySelector('#disclaimer').getBoundingClientRect());
-      assert.ok(disclaimerRect.left <= 0.5, `viewport ${vp.width}x${vp.height}: disclaimer left ${disclaimerRect.left} > 0.5`);
-      assert.ok(disclaimerRect.width >= vp.width - 1, `viewport ${vp.width}x${vp.height}: disclaimer width ${disclaimerRect.width} < ${vp.width - 1}`);
-      assert.ok(disclaimerRect.bottom >= vp.height - 0.5, `viewport ${vp.width}x${vp.height}: disclaimer bottom ${disclaimerRect.bottom} < ${vp.height - 0.5}`);
+      assertDisclaimerOnScreen(disclaimerRect, vp.width, vp.height);
 
+      // Check share above disclaimer after scroll
       await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
       const shareRectAfter = await page.evaluate(() => document.querySelector('#share').getBoundingClientRect());
       const disclaimerRectAfter = await page.evaluate(() => document.querySelector('#disclaimer').getBoundingClientRect());
@@ -145,8 +159,8 @@ test('design acceptance across viewports', { timeout: 120000 }, async () => {
         assert.strictEqual(miniTexts[i], digitTexts[i], `viewport ${vp.width}x${vp.height}: mini ${i} "${miniTexts[i]}" != digit ${i} "${digitTexts[i]}"`);
       }
 
-      // 6. Mode toggle works
-      await page.check('input[name="mode"][value="rambolito"]');
+      // 6. Mode toggle: click visible label text
+      await page.locator('.segmented span', { hasText: /^Rambolito$/ }).click();
       await page.waitForFunction(() => {
         const el = document.querySelector('#combo-output');
         if (!el) return false;
@@ -156,10 +170,15 @@ test('design acceptance across viewports', { timeout: 120000 }, async () => {
       });
       const rambolitoText = await page.textContent('#combo-output');
       assert.ok(rambolitoText.includes(','), `viewport ${vp.width}x${vp.height}: rambolito should have commas`);
-      await page.check('input[name="mode"][value="straight"]');
+      assert.strictEqual(await page.isChecked('input[name="mode"][value="rambolito"]'), true, `viewport ${vp.width}x${vp.height}: rambolito radio should be checked`);
+      assert.strictEqual(await page.isChecked('input[name="mode"][value="straight"]'), false, `viewport ${vp.width}x${vp.height}: straight radio should be unchecked`);
+
+      await page.locator('.segmented span', { hasText: /^Straight$/ }).click();
       await page.waitForFunction(() => /^\d-\d-\d$/.test(document.querySelector('#combo-output').textContent.trim()));
       const straightText = await page.textContent('#combo-output');
       assert.match(straightText, /^\d-\d-\d$/, `viewport ${vp.width}x${vp.height}: straight format mismatch`);
+      assert.strictEqual(await page.isChecked('input[name="mode"][value="straight"]'), true, `viewport ${vp.width}x${vp.height}: straight radio should be checked`);
+      assert.strictEqual(await page.isChecked('input[name="mode"][value="rambolito"]'), false, `viewport ${vp.width}x${vp.height}: rambolito radio should be unchecked`);
 
       // Save screenshot
       const filename = `.smoke/design-${vp.width}.png`;

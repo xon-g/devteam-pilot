@@ -56,12 +56,31 @@ test('formatStraight', () => {
 });
 
 test('REASONS content check', () => {
+  // Verify all digits 0-9 exist as keys
+  const keys = Object.keys(REASONS).sort();
+  assert.deepStrictEqual(keys, ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'], 'REASONS keys must be digits 0-9');
+  
+  // Verify required phrases exist
+  const allReasons = Object.values(REASONS).flat();
+  assert.ok(allReasons.includes('Pwede nang mangarap'), 'Missing "Pwede nang mangarap"');
+  assert.ok(allReasons.includes('Meron din naman palang ganda ang buhay'), 'Missing "Meron din naman palang ganda ang buhay"');
+  
+  // Validate each digit's reasons
   for (let d = 0; d <= 9; d++) {
     const list = REASONS[d];
-    assert.ok(Array.isArray(list) && list.length >= 3, `Digit ${d} must have >= 3 reasons`);
-    list.forEach(reason => {
-      assert.ok(typeof reason === 'string' && reason.length > 0, `Reason for ${d} must be a non-empty string`);
-    });
+    assert.ok(Array.isArray(list), `Digit ${d} reasons must be an array`);
+    assert.ok(list.length >= 4, `Digit ${d} must have >= 4 reasons, got ${list.length}`);
+    
+    // Check each reason
+    const seen = new Set();
+    for (const reason of list) {
+      assert.ok(typeof reason === 'string', `Digit ${d} reason must be a string`);
+      assert.ok(reason.length > 0, `Digit ${d} reason must be non-empty`);
+      assert.ok(reason.trim().length > 0, `Digit ${d} reason must not be whitespace-only`);
+      assert.ok(reason.length <= 48, `Digit ${d} reason too long (${reason.length} chars): ${reason}`);
+      assert.ok(!seen.has(reason), `Digit ${d} has duplicate reason: ${reason}`);
+      seen.add(reason);
+    }
   }
 });
 
