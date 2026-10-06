@@ -33,8 +33,8 @@ test('manifest.webmanifest exists and is valid JSON', () => {
   assert.strictEqual(manifest.start_url, './', 'start_url should be "./"');
   assert.strictEqual(manifest.scope, './', 'scope should be "./"');
   assert.strictEqual(manifest.display, 'standalone', 'display should be "standalone"');
-  assert.strictEqual(manifest.theme_color, '#FFD700', 'theme_color should be #FFD700');
-  assert.strictEqual(manifest.background_color, '#FFFFFF', 'background_color should be #FFFFFF');
+  assert.strictEqual(manifest.theme_color, '#12061f', 'theme_color should be #12061f');
+  assert.strictEqual(manifest.background_color, '#12061f', 'background_color should be #12061f');
   
   assert.ok(Array.isArray(manifest.icons), 'icons should be an array');
   assert.strictEqual(manifest.icons.length, 3, 'should have 3 icons');

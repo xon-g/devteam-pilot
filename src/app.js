@@ -17,6 +17,12 @@ const reasonElements = [
   document.getElementById('reason-1'),
   document.getElementById('reason-2')
 ];
+const miniElements = [
+  document.getElementById('mini-0'),
+  document.getElementById('mini-1'),
+  document.getElementById('mini-2')
+];
+const reasonsList = document.querySelector('.reasons');
 const comboOutput = document.getElementById('combo-output');
 const drawButton = document.getElementById('draw');
 const shareButton = document.getElementById('share');
@@ -43,7 +49,9 @@ async function draw() {
   // Clear reasons before starting
   for (let i = 0; i < 3; i++) {
     reasonElements[i].textContent = '';
+    miniElements[i].textContent = '';
   }
+  reasonsList.hidden = true;
 
   try {
     const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -53,6 +61,7 @@ async function draw() {
       for (let i = 0; i < 3; i++) {
         digitElements[i].textContent = currentCombo[i];
         reasonElements[i].textContent = pickReason(currentCombo[i]);
+        miniElements[i].textContent = currentCombo[i];
       }
     } else {
       // Roll animation
@@ -61,7 +70,9 @@ async function draw() {
         
         for (let j = 0; j < 3; j++) {
           digitElements[j].textContent = tempCombo[j];
-          reasonElements[j].textContent = ''; // Clear during roll
+          digitElements[j].classList.add('rolling');
+          reasonElements[j].textContent = '';
+          miniElements[j].textContent = '';
         }
         
         await new Promise(r => setTimeout(r, 70));
@@ -72,7 +83,9 @@ async function draw() {
       // Settle left to right
       for (let i = 0; i < 3; i++) {
         digitElements[i].textContent = currentCombo[i];
+        digitElements[i].classList.remove('rolling');
         reasonElements[i].textContent = pickReason(currentCombo[i]);
+        miniElements[i].textContent = currentCombo[i];
         await new Promise(r => setTimeout(r, 100));
       }
     }
@@ -80,6 +93,7 @@ async function draw() {
     drawButton.disabled = false;
   }
 
+  reasonsList.hidden = false;
   updateDisplay();
   shareButton.disabled = false;
 }
