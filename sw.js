@@ -1,4 +1,4 @@
-const CACHE = "swertres-v1";
+const CACHE = "swertres-v2";
 
 const ASSETS = [
   "./",
@@ -10,7 +10,8 @@ const ASSETS = [
   "manifest.webmanifest",
   "assets/icons/icon-192.png",
   "assets/icons/icon-512.png",
-  "assets/icons/icon-maskable-512.png"
+  "assets/icons/icon-maskable-512.png",
+  "assets/og-image.png"
 ];
 
 // Install event: precache the app shell

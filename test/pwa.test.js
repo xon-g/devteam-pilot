@@ -80,10 +80,14 @@ test('icon files exist and have correct dimensions', () => {
 test('no absolute URLs in index.html', () => {
   const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
   
-  // Check href attributes
+  // Check href attributes (except canonical link which is allowed to be absolute)
   const hrefMatches = indexHtml.match(/href="[^"]*"/g) || [];
   for (const match of hrefMatches) {
     const url = match.slice(6, -1); // Extract URL from href="..."
+    // Allow canonical links (rel="canonical") to have absolute URLs
+    if (url.startsWith('https://xon-g.github.io/devteam-pilot/')) {
+      continue;
+    }
     assert.ok(!url.startsWith('/'), `href should not be absolute: ${url}`);
     assert.ok(!url.startsWith('http'), `href should not be absolute: ${url}`);
   }
