@@ -3,7 +3,17 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const PORT = process.env.PORT || 4173;
+const BASE_PATH = process.env.BASE_PATH || '/';
 const root = process.cwd();
+
+// Normalize BASE_PATH to start and end with '/'
+let normalizedBasePath = BASE_PATH;
+if (!normalizedBasePath.startsWith('/')) {
+  normalizedBasePath = '/' + normalizedBasePath;
+}
+if (!normalizedBasePath.endsWith('/')) {
+  normalizedBasePath = normalizedBasePath + '/';
+}
 
 const MIME_TYPES = {
   '.html': 'text/html',
@@ -11,12 +21,24 @@ const MIME_TYPES = {
   '.js': 'application/javascript',
   '.png': 'image/png',
   '.svg': 'image/svg+xml',
+  '.webmanifest': 'application/manifest+json',
 };
 
 const server = http.createServer((req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
-  const pathname = url.pathname;
-  
+  let pathname = url.pathname;
+
+  // Strip BASE_PATH prefix
+  if (normalizedBasePath !== '/') {
+    if (!pathname.startsWith(normalizedBasePath)) {
+      res.statusCode = 404;
+      res.end('Not Found');
+      return;
+    }
+    pathname = pathname.substring(normalizedBasePath.length - 1);
+    if (pathname === '') pathname = '/';
+  }
+
   // Resolve path and prevent traversal
   let decodedPath;
   try {
@@ -75,5 +97,5 @@ function serveFile(filePath, res) {
 }
 
 server.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}/`);
+  console.log(`Server running at http://localhost:${PORT}${normalizedBasePath}`);
 });
