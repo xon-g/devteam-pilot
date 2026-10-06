@@ -160,16 +160,25 @@ test('design acceptance across viewports', { timeout: 120000 }, async () => {
       }
 
       // 6. Mode toggle: click visible label text
+      const drawn = await page.evaluate(() => Array.from(document.querySelectorAll('.digit')).map(el => el.textContent.trim()));
+      const allSame = drawn.length === 3 && drawn[0] === drawn[1] && drawn[1] === drawn[2];
       await page.locator('.segmented span', { hasText: /^Rambolito$/ }).click();
-      await page.waitForFunction(() => {
+      await page.waitForFunction((same) => {
         const el = document.querySelector('#combo-output');
         if (!el) return false;
         const text = el.textContent.trim();
-        // Rambolito format: comma-separated combos like "1-2-3, 1-3-2"
-        return text.includes(',') && text.split(',').every(c => /^\d-\d-\d$/.test(c.trim()));
-      });
-      const rambolitoText = await page.textContent('#combo-output');
-      assert.ok(rambolitoText.includes(','), `viewport ${vp.width}x${vp.height}: rambolito should have commas`);
+        // Triple digits have a single combo (no comma); otherwise a comma-separated list
+        return same ? /^\d-\d-\d$/.test(text) : text.includes(',');
+      }, allSame);
+      const rambolitoText = (await page.textContent('#combo-output')).trim();
+      if (allSame) {
+        assert.strictEqual(rambolitoText, drawn.join('-'), `viewport ${vp.width}x${vp.height}: triple rambolito should be a single combo`);
+      } else {
+        const items = rambolitoText.split(',').map(c => c.trim());
+        assert.ok(items.every(c => /^\d-\d-\d$/.test(c)), `viewport ${vp.width}x${vp.height}: bad rambolito items: ${rambolitoText}`);
+        const expected = new Set(drawn).size === 2 ? 3 : 6;
+        assert.strictEqual(items.length, expected, `viewport ${vp.width}x${vp.height}: rambolito count ${items.length}, expected ${expected}`);
+      }
       assert.strictEqual(await page.isChecked('input[name="mode"][value="rambolito"]'), true, `viewport ${vp.width}x${vp.height}: rambolito radio should be checked`);
       assert.strictEqual(await page.isChecked('input[name="mode"][value="straight"]'), false, `viewport ${vp.width}x${vp.height}: straight radio should be unchecked`);
 

@@ -39,6 +39,11 @@ test('rambolitoCombos permutations', () => {
   assert.deepStrictEqual(rambolitoCombos([5, 5, 5]), ["5-5-5"]);
 });
 
+test('rambolitoCombos counts', () => {
+  assert.strictEqual(rambolitoCombos([7, 7, 7]).length, 1);
+  assert.strictEqual(rambolitoCombos([1, 1, 2]).length, 3);
+});
+
 test('rambolitoCombos is sorted for unsorted input', () => {
   assert.deepStrictEqual(rambolitoCombos([3, 2, 1]), ["1-2-3", "1-3-2", "2-1-3", "2-3-1", "3-1-2", "3-2-1"]);
   assert.deepStrictEqual(rambolitoCombos([2, 1, 1]), ["1-1-2", "1-2-1", "2-1-1"]);
