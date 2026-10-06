@@ -66,6 +66,23 @@ header {
   margin-top: 0.5rem;
 }
 
+.sound-toggle {
+  margin-top: 0.75rem;
+  min-height: 44px;
+  padding: 0 1rem;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.sound-toggle:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
 main {
   grid-area: main;
   padding-top: 1rem;

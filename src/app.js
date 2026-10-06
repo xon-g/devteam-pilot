@@ -1,5 +1,6 @@
 import { rambolitoCombos, randomInt, shareText } from './lucky.js';
 import { DEFAULT_GAME, drawNumbers, formatNumbers, getGame } from './games.js';
+import { createSound } from './sound.js';
 import { validateProfile, pickMoodReasons } from './profile.js';
 
 // Register service worker if supported
@@ -28,6 +29,12 @@ const nameInput = document.getElementById('name');
 const ageInput = document.getElementById('age');
 const formStatus = document.getElementById('form-status');
 const forName = document.getElementById('for-name');
+
+const sound = createSound(() => {
+  const C = window.AudioContext || window.webkitAudioContext;
+  return C ? new C() : null;
+});
+const soundButton = document.getElementById('sound');
 
 let currentCombo = null;
 let currentGame = getGame(DEFAULT_GAME);
@@ -144,6 +151,7 @@ async function draw() {
         reasonElements[i].textContent = moodReasons[i];
         miniElements[i].textContent = ballText(game, currentCombo[i]);
       }
+      sound.play('chaching');
     } else {
       // Roll animation
       for (let r = 0; r < 8; r++) {
@@ -151,6 +159,7 @@ async function draw() {
           digitElements[j].textContent = ballText(game, game.min + randomInt(span));
           digitElements[j].classList.add('rolling');
         }
+        sound.play('tick');
         await new Promise(res => setTimeout(res, 70));
       }
 
@@ -162,8 +171,10 @@ async function draw() {
         digitElements[i].classList.remove('rolling');
         reasonElements[i].textContent = moodReasons[i];
         miniElements[i].textContent = ballText(game, currentCombo[i]);
+        sound.play('ding', i);
         await new Promise(res => setTimeout(res, 100));
       }
+      sound.play('chaching');
     }
   } finally {
     drawing = false;
@@ -212,6 +223,12 @@ async function handleShare() {
 
 drawButton.addEventListener('click', draw);
 shareButton.addEventListener('click', handleShare);
+soundButton.addEventListener('click', () => {
+  const on = !sound.isEnabled();
+  sound.setEnabled(on);
+  soundButton.setAttribute('aria-pressed', String(on));
+  soundButton.textContent = on ? '🔊 Tunog: On' : '🔇 Tunog: Off';
+});
 
 modeRadios.forEach(radio => {
   radio.addEventListener('change', updateDisplay);
