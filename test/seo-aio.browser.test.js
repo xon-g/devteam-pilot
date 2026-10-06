@@ -91,6 +91,26 @@ test('SEO/AIO: content readable without JS; FAQ and app work with JS', { timeout
     assert.ok(fits, 'no horizontal scroll at 375px');
     assert.deepStrictEqual(errors, []);
     await ctx.close();
+
+    for (const width of [360, 1280]) {
+      const c = await browser.newContext({ viewport: { width, height: 800 } });
+      const pg = await c.newPage();
+      await pg.goto(url, { waitUntil: 'load' });
+      const r = await pg.evaluate(() => {
+        const el = document.querySelector('#about-games p.lore');
+        el.scrollIntoView();
+        const b = el.getBoundingClientRect();
+        return {
+          visible: b.width > 0 && b.height > 0 && getComputedStyle(el).visibility !== 'hidden',
+          italic: getComputedStyle(el).fontStyle === 'italic',
+          fits: document.documentElement.scrollWidth <= window.innerWidth,
+        };
+      });
+      assert.ok(r.visible, `lore visible at ${width}px`);
+      assert.ok(r.italic, `lore italic at ${width}px`);
+      assert.ok(r.fits, `no horizontal scroll at ${width}px`);
+      await c.close();
+    }
   } finally {
     if (browser) await browser.close();
     proc.kill();
