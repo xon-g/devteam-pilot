@@ -127,46 +127,10 @@ test('share functionality', { timeout: 60000 }, async () => {
     }, null, { timeout: 5000 });
 
     // Verify stubbed share call
-    const sharedData = await pageB.evaluate(() => window.__shareCalls?.[0]);
-    assert.strictEqual(sharedData ? 1 : 0, 1, 'share should be called exactly once'); // This is a bit weird, let's fix the logic
-    // Wait, the architect said:
-    // const shareCalls = await pageB.evaluate(() => window.__shareCalls || []);
-    // assert.strictEqual(shareCalls.length, 1, 'share should be called exactly once');
-    // assert.match(shareCalls[0].text, <existing combo regex>, 'stubbed share text mismatch');
-    // Let's follow the architect's exact suggestion.
-    // Actually, the architect's suggestion for the assert is:
-    // const shareCalls = await pageB.evaluate(() => window.__shareCalls || []);
-    // assert.strictEqual(shareCalls.length, 1, 'share should be called exactly once');
-    // ...
-    // Let's re-read the architect's note carefully.
-    // "const shareCalls = await pageB.evaluate(() => window.__shareCalls || []);
-    //  assert.strictEqual(shareCalls.length, 1, 'share should be called exactly once');
-    //  assert.match(shareCalls[0].text, <existing combo regex>, 'stubbed share text mismatch');"
-    // Okay, I will use that.
-    // Wait, I need to replace the existing lines 130-132.
-    // Current lines 130-132:
-    // const sharedData = await pageB.evaluate(() => window.__shareCalls?.[0]);
-    // assert.strictEqual(window.__shareCalls.length, 1, 'share should be called exactly once');
-    // assert.match(sharedData.text, new RegExp(comboTextB.trim().replace(/[^\w-]/g, '\\$&')), 'stubbed share text mismatch');
-    // Wait, the current code in the file I read was:
-    // const sharedData = await pageB.evaluate(() => window.__s...
-    // Let me check the file content again.
-    // Line 130: const sharedData = await pageB.evaluate(() => window.__shareCalls?.[0]);
-    // Line 131: assert.strictEqual(window.__shareCalls.length, 1, 'share should be called exactly once');
-    // Line 132: assert.match(sharedData.text, new RegExp(comboTextB.trim().replace(/[^\w-]/g, '\\$&')), 'stubbed share text mismatch');
-    // Ah, the error was at line 131 because window.__shareCalls.length is accessed in Node.
-    // I will replace 130-132 with the architect's version.
-    // Wait, the architect's version:
-    // const shareCalls = await pageB.evaluate(() => window.__shareCalls || []);
-    // assert.strictEqual(shareCalls.length, 1, 'share should be called exactly once');
-    // assert.match(shareCalls[0].text, new RegExp(comboTextB.trim().replace(/[^\w-]/g, '\\$&')), 'stubbed share text mismatch');
-    // (I'll include the regex part)
-    // Let's do it.
     const shareCalls = await pageB.evaluate(() => window.__shareCalls || []);
     assert.strictEqual(shareCalls.length, 1, 'share should be called exactly once');
     assert.match(shareCalls[0].text, new RegExp(comboTextB.trim().replace(/[^\w-]/g, '\\$&')), 'stubbed share text mismatch');
 
-    
     // Verify status again
     const statusB = await pageB.textContent('#share-status');
     assert.ok(statusB && statusB.trim().length > 0, 'share status should not be empty');
