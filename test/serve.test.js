@@ -5,6 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import http from 'node:http';
 import net from 'node:net';
+import fs from 'node:fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -43,10 +44,12 @@ test('server serves index.html', async () => {
     env: { ...process.env, PORT: port.toString() }
   });
   
-  // Wait for "Server running"
-  await new Promise((resolve) => {
+  // Wait for "Server running" with 5s timeout
+  await new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => reject(new Error('Server did not start in 5s')), 5000);
     server.stdout.on('data', (data) => {
       if (data.toString().includes('Server running')) {
+        clearTimeout(timeout);
         resolve();
       }
     });
@@ -70,6 +73,54 @@ test('server serves index.html', async () => {
     // Dot-file test
     const res5 = await httpRequest(port, '/.git/config');
     assert.ok(res5.status === 403 || res5.status === 404, `dot-file should be 403/404, got ${res5.status}`);
+
+    // Dotfile under base path (for BASE_PATH tests)
+    const res6 = await httpRequest(port, '/.gitignore');
+    assert.ok(res6.status === 403 || res6.status === 404, `dotfile should be 403/404, got ${res6.status}`);
+
+  } finally {
+    server.kill();
+  }
+});
+
+test('server with BASE_PATH', async () => {
+  const port = await getFreePort();
+  const server = spawn('node', ['scripts/serve.js'], { 
+    cwd: rootDir,
+    env: { ...process.env, PORT: port.toString(), BASE_PATH: '/devteam-pilot/' }
+  });
+  
+  // Wait for "Server running" with 5s timeout
+  await new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => reject(new Error('Server did not start in 5s')), 5000);
+    server.stdout.on('data', (data) => {
+      if (data.toString().includes('Server running')) {
+        clearTimeout(timeout);
+        resolve();
+      }
+    });
+  });
+
+  try {
+    // Should serve from base path
+    const res1 = await httpRequest(port, '/devteam-pilot/');
+    assert.strictEqual(res1.status, 200, '/devteam-pilot/ should be 200');
+
+    const res2 = await httpRequest(port, '/devteam-pilot/manifest.webmanifest');
+    assert.strictEqual(res2.status, 200, '/devteam-pilot/manifest.webmanifest should be 200');
+    assert.ok(res2.type && res2.type.includes('manifest'), 'manifest should be manifest+json type');
+
+    // Root should return 404 when BASE_PATH is set
+    const res3 = await httpRequest(port, '/');
+    assert.strictEqual(res3.status, 404, '/ should be 404 when BASE_PATH is set');
+
+    // Traversal test with BASE_PATH
+    const res4 = await httpRequest(port, '/devteam-pilot/..%2fpackage.json');
+    assert.ok(res4.status === 403 || res4.status === 404, `traversal with BASE_PATH should be 403/404, got ${res4.status}`);
+
+    // Dotfile check under base path
+    const res5 = await httpRequest(port, '/devteam-pilot/.gitignore');
+    assert.ok(res5.status === 403 || res5.status === 404, `dotfile under base path should be 403/404, got ${res5.status}`);
 
   } finally {
     server.kill();

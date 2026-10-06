@@ -1,5 +1,12 @@
 import { drawCombo, formatStraight, rambolitoCombos, pickReason, randomInt, shareText } from './lucky.js';
 
+// Register service worker if supported
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js')
+    .then(() => console.log('Service Worker registered'))
+    .catch(() => {}); // Silently fail - page still works
+}
+
 const digitElements = [
   document.getElementById('digit-0'),
   document.getElementById('digit-1'),
