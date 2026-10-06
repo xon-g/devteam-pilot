@@ -39,6 +39,19 @@ test('rambolitoCombos permutations', () => {
   assert.deepStrictEqual(rambolitoCombos([5, 5, 5]), ["5-5-5"]);
 });
 
+test('rambolitoCombos is sorted for unsorted input', () => {
+  assert.deepStrictEqual(rambolitoCombos([3, 2, 1]), ["1-2-3", "1-3-2", "2-1-3", "2-3-1", "3-1-2", "3-2-1"]);
+  assert.deepStrictEqual(rambolitoCombos([2, 1, 1]), ["1-1-2", "1-2-1", "2-1-1"]);
+});
+
+test('pickReason(d) returns one of REASONS[d]', () => {
+  for (let d = 0; d <= 9; d++) {
+    for (let i = 0; i < 20; i++) {
+      assert.ok(REASONS[d].includes(pickReason(d)), `pickReason(${d}) returned an unknown reason`);
+    }
+  }
+});
+
 test('formatStraight', () => {
   assert.strictEqual(formatStraight([3, 8, 1]), "3-8-1");
 });
@@ -51,6 +64,12 @@ test('REASONS content check', () => {
       assert.ok(typeof reason === 'string' && reason.length > 0, `Reason for ${d} must be a non-empty string`);
     });
   }
+});
+
+test('lucky.js uses the single REASONS list from reasons.js', () => {
+  const content = fs.readFileSync(new URL('../src/lucky.js', import.meta.url), 'utf8');
+  assert.ok(content.includes("from './reasons.js'"), 'lucky.js must import REASONS from reasons.js');
+  assert.strictEqual(/export const REASONS/.test(content), false, 'lucky.js must not keep its own copy of REASONS');
 });
 
 test('banned-phrase scan', () => {
