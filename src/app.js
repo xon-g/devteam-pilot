@@ -96,7 +96,7 @@ function readProfile() {
 
 function checkForm() {
   const result = readProfile();
-  drawButton.disabled = !result.ok;
+  drawButton.disabled = drawing || !result.ok;
   if (result.ok) {
     formStatus.textContent = '';
   } else if (result.field === 'mood' && !moodTouched) {

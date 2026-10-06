@@ -8,9 +8,6 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const PLAYWRIGHT = '/usr/local/lib/node_modules/playwright';
-const DISCLAIMER = "For entertainment only. Numbers are random and don't improve your odds. 18+. Play responsibly.";
-const BANNED = ['guarantee', 'sigurado', 'siguradong panalo', 'tsansa', 'odds', 'better chance', 'sure win', 'jackpot ka na', 'panalo', 'tatama', 'jackpot'];
-const VIEWPORT = { width: 375, height: 812 };
 
 async function loadChromium() {
   try {
@@ -74,7 +71,7 @@ test('game picker', { timeout: 120000 }, async () => {
     await ready;
     const chromium = await loadChromium();
     browser = await chromium.launch();
-    const context = await browser.newContext({ viewport: { width: 360, height: 740 }, reducedMotion: 'reduce' });
+    const context = await browser.newContext({ viewport: { width: 360, height: 740 } });
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', (err) => errors.push(err.message));
@@ -156,6 +153,14 @@ test('game picker', { timeout: 120000 }, async () => {
     assert.strictEqual(await page.locator('#share').isDisabled(), true);
     assert.strictEqual(await page.locator('#mode-group').isVisible(), true);
     await page.screenshot({ path: '.smoke/swertres-360x740.png', fullPage: true });
+
+    // switch game during an animated draw
+    await page.click('#draw');
+    await pickGame(page, 'Ultra Lotto 6/58');
+    await page.locator('#draw:not([disabled])').waitFor();
+    assert.strictEqual((await balls(page)).length, 6);
+    assert.strictEqual(await page.locator('#combo-output.prompt').count(), 1);
+    assert.strictEqual(await page.locator('#share').isDisabled(), true);
 
     assert.deepStrictEqual(errors, []);
     await context.close();
