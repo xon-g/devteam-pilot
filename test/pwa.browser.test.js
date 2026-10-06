@@ -112,6 +112,7 @@ test('PWA browser test - offline mode', { timeout: 60000 }, async () => {
     assert.ok(disclaimerVisible, 'disclaimer should be visible');
     
     // Click draw button
+    await page.locator('.moods span', { hasText: /^Chill$/ }).click();
     await page.click('#draw');
     
     // Wait for draw to complete

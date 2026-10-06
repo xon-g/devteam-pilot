@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 
 const DISCLAIMER = "For entertainment only. Numbers are random and don't improve your odds. 18+. Play responsibly.";
-const BANNED = ['guarantee', 'sigurado', 'siguradong panalo', 'tsansa', 'odds', 'better chance', 'sure win', 'jackpot ka na'];
+const BANNED = ['guarantee', 'sigurado', 'siguradong panalo', 'tsansa', 'odds', 'better chance', 'sure win', 'jackpot ka na', 'panalo', 'tatama', 'jackpot'];
 
 // Helper to read PNG header and extract dimensions
 function getPngDimensions(filePath) {
@@ -218,11 +218,11 @@ test('OG image exists and has correct dimensions', () => {
   assert.strictEqual(dims.height, 630, 'og-image.png height should be 630');
 });
 
-test('sw.js precaches og-image.png and CACHE is swertres-v3', () => {
+test('sw.js precaches og-image.png and CACHE is swertres-v4', () => {
   const swJs = fs.readFileSync(path.join(rootDir, 'sw.js'), 'utf8');
   
   // Check CACHE version
-  assert.ok(swJs.includes('const CACHE = "swertres-v3"'), 'CACHE should be swertres-v3');
+  assert.ok(swJs.includes('const CACHE = "swertres-v4"'), 'CACHE should be swertres-v4');
   
   // Check og-image.png in ASSETS
   assert.ok(swJs.includes('"assets/og-image.png"'), 'sw.js should precache og-image.png');

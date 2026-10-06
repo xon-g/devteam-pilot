@@ -75,6 +75,7 @@ test('share functionality', { timeout: 60000 }, async () => {
     assert.strictEqual(await pageA.locator('#share').isDisabled(), true, 'share button should be disabled initially');
 
     // Perform draw
+    await pageA.locator('.moods span', { hasText: /^Chill$/ }).click();
     await pageA.click('#draw');
     await pageA.waitForFunction(() => {
       const el = document.querySelector('#combo-output');
@@ -112,6 +113,7 @@ test('share functionality', { timeout: 60000 }, async () => {
     await pageB.goto(`http://localhost:${port}/`, { waitUntil: 'load' });
 
     // Perform draw
+    await pageB.locator('.moods span', { hasText: /^Chill$/ }).click();
     await pageB.click('#draw');
     await pageB.waitForFunction(() => {
       const el = document.querySelector('#combo-output');

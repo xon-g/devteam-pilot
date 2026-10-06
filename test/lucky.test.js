@@ -96,7 +96,7 @@ test('shareText rambolito format', () => {
 
 test('shareText banned-phrase scan', () => {
   const text = shareText([3, 8, 1], 'straight');
-  const banned = ['guarantee', 'sigurado', 'siguradong panalo', 'tsansa', 'odds', 'better chance', 'sure win', 'jackpot ka na'];
+  const banned = ['guarantee', 'sigurado', 'siguradong panalo', 'tsansa', 'odds', 'better chance', 'sure win', 'jackpot ka na', 'panalo', 'tatama', 'jackpot'];
   banned.forEach(phrase => {
     assert.strictEqual(text.toLowerCase().includes(phrase), false, `Found banned phrase in shareText: ${phrase}`);
   });

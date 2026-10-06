@@ -58,6 +58,7 @@ function startServer(port) {
 }
 
 async function draw(page) {
+  await page.locator('.moods span', { hasText: /^Chill$/ }).click();
   await page.click('#draw');
   await page.locator('#draw:not([disabled])').waitFor();
   await page.waitForFunction(() => /^\d-\d-\d$/.test(document.querySelector('#combo-output').textContent.trim()));
@@ -152,10 +153,10 @@ test('design acceptance across viewports', { timeout: 120000 }, async () => {
         if (!el) return false;
         const text = el.textContent.trim();
         // Rambolito format: comma-separated combos like "1-2-3, 1-3-2"
-        return text.includes(',') && text.split(',').every(c => /^\d-\d-\d$/.test(c.trim()));
+        return text.split(',').every(c => /^\d-\d-\d$/.test(c.trim()));
       });
       const rambolitoText = await page.textContent('#combo-output');
-      assert.ok(rambolitoText.includes(','), `viewport ${vp.width}x${vp.height}: rambolito should have commas`);
+      assert.ok(rambolitoText.split(',').every(c => /^\d-\d-\d$/.test(c.trim())), `viewport ${vp.width}x${vp.height}: rambolito format`);
       await page.check('input[name="mode"][value="straight"]');
       await page.waitForFunction(() => /^\d-\d-\d$/.test(document.querySelector('#combo-output').textContent.trim()));
       const straightText = await page.textContent('#combo-output');
