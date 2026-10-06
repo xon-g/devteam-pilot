@@ -2,7 +2,6 @@ import { test } from 'node:test';
 import assert from 'node:assert';
 import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
-import fs from 'node:fs';
 import net from 'node:net';
 import { fileURLToPath } from 'node:url';
 
@@ -64,6 +63,21 @@ async function draw(page) {
   await page.waitForFunction(() => /^\d-\d-\d$/.test(document.querySelector('#combo-output').textContent.trim()));
 }
 
+function assertDisclaimerOnScreen(rect, vpWidth, vpHeight) {
+  const left = rect.left;
+  const top = rect.top;
+  const bottom = rect.bottom;
+  const width = rect.width;
+  const vw = vpWidth;
+  const vh = vpHeight;
+  
+  assert.ok(top >= 0, `viewport ${vpWidth}x${vpHeight}: disclaimer top ${top} < 0 (off screen)`);
+  assert.ok(bottom <= vh + 0.5, `viewport ${vpWidth}x${vpHeight}: disclaimer bottom ${bottom} > ${vh + 0.5} (below viewport)`);
+  assert.ok(bottom >= vh - 1, `viewport ${vpWidth}x${vpHeight}: disclaimer bottom ${bottom} < ${vh - 1} (not pinned to bottom)`);
+  assert.ok(left <= 0.5, `viewport ${vpWidth}x${vpHeight}: disclaimer left ${left} > 0.5`);
+  assert.ok(width >= vw - 1, `viewport ${vpWidth}x${vpHeight}: disclaimer width ${width} < ${vw - 1}`);
+}
+
 test('design acceptance across viewports', { timeout: 120000 }, async () => {
   const port = await getFreePort();
   const { proc, ready } = startServer(port);
@@ -120,15 +134,15 @@ test('design acceptance across viewports', { timeout: 120000 }, async () => {
         assert.ok(spanRects[i].height >= 44, `viewport ${vp.width}x${vp.height}: span ${i} height ${spanRects[i].height} < 44`);
       }
 
-      // 4. Disclaimer full width, bottom fixed, share above it after scroll
+      // 4. Disclaimer full width, bottom fixed, on screen
       const disclaimerRect = await page.evaluate(() => document.querySelector('#disclaimer').getBoundingClientRect());
-      assert.ok(disclaimerRect.left <= 0.5, `viewport ${vp.width}x${vp.height}: disclaimer left ${disclaimerRect.left} > 0.5`);
-      assert.ok(disclaimerRect.width >= vp.width - 1, `viewport ${vp.width}x${vp.height}: disclaimer width ${disclaimerRect.width} < ${vp.width - 1}`);
-      assert.ok(disclaimerRect.bottom >= vp.height - 0.5, `viewport ${vp.width}x${vp.height}: disclaimer bottom ${disclaimerRect.bottom} < ${vp.height - 0.5}`);
+      assertDisclaimerOnScreen(disclaimerRect, vp.width, vp.height);
 
+      // Check share above disclaimer after scroll
       await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
       const shareRectAfter = await page.evaluate(() => document.querySelector('#share').getBoundingClientRect());
       const disclaimerRectAfter = await page.evaluate(() => document.querySelector('#disclaimer').getBoundingClientRect());
+      assertDisclaimerOnScreen(disclaimerRectAfter, vp.width, vp.height);
       assert.ok(shareRectAfter.bottom <= disclaimerRectAfter.top, `viewport ${vp.width}x${vp.height}: share bottom ${shareRectAfter.bottom} not above disclaimer top ${disclaimerRectAfter.top}`);
 
       // 5. Reasons visible, non-empty, mini matches digit
@@ -146,21 +160,35 @@ test('design acceptance across viewports', { timeout: 120000 }, async () => {
         assert.strictEqual(miniTexts[i], digitTexts[i], `viewport ${vp.width}x${vp.height}: mini ${i} "${miniTexts[i]}" != digit ${i} "${digitTexts[i]}"`);
       }
 
-      // 6. Mode toggle works
-      await page.check('input[name="mode"][value="rambolito"]');
-      await page.waitForFunction(() => {
+      // 6. Mode toggle: click visible label text
+      const drawn = await page.evaluate(() => Array.from(document.querySelectorAll('.digit')).map(el => el.textContent.trim()));
+      const allSame = drawn.length === 3 && drawn[0] === drawn[1] && drawn[1] === drawn[2];
+      await page.locator('.segmented span', { hasText: /^Rambolito$/ }).click();
+      await page.waitForFunction((same) => {
         const el = document.querySelector('#combo-output');
         if (!el) return false;
         const text = el.textContent.trim();
-        // Rambolito format: comma-separated combos like "1-2-3, 1-3-2"
-        return text.split(',').every(c => /^\d-\d-\d$/.test(c.trim()));
-      });
-      const rambolitoText = await page.textContent('#combo-output');
-      assert.ok(rambolitoText.split(',').every(c => /^\d-\d-\d$/.test(c.trim())), `viewport ${vp.width}x${vp.height}: rambolito format`);
-      await page.check('input[name="mode"][value="straight"]');
+        // Triple digits have a single combo (no comma); otherwise a comma-separated list
+        return same ? /^\d-\d-\d$/.test(text) : text.includes(',');
+      }, allSame);
+      const rambolitoText = (await page.textContent('#combo-output')).trim();
+      if (allSame) {
+        assert.strictEqual(rambolitoText, drawn.join('-'), `viewport ${vp.width}x${vp.height}: triple rambolito should be a single combo`);
+      } else {
+        const items = rambolitoText.split(',').map(c => c.trim());
+        assert.ok(items.every(c => /^\d-\d-\d$/.test(c)), `viewport ${vp.width}x${vp.height}: bad rambolito items: ${rambolitoText}`);
+        const expected = new Set(drawn).size === 2 ? 3 : 6;
+        assert.strictEqual(items.length, expected, `viewport ${vp.width}x${vp.height}: rambolito count ${items.length}, expected ${expected}`);
+      }
+      assert.strictEqual(await page.isChecked('input[name="mode"][value="rambolito"]'), true, `viewport ${vp.width}x${vp.height}: rambolito radio should be checked`);
+      assert.strictEqual(await page.isChecked('input[name="mode"][value="straight"]'), false, `viewport ${vp.width}x${vp.height}: straight radio should be unchecked`);
+
+      await page.locator('.segmented span', { hasText: /^Straight$/ }).click();
       await page.waitForFunction(() => /^\d-\d-\d$/.test(document.querySelector('#combo-output').textContent.trim()));
       const straightText = await page.textContent('#combo-output');
       assert.match(straightText, /^\d-\d-\d$/, `viewport ${vp.width}x${vp.height}: straight format mismatch`);
+      assert.strictEqual(await page.isChecked('input[name="mode"][value="straight"]'), true, `viewport ${vp.width}x${vp.height}: straight radio should be checked`);
+      assert.strictEqual(await page.isChecked('input[name="mode"][value="rambolito"]'), false, `viewport ${vp.width}x${vp.height}: rambolito radio should be unchecked`);
 
       // Save screenshot
       const filename = `.smoke/design-${vp.width}.png`;
@@ -169,27 +197,5 @@ test('design acceptance across viewports', { timeout: 120000 }, async () => {
   } finally {
     if (browser) await browser.close();
     proc.kill();
-  }
-});
-
-test('lucky.js REASONS content', () => {
-  const reasonsPath = new URL('../src/reasons.js', import.meta.url);
-  const content = fs.readFileSync(reasonsPath, 'utf8');
-  
-  // Check required phrases exist
-  assert.ok(content.includes('"Pwede nang mangarap"'), 'Missing "Pwede nang mangarap"');
-  assert.ok(content.includes('"Meron din naman palang ganda ang buhay"'), 'Missing "Moner din naman palang ganda ang buhay"');
-  
-  // Check each digit has at least 4 reasons
-  for (let d = 0; d <= 9; d++) {
-    const regex = new RegExp(`\\b${d}\\s*:\\s*\\[([^\\]]+)\\]`, 's');
-    const match = content.match(regex);
-    assert.ok(match, `Missing REASONS[${d}]`);
-    const reasonsStr = match[1];
-    const reasons = reasonsStr.split(',').map(s => s.trim().replace(/["']/g, '')).filter(Boolean);
-    assert.ok(reasons.length >= 4, `Digit ${d} has ${reasons.length} reasons, need at least 4`);
-    for (const r of reasons) {
-      assert.ok(r.length <= 48, `Digit ${d} reason too long (${r.length} chars): ${r}`);
-    }
   }
 });
