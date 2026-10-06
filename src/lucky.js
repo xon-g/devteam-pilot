@@ -47,3 +47,13 @@ export function rambolitoCombos(combo) {
   permute(combo);
   return Array.from(results).sort();
 }
+
+export function shareText(combo, mode) {
+  const straight = formatStraight(combo);
+  if (mode === 'straight') {
+    return `Swertres lucky numbers ko: ${straight} (Straight) 🍀 For entertainment only. 18+.`;
+  } else {
+    const rambolito = rambolitoCombos(combo).join(', ');
+    return `Swertres lucky numbers ko: ${rambolito} (Rambolito) 🍀 For entertainment only. 18+.`;
+  }
+}

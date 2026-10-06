@@ -1,8 +1,7 @@
+import { randomInt, drawCombo, pickReason, formatStraight, rambolitoCombos, REASONS, shareText } from '../src/lucky.js';
 import fs from 'node:fs';
 import { test } from 'node:test';
 import assert from 'node:assert';
-
-import { randomInt, drawCombo, pickReason, formatStraight, rambolitoCombos, REASONS } from '../src/lucky.js';
 
 test('randomInt(10) distribution', () => {
   const counts = new Array(10).fill(0);
@@ -77,5 +76,28 @@ test('banned-phrase scan', () => {
   const banned = ['guarantee', 'sigurado', 'siguradong panalo', 'tsansa', 'odds', 'better chance', 'sure win', 'jackpot ka na'];
   banned.forEach(phrase => {
     assert.strictEqual(content.includes(phrase), false, `Found banned phrase: ${phrase}`);
+  });
+});
+
+test('shareText straight format', () => {
+  assert.strictEqual(shareText([3, 8, 1], 'straight'), 'Swertres lucky numbers ko: 3-8-1 (Straight) 🍀 For entertainment only. 18+.');
+});
+
+test('shareText rambolito format', () => {
+  const text = shareText([1, 2, 3], 'rambolito');
+  assert.ok(text.includes('1-2-3'));
+  assert.ok(text.includes('1-3-2'));
+  assert.ok(text.includes('2-1-3'));
+  assert.ok(text.includes('2-3-1'));
+  assert.ok(text.includes('3-1-2'));
+  assert.ok(text.includes('3-2-1'));
+  assert.ok(text.includes('🍀 For entertainment only. 18+.'));
+});
+
+test('shareText banned-phrase scan', () => {
+  const text = shareText([3, 8, 1], 'straight');
+  const banned = ['guarantee', 'sigurado', 'siguradong panalo', 'tsansa', 'odds', 'better chance', 'sure win', 'jackpot ka na'];
+  banned.forEach(phrase => {
+    assert.strictEqual(text.toLowerCase().includes(phrase), false, `Found banned phrase in shareText: ${phrase}`);
   });
 });
