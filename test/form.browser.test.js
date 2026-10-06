@@ -91,6 +91,8 @@ test('about-you form', { timeout: 90000 }, async () => {
     await page.fill('#age', '15');
     assert.strictEqual(await page.locator('#draw').isDisabled(), true);
     assert.ok((await page.textContent('#form-status')).includes('18+ lang'));
+    await page.fill('#age', '17');
+    assert.strictEqual(await page.locator('#draw').isDisabled(), true);
     await page.fill('#age', '');
     assert.strictEqual(await page.locator('#draw').isDisabled(), false);
     await page.fill('#age', '25');
