@@ -73,7 +73,7 @@ test('lucky.js uses the single REASONS list from reasons.js', () => {
 
 test('banned-phrase scan', () => {
   const content = fs.readFileSync(new URL('../src/reasons.js', import.meta.url), 'utf8').toLowerCase();
-  const banned = ['guarantee', 'sigurado', 'siguradong panalo', 'tsansa', 'odds', 'better chance', 'sure win', 'jackpot ka na'];
+  const banned = ['guarantee', 'sigurado', 'siguradong panalo', 'tsansa', 'odds', 'better chance', 'sure win', 'jackpot ka na', 'panalo', 'tatama', 'jackpot'];
   banned.forEach(phrase => {
     assert.strictEqual(content.includes(phrase), false, `Found banned phrase: ${phrase}`);
   });

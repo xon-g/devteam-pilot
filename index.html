@@ -25,44 +25,54 @@
   <meta name="twitter:title" content="Swertres Lucky Numbers">
   <meta name="twitter:description" content="Tatlong random na numero, 0-9. Random digits para sa iyong swerte. For entertainment only. 18+.">
   <meta name="twitter:image" content="https://xon-g.github.io/devteam-pilot/assets/og-image.png">
-  <meta name="theme-color" content="#FFD700">
+  <meta name="theme-color" content="#12061f">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="container">
+<body>
   <header id="header">
-    <h1 class="title">Swertres Lucky Numbers</h1>
+    <p class="eyebrow">Swertres · 3D</p>
+    <h1 class="title">Swertres <span>Lucky</span> Numbers</h1>
+    <p class="tagline">Tatlong numero, isang tapik. Good vibes lang.</p>
   </header>
 
   <main id="main">
-    <div id="combo-display">
-      <div class="digit-container">
-        <div class="digit" id="digit-0"></div>
-        <div class="reason" id="reason-0"></div>
-      </div>
-      <div class="digit-container">
-        <div class="digit" id="digit-1"></div>
-        <div class="reason" id="reason-1"></div>
-      </div>
-      <div class="digit-container">
-        <div class="digit" id="digit-2"></div>
-        <div class="reason" id="reason-2"></div>
-      </div>
+    <div class="balls">
+      <div class="digit" id="digit-0"></div>
+      <div class="digit" id="digit-1"></div>
+      <div class="digit" id="digit-2"></div>
     </div>
 
-    <div id="combo-output">Pindutin ang Bunot na! para sa swerte mo</div>
+    <ol class="reasons" hidden>
+      <li>
+        <span class="mini" id="mini-0"></span>
+        <span class="reason" id="reason-0"></span>
+      </li>
+      <li>
+        <span class="mini" id="mini-1"></span>
+        <span class="reason" id="reason-1"></span>
+      </li>
+      <li>
+        <span class="mini" id="mini-2"></span>
+        <span class="reason" id="reason-2"></span>
+      </li>
+    </ol>
 
-    <div class="controls">
-      <div class="mode-selector">
-        <label>
-          <input type="radio" name="mode" value="straight" checked> Straight
-        </label>
-        <label>
-          <input type="radio" name="mode" value="rambolito"> Rambolito
-        </label>
-      </div>
+    <div id="combo-output" class="prompt">G ka na? Pindutin ang Bunot na!</div>
 
+    <div class="segmented" role="radiogroup">
+      <label>
+        <input type="radio" name="mode" value="straight" checked>
+        <span>Straight</span>
+      </label>
+      <label>
+        <input type="radio" name="mode" value="rambolito">
+        <span>Rambolito</span>
+      </label>
+    </div>
+
+    <div class="actions">
       <button id="draw">Bunot na!</button>
       <button id="share" disabled>I-share</button>
     </div>
