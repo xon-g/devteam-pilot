@@ -1,4 +1,4 @@
-const CACHE = "swertres-v7";
+const CACHE = "swertres-v8";
 
 const ASSETS = [
   "./",
@@ -9,6 +9,7 @@ const ASSETS = [
   "src/reasons.js",
   "src/profile.js",
   "src/sound.js",
+  "src/roast.js",
   "src/app.js",
   "manifest.webmanifest",
   "assets/icons/icon-192.png",

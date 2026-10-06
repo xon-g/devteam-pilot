@@ -1,6 +1,7 @@
 import { rambolitoCombos, randomInt, shareText } from './lucky.js';
 import { DEFAULT_GAME, drawNumbers, formatNumbers, getGame } from './games.js';
 import { createSound } from './sound.js';
+import { roastLines } from './roast.js';
 import { validateProfile, pickMoodReasons } from './profile.js';
 
 // Register service worker if supported
@@ -29,6 +30,7 @@ const nameInput = document.getElementById('name');
 const ageInput = document.getElementById('age');
 const formStatus = document.getElementById('form-status');
 const forName = document.getElementById('for-name');
+const roastEl = document.getElementById('roast');
 
 const sound = createSound(() => {
   const C = window.AudioContext || window.webkitAudioContext;
@@ -80,12 +82,18 @@ function buildSlots(game) {
   miniElements = Array.from(reasonsList.querySelectorAll('.mini'));
 }
 
+function clearRoast() {
+  roastEl.textContent = '';
+  roastEl.hidden = true;
+}
+
 function applyGame(game) {
   currentGame = game;
   currentCombo = null;
   buildSlots(game);
   reasonsList.hidden = true;
   forName.hidden = true;
+  clearRoast();
   comboOutput.textContent = PROMPT;
   comboOutput.classList.add('prompt');
   shareButton.disabled = true;
@@ -137,6 +145,7 @@ async function draw() {
   const moodReasons = pickMoodReasons(profile.mood, n);
   currentName = profile.name;
   forName.hidden = true;
+  clearRoast();
   buildSlots(game);
   reasonsList.hidden = true;
 
@@ -193,6 +202,12 @@ async function draw() {
   } else {
     forName.hidden = true;
   }
+  for (const line of roastLines(profile)) {
+    const li = document.createElement('li');
+    li.textContent = line;
+    roastEl.appendChild(li);
+  }
+  roastEl.hidden = roastEl.children.length === 0;
   reasonsList.hidden = false;
   updateDisplay();
   shareButton.disabled = false;
