@@ -32,7 +32,7 @@ async function httpRequest(port, pathname) {
         status: res.statusCode,
         type: res.headers['content-type']
       });
-    }).on('error', reject);
+    }).on('error', reject).end();
   });
 }
 
