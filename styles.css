@@ -24,11 +24,11 @@ body {
   min-height: 100dvh;
   color: var(--text);
   display: grid;
-  grid-template-areas: "header" "main" "banner" "disclaimer";
-  grid-template-rows: auto 1fr auto auto;
+  grid-template-areas: "header" "main" "about" "banner" "disclaimer";
+  grid-template-rows: auto 1fr auto auto auto;
 }
 
-header, main, #ad-slot {
+header, main, #about-games, #ad-slot {
   width: min(100% - 2rem, 34rem);
   margin-inline: auto;
 }
@@ -86,7 +86,7 @@ header {
 main {
   grid-area: main;
   padding-top: 1rem;
-  padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+  padding-bottom: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -486,4 +486,43 @@ footer#disclaimer {
   color: var(--muted);
   font-size: 0.75rem;
   text-align: center;
+}
+
+/* Crawlable about / FAQ section (below the app, clear of the fixed footer) */
+.about-games {
+  grid-area: about;
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.about-games h2 {
+  margin: 1.5rem 0 0.5rem;
+  color: var(--text);
+  font-size: 1.1rem;
+}
+
+.about-games ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.about-games details {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.6rem 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.about-games summary {
+  cursor: pointer;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.about-games details p {
+  margin: 0.5rem 0 0;
 }
