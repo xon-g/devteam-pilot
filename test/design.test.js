@@ -2,7 +2,6 @@ import { test } from 'node:test';
 import assert from 'node:assert';
 import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
-import fs from 'node:fs';
 import net from 'node:net';
 import { fileURLToPath } from 'node:url';
 
@@ -142,6 +141,7 @@ test('design acceptance across viewports', { timeout: 120000 }, async () => {
       await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
       const shareRectAfter = await page.evaluate(() => document.querySelector('#share').getBoundingClientRect());
       const disclaimerRectAfter = await page.evaluate(() => document.querySelector('#disclaimer').getBoundingClientRect());
+      assertDisclaimerOnScreen(disclaimerRectAfter, vp.width, vp.height);
       assert.ok(shareRectAfter.bottom <= disclaimerRectAfter.top, `viewport ${vp.width}x${vp.height}: share bottom ${shareRectAfter.bottom} not above disclaimer top ${disclaimerRectAfter.top}`);
 
       // 5. Reasons visible, non-empty, mini matches digit
@@ -187,27 +187,5 @@ test('design acceptance across viewports', { timeout: 120000 }, async () => {
   } finally {
     if (browser) await browser.close();
     proc.kill();
-  }
-});
-
-test('lucky.js REASONS content', () => {
-  const reasonsPath = new URL('../src/reasons.js', import.meta.url);
-  const content = fs.readFileSync(reasonsPath, 'utf8');
-  
-  // Check required phrases exist
-  assert.ok(content.includes('"Pwede nang mangarap"'), 'Missing "Pwede nang mangarap"');
-  assert.ok(content.includes('"Meron din naman palang ganda ang buhay"'), 'Missing "Moner din naman palang ganda ang buhay"');
-  
-  // Check each digit has at least 4 reasons
-  for (let d = 0; d <= 9; d++) {
-    const regex = new RegExp(`\\b${d}\\s*:\\s*\\[([^\\]]+)\\]`, 's');
-    const match = content.match(regex);
-    assert.ok(match, `Missing REASONS[${d}]`);
-    const reasonsStr = match[1];
-    const reasons = reasonsStr.split(',').map(s => s.trim().replace(/["']/g, '')).filter(Boolean);
-    assert.ok(reasons.length >= 4, `Digit ${d} has ${reasons.length} reasons, need at least 4`);
-    for (const r of reasons) {
-      assert.ok(r.length <= 48, `Digit ${d} reason too long (${r.length} chars): ${r}`);
-    }
   }
 });

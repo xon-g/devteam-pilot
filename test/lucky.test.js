@@ -1,4 +1,5 @@
-import { randomInt, drawCombo, pickReason, formatStraight, rambolitoCombos, REASONS, shareText } from '../src/lucky.js';
+import { randomInt, drawCombo, pickReason, formatStraight, rambolitoCombos, shareText } from '../src/lucky.js';
+import { REASONS } from '../src/reasons.js';
 import fs from 'node:fs';
 import { test } from 'node:test';
 import assert from 'node:assert';
