@@ -1,0 +1,25 @@
+body {
+    font-family: sans-serif;
+    text-align: center;
+    padding: 20px;
+}
+
+#draw-btn {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+#result-container {
+    margin-top: 20px;
+}
+
+#combo-display {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+#reason-display {
+    font-style: italic;
+    color: #555;
+}
