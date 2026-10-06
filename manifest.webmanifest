@@ -1,6 +1,6 @@
 {
-  "name": "Swertres Lucky Numbers",
-  "short_name": "Swertres",
+  "name": "PCSO Lucky Numbers",
+  "short_name": "PCSO Lucky",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
