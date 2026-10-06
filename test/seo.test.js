@@ -218,11 +218,11 @@ test('OG image exists and has correct dimensions', () => {
   assert.strictEqual(dims.height, 630, 'og-image.png height should be 630');
 });
 
-test('sw.js precaches og-image.png and CACHE is swertres-v10', () => {
+test('sw.js precaches og-image.png and CACHE is swertres-v11', () => {
   const swJs = fs.readFileSync(path.join(rootDir, 'sw.js'), 'utf8');
   
   // Check CACHE version
-  assert.ok(swJs.includes('const CACHE = "swertres-v10"'), 'CACHE should be swertres-v10');
+  assert.ok(swJs.includes('const CACHE = "swertres-v11"'), 'CACHE should be swertres-v11');
   
   // Check og-image.png in ASSETS
   assert.ok(swJs.includes('"assets/og-image.png"'), 'sw.js should precache og-image.png');
