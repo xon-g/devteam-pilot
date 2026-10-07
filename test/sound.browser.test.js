@@ -101,7 +101,7 @@ test('sound effects', { timeout: 120000 }, async () => {
     await draw(page);
     assert.strictEqual(await page.evaluate(() => window.__audio.created), 1);
     let s = await starts(page);
-    assert.strictEqual(near(s, 2400), 8);
+    assert.strictEqual(near(s, 2400), 10);
     for (let i = 0; i < 3; i++) assert.strictEqual(near(s, 1320 * 1.06 ** i), 3 > i ? 1 : 0, `ding ${i}`);
     assert.strictEqual(near(s, 2093), 1);
 
