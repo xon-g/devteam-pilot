@@ -20,6 +20,7 @@ const MIME_TYPES = {
   '.css': 'text/css',
   '.js': 'application/javascript',
   '.png': 'image/png',
+  '.ico': 'image/x-icon',
   '.svg': 'image/svg+xml',
   '.webmanifest': 'application/manifest+json',
 };
