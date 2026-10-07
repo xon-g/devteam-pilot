@@ -159,7 +159,7 @@ test('service worker bypasses ads and never precaches them', () => {
   assert.ok(!/ads\.txt|ads\.config|https?:/.test(block));
   assert.ok(block.includes('"src/ads.js"'));
   for (const d of ['googlesyndication.com', 'doubleclick.net', 'googleadservices.com', 'google.com', 'gstatic.com', '/ads.txt']) assert.ok(sw.includes(d), d);
-  assert.ok(/const CACHE = "swertres-v40"/.test(sw));
+  assert.ok(/const CACHE = "swertres-v41"/.test(sw));
 });
 
 test('sitemap lists every page once and robots names it', () => {

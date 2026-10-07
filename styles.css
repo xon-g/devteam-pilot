@@ -700,6 +700,7 @@ footer#disclaimer {
 }
 
 .about-games p.fine-print {
+  margin-inline: auto;
   margin-block: var(--space-4) 0;
 }
 
