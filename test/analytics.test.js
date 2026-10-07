@@ -39,7 +39,7 @@ test('index.html GoatCounter tag and privacy note', () => {
   const head = html.slice(html.indexOf('<head>'), html.indexOf('</head>'));
   assert.ok(head.includes(tag));
   assert.ok(head.indexOf(tag) > head.indexOf('location.replace'));
-  const note = html.match(/<p id="privacy-note"[^>]*>([^<]*)<\/p>/);
+  const note = html.match(/<p id="privacy-note"[^>]*>([\s\S]*?)<\/p>/);
   assert.ok(note);
   assert.ok(note[1].includes('GoatCounter') && note[1].includes('walang cookies'));
   assert.ok(html.includes('id="not-affiliated"'));
@@ -47,6 +47,6 @@ test('index.html GoatCounter tag and privacy note', () => {
 
 test('sw.js cache bumped, no gc caching', () => {
   const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
-  assert.ok(sw.includes('"swertres-v21"'));
+  assert.ok(sw.includes('"swertres-v22"'));
   assert.ok(!sw.includes('zgo.at'));
 });

@@ -21,5 +21,5 @@ test('styles.css draws the badge and sw.js is v20', () => {
   const css = read('styles.css');
   assert.ok(css.includes('attr(data-ball)'));
   assert.ok(css.includes('.games span.lotto::before'));
-  assert.ok(read('sw.js').includes('swertres-v21'));
+  assert.ok(read('sw.js').includes('swertres-v22'));
 });

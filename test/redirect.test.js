@@ -33,11 +33,31 @@ test('inline script is first in head after charset and agrees with src/redirect.
   }
 });
 
+const PRIVACY_CASES = [
+  ...CASES,
+  ['xon-g.github.io', '/devteam-pilot/privacy/', '', '', 'https://lotto.xonicbox.com/privacy/'],
+];
+const privacyHtml = read('privacy/index.html');
+
+test('privacy page inline script agrees with redirectTarget', () => {
+  const m = privacyHtml.match(/<head>\s*<meta charset="UTF-8">\s*<script>([\s\S]*?)<\/script>/);
+  assert.ok(m, 'inline redirect script right after <meta charset>');
+  for (const [hostname, pathname, search, hash, want] of PRIVACY_CASES) {
+    let got = null;
+    const location = { hostname, pathname, search, hash, replace: (u) => { got = u; } };
+    vm.runInNewContext(m[1], { location });
+    assert.strictEqual(got, want, `privacy inline: ${hostname}${pathname}`);
+    assert.strictEqual(redirectTarget(hostname, pathname, search, hash), want, `redirectTarget: ${hostname}${pathname}`);
+  }
+});
+
 test('xon-g.github.io appears only in the redirect script/module (outside tasks, test, .review)', () => {
   const files = execFileSync('git', ['ls-files'], { cwd: root, encoding: 'utf8' }).split('\n')
     .filter((f) => f && !/^(tasks|test|\.review)\//.test(f) && !/\.(png|jpg)$/.test(f));
   const hits = files.filter((f) => fs.existsSync(new URL(f, root)) && read(f).includes('xon-g.github.io'));
-  assert.deepStrictEqual(hits.sort(), ['index.html', 'src/redirect.js']);
+  assert.deepStrictEqual(hits.sort(), ['index.html', 'privacy/index.html', 'src/redirect.js']);
   const stripped = html.replace(/<script>[\s\S]*?<\/script>/, '');
   assert.ok(!stripped.includes('xon-g.github.io'));
+  const strippedPrivacy = privacyHtml.replace(/<script>[\s\S]*?<\/script>/, '');
+  assert.ok(!strippedPrivacy.includes('xon-g.github.io'));
 });
