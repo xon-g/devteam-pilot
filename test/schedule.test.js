@@ -87,8 +87,8 @@ test('how-to-play draw days match the JSON', () => {
   }
 });
 
-test('sw.js is v29 and lists the new files', () => {
+test('sw.js is v30 and lists the new files', () => {
   const sw = read('sw.js');
-  assert.ok(sw.includes('swertres-v29'));
+  assert.ok(sw.includes('swertres-v30'));
   assert.ok(sw.includes('"data/draw-schedule.json"') && sw.includes('"src/schedule.js"'));
 });
