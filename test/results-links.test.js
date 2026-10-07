@@ -42,7 +42,7 @@ test('src has no network calls and only config mentions the hosts', () => {
     } else {
       assert.strictEqual(fetches.length, 0, `${f} makes network calls`);
     }
-    if (f !== 'config.js') assert.ok(!/pcso\.gov\.ph|facebook\.com/.test(src), `${f} mentions hosts`);
+    if (f !== 'config.js' && f !== 'share.js') assert.ok(!/pcso\.gov\.ph|facebook\.com/.test(src), `${f} mentions hosts`);
   }
 });
 
@@ -53,6 +53,6 @@ test('contact page links the results URL with noopener', () => {
   assert.ok(/rel="[^"]*noopener/.test(a[0]));
 });
 
-test('sw.js has swertres-v28', () => {
-  assert.ok(read('sw.js').includes('swertres-v28'));
+test('sw.js has swertres-v29', () => {
+  assert.ok(read('sw.js').includes('swertres-v29'));
 });

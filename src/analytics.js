@@ -2,7 +2,7 @@ import { GAMES } from './games.js';
 
 const MOODS = ['masaya', 'pagod', 'stressed', 'kinikilig', 'chill', 'ewan'];
 const MODES = ['straight', 'rambolito'];
-const VIA = ['native', 'copy'];
+const VIA = ['native', 'copy', 'fb', 'msgr', 'viber', 'wa', 'tg', 'x', 'img'];
 
 const pick = (allowed, value) => (allowed.includes(value) ? value : 'other');
 
