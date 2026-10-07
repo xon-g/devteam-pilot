@@ -17,9 +17,9 @@ test('every game span has its data-ball code; only 6/xx spans are lotto', () => 
   }
 });
 
-test('styles.css draws the badge and sw.js is v17', () => {
+test('styles.css draws the badge and sw.js is v18', () => {
   const css = read('styles.css');
   assert.ok(css.includes('attr(data-ball)'));
   assert.ok(css.includes('.games span.lotto::before'));
-  assert.ok(read('sw.js').includes('swertres-v17'));
+  assert.ok(read('sw.js').includes('swertres-v18'));
 });
