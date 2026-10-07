@@ -3,7 +3,8 @@ import { DEFAULT_GAME, drawNumbers, formatNumbers, getGame } from './games.js';
 import { createSound } from './sound.js';
 import { roastLines } from './roast.js';
 import { eventPath, track } from './analytics.js';
-import { PCSO_RESULTS_URL, PCSO_FACEBOOK_URL } from './config.js';
+import { PCSO_RESULTS_URL, PCSO_FACEBOOK_URL, SITE_URL } from './config.js';
+import { shareLinks, isMobileUA, copyText, shareUrl } from './share.js';
 import { nextDraw, formatCountdown, drawLabel, loadSchedule } from './schedule.js';
 import { validateProfile, pickMoodReasons } from './profile.js';
 
@@ -25,6 +26,7 @@ const comboOutput = document.getElementById('combo-output');
 const PROMPT = comboOutput.textContent;
 const drawButton = document.getElementById('draw');
 const shareButton = document.getElementById('share');
+const shareRow = document.getElementById('share-row');
 const shareStatus = document.getElementById('share-status');
 const modeRadios = document.querySelectorAll('input[name="mode"]');
 
@@ -117,6 +119,7 @@ function applyGame(game) {
   comboOutput.textContent = PROMPT;
   comboOutput.classList.add('prompt');
   shareButton.disabled = true;
+  shareRow.hidden = true;
   shareStatus.textContent = '';
   modeGroup.hidden = !game.rambolito;
   resultsGame.textContent = game.name;
@@ -242,22 +245,58 @@ async function draw() {
   reasonsList.hidden = false;
   updateDisplay();
   shareButton.disabled = false;
+  updateShareRow();
   track(window.goatcounter, eventPath('draw', { game: game.id, mood: profile.mood, mode: currentMode() }));
+}
+
+function currentShareText() {
+  return shareText(currentCombo, currentMode(), currentName, currentGame.id);
+}
+
+function updateShareRow() {
+  const mobile = isMobileUA(navigator.userAgent);
+  for (const link of shareLinks(currentShareText(), SITE_URL)) {
+    const a = shareRow.querySelector(`a[data-share="${link.id}"]`);
+    if (!a) continue;
+    a.href = link.href;
+    if (link.href.startsWith('https:')) {
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+    }
+    a.hidden = link.id === 'msgr' && !mobile;
+  }
+  shareRow.hidden = false;
+}
+
+async function handleRowClick(e) {
+  const el = e.target.closest('[data-share]');
+  if (!el) return;
+  const via = el.dataset.share;
+  track(window.goatcounter, eventPath('share-done', { via }));
+  if (via !== 'copy') return;
+  try {
+    await navigator.clipboard.writeText(copyText(currentShareText(), SITE_URL));
+    shareStatus.textContent = 'Nakopya na!';
+  } catch (err) {
+    shareStatus.textContent = 'Hindi maibahagi';
+    console.error('Share error:', err);
+  }
 }
 
 async function handleShare() {
   track(window.goatcounter, eventPath('share-tap'));
-  const text = shareText(currentCombo, currentMode(), currentName, currentGame.id);
+  const text = currentShareText();
 
   try {
     if (navigator.share) {
       await navigator.share({
-        text: text
+        text: text,
+        url: shareUrl(SITE_URL, 'native')
       });
       shareStatus.textContent = 'Naibahagi na!';
       track(window.goatcounter, eventPath('share-done', { via: 'native' }));
     } else {
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(copyText(text, SITE_URL));
       shareStatus.textContent = 'Nakopya na!';
       track(window.goatcounter, eventPath('share-done', { via: 'copy' }));
     }
@@ -274,6 +313,7 @@ async function handleShare() {
 window.addEventListener('appinstalled', () => track(window.goatcounter, eventPath('pwa-install')));
 drawButton.addEventListener('click', draw);
 shareButton.addEventListener('click', handleShare);
+shareRow.addEventListener('click', handleRowClick);
 soundButton.addEventListener('click', () => {
   const on = !sound.isEnabled();
   sound.setEnabled(on);
