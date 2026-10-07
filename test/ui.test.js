@@ -1,3 +1,5 @@
+import { launchStubbed, readConfig } from './ads-helpers.js';
+import { slotSnippet } from '../scripts/ads.js';
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { spawn } from 'node:child_process';
@@ -84,7 +86,7 @@ test('page UI acceptance', { timeout: 60000 }, async () => {
   try {
     await ready;
     const chromium = await loadChromium();
-    browser = await chromium.launch();
+    browser = await launchStubbed(chromium);
     const context = await browser.newContext({ viewport: VIEWPORT, reducedMotion: 'reduce' });
     await context.route('https://gc.zgo.at/**', (route) => route.fulfill({ status: 200, contentType: 'application/javascript', body: '' }));
     const page = await context.newPage();
@@ -96,6 +98,7 @@ test('page UI acceptance', { timeout: 60000 }, async () => {
     page.on('request', (req) => {
       const { hostname, port: p } = new URL(req.url());
       if (hostname === 'gc.zgo.at') return;
+      if (req.url().startsWith('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-')) return; // AdSense head script (stubbed, task 46)
       if (hostname !== 'localhost' || p !== String(port)) foreign.push(req.url());
     });
 
@@ -107,7 +110,7 @@ test('page UI acceptance', { timeout: 60000 }, async () => {
     await assertDisclaimerInViewport(page, 'at load');
 
     const ad = await page.$eval('#ad-slot', (el) => ({ hidden: el.hidden, children: el.children.length, height: el.getBoundingClientRect().height }));
-    assert.deepStrictEqual(ad, { hidden: true, children: 0, height: 0 });
+    if (!slotSnippet(readConfig())) assert.deepStrictEqual(ad, { hidden: true, children: 0, height: 0 });
 
     const digits = await draw(page);
     assert.strictEqual(digits.length, 3);

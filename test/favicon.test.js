@@ -1,3 +1,4 @@
+import { launchStubbed } from './ads-helpers.js';
 import { test } from 'node:test';
 import assert from 'node:assert';
 import fs from 'node:fs';
@@ -42,9 +43,9 @@ test('favicon.ico wraps a 32x32 PNG', () => {
   assert.ok(ico.subarray(offset, offset + 8).equals(PNG_SIG));
 });
 
-test('sw.js precaches favicons under swertres-v38', () => {
+test('sw.js precaches favicons under swertres-v39', () => {
   const sw = read('sw.js').toString('utf8');
-  assert.ok(sw.includes('swertres-v38'));
+  assert.ok(sw.includes('swertres-v39'));
   assert.ok(sw.includes('assets/icons/favicon.svg'));
   assert.ok(sw.includes('assets/icons/favicon-32.png'));
 });
@@ -82,7 +83,7 @@ test('favicons are served with correct content types', { timeout: 60000 }, async
     } catch {
       chromium = createRequire(import.meta.url)(PLAYWRIGHT).chromium;
     }
-    browser = await chromium.launch();
+    browser = await launchStubbed(chromium);
     const context = await browser.newContext();
     await context.route('https://gc.zgo.at/**', (route) => route.fulfill({ status: 200, contentType: 'application/javascript', body: '' }));
     const page = await context.newPage();

@@ -1,3 +1,4 @@
+import { launchStubbed } from './ads-helpers.js';
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { spawn } from 'node:child_process';
@@ -55,7 +56,7 @@ const port = await getFreePort();
 const server = startServer(port);
 await server.ready;
 const chromium = await loadChromium();
-const browser = await chromium.launch();
+const browser = await launchStubbed(chromium);
 const base = `http://localhost:${port}`;
 
 test.after(async () => {

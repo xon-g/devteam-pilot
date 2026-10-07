@@ -1,3 +1,4 @@
+import { launchStubbed } from './ads-helpers.js';
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { spawn } from 'node:child_process';
@@ -58,7 +59,7 @@ test('share functionality', { timeout: 60000 }, async () => {
   try {
     await ready;
     const chromium = await loadChromium();
-    browser = await chromium.launch();
+    browser = await launchStubbed(chromium);
     
     // Context A: Clipboard focus
     const contextA = await browser.newContext({ 

@@ -1,3 +1,4 @@
+import { launchStubbed } from './ads-helpers.js';
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { spawn } from 'node:child_process';
@@ -56,7 +57,7 @@ test('mobile background: no white strip, layout unchanged', { timeout: 90000 }, 
   try {
     await ready;
     const chromium = await loadChromium();
-    browser = await chromium.launch();
+    browser = await launchStubbed(chromium);
     const context = await browser.newContext({ viewport: { width: 360, height: 780 }, reducedMotion: 'reduce' });
     const page = await context.newPage();
     const errors = [];

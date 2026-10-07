@@ -1,4 +1,6 @@
 import { test } from 'node:test';
+import { readConfig } from './ads-helpers.js';
+import { headSnippet, HEAD_PAGES } from '../scripts/ads.js';
 import assert from 'node:assert';
 import fs from 'node:fs';
 
@@ -22,7 +24,7 @@ for (const [slug, { h1, title, page, checks }] of Object.entries(PAGES)) {
     assert.ok(html.includes(`<title>${title}</title>`));
     assert.ok(html.includes(`<h1>${h1}</h1>`));
     const scripts = [...html.matchAll(/<script\b([^>]*)>/g)].map((m) => m[1].trim());
-    assert.strictEqual(scripts.length, slug === 'contact' ? 4 : 3);
+    assert.strictEqual(scripts.length, (slug === 'contact' ? 4 : 3) + (headSnippet(readConfig().adsensePublisherId) && HEAD_PAGES.includes(`${slug}/index.html`) ? 1 : 0));
     if (slug === 'contact') assert.ok(scripts.includes('type="module" src="../src/contact.js"'));
     assert.ok(html.indexOf('location.replace') < html.indexOf('data-goatcounter'));
     assert.ok(html.indexOf('<script>') < html.indexOf('<meta name="viewport"'));
@@ -32,7 +34,11 @@ for (const [slug, { h1, title, page, checks }] of Object.entries(PAGES)) {
     assert.strictEqual(gc(html).length, 1);
     assert.strictEqual(og(html), og(HOME));
     assert.ok(!/(href|src)="\//.test(html));
-    assert.ok(!/adsbygoogle|googlesyndication/.test(html));
+    {
+      const snip = headSnippet(readConfig().adsensePublisherId);
+      assert.strictEqual(html.split(snip || '\0').length - 1, snip && HEAD_PAGES.includes(`${slug}/index.html`) ? 1 : 0);
+      assert.ok(!/adsbygoogle|googlesyndication/.test(html.replace(snip || '\0', '')));
+    }
     assert.ok(text(html).split(' ').length >= 300);
     assert.ok(/<section lang="en">\s*<h2>English summary<\/h2>/.test(html));
     assert.ok(html.includes('<footer id="disclaimer">For entertainment only. Numbers are random and don\'t improve your odds. 18+. Play responsibly.</footer>'));
@@ -102,5 +108,5 @@ test('sitemap and sw list the new pages', () => {
     assert.ok(sm.includes(`<loc>https://lotto.xonicbox.com/${s}/</loc>`));
     assert.ok(sw.includes(`"${s}/"`));
   }
-  assert.ok(sw.includes('swertres-v38'));
+  assert.ok(sw.includes('swertres-v39'));
 });

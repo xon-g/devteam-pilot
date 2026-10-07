@@ -1,3 +1,4 @@
+import { launchStubbed } from './ads-helpers.js';
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { spawn } from 'node:child_process';
@@ -64,7 +65,7 @@ test.before(async () => {
   server = startServer(port);
   await server.ready;
   base = `http://localhost:${port}/devteam-pilot`;
-  browser = await (await loadChromium()).launch();
+  browser = await launchStubbed(await loadChromium());
 });
 test.after(async () => {
   await browser?.close();

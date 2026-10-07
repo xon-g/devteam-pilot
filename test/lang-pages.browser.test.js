@@ -1,3 +1,4 @@
+import { launchStubbed } from './ads-helpers.js';
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { spawn } from 'node:child_process';
@@ -64,7 +65,7 @@ test('content page language picker', { timeout: 180000 }, async () => {
   try {
     await ready;
     const base = `http://127.0.0.1:${port}/devteam-pilot/`;
-    browser = await (await loadChromium()).launch();
+    browser = await launchStubbed(await loadChromium());
     fs.mkdirSync(new URL('../.smoke', import.meta.url), { recursive: true });
     const shot = (page, name) => page.screenshot({ path: fileURLToPath(new URL(`../.smoke/${name}.png`, import.meta.url)), fullPage: true });
 

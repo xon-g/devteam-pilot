@@ -643,6 +643,12 @@ main {
   overflow: hidden;
 }
 
+.ad-slot:not([hidden]) {
+  height: auto;
+  min-height: 280px;
+  overflow: visible;
+}
+
 footer#disclaimer {
   grid-area: disclaimer;
   position: fixed;
