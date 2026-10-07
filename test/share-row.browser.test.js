@@ -100,6 +100,19 @@ test('share row', { timeout: 120000 }, async () => {
     assert.ok(await page.isVisible('#share-row'));
     const labels = await page.$$eval('#share-row [data-share]', (els) => els.map((e) => e.textContent.trim()));
     assert.deepStrictEqual(labels, ORDER);
+    const icons = await page.$$eval('#share-row [data-share]', (els) => els.map((e) => {
+      const svgs = e.querySelectorAll('svg.share-icon');
+      const r = svgs[0].getBoundingClientRect();
+      return { n: svgs.length, aria: svgs[0].getAttribute('aria-hidden'), w: r.width, h: r.height };
+    }));
+    assert.strictEqual(icons.length, 8);
+    for (const i of icons) if (i.w) assert.deepStrictEqual(i, { n: 1, aria: 'true', w: 20, h: 20 });
+    const fills = await page.evaluate(() => {
+      const f = (id) => getComputedStyle(document.querySelector(`[data-share="${id}"] svg`)).fill;
+      return { fb: f('fb'), wa: f('wa'), tg: f('tg'), viber: f('viber'), x: f('x'), xColor: getComputedStyle(document.querySelector('[data-share="x"]')).color };
+    });
+    assert.deepStrictEqual(fills, { fb: 'rgb(8, 102, 255)', wa: 'rgb(37, 211, 102)', tg: 'rgb(38, 165, 228)', viber: 'rgb(115, 96, 242)', x: fills.x, xColor: fills.xColor });
+    assert.strictEqual(fills.x, fills.xColor);
     assert.ok(!(await page.isVisible('[data-share="msgr"]')), 'msgr hidden on desktop');
     for (const id of IDS.filter((i) => i !== 'msgr')) assert.ok(await page.isVisible(`[data-share="${id}"]`), id);
 
@@ -152,6 +165,7 @@ test('share row', { timeout: 120000 }, async () => {
     const hs = await s.page.$$eval('#share-row [data-share]', (els) => els.filter((e) => e.offsetParent).map((e) => e.getBoundingClientRect().height));
     assert.strictEqual(hs.length, 8);
     assert.ok(hs.every((h) => h >= 44), `heights ${hs}`);
+    await s.page.locator('#share-row').screenshot({ path: '/home/node/projects/swertres/.smoke/share-row-360.png' });
     await s.context.close();
 
     assert.deepStrictEqual(errors, []);

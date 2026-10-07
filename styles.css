@@ -891,6 +891,36 @@ mark.check {
   cursor: pointer;
 }
 
+.share-row a,
+.share-row button {
+  gap: 0.4rem;
+}
+
+.share-icon {
+  flex: none;
+}
+
+.share-row [data-share="fb"] .share-icon,
+.share-row [data-share="msgr"] .share-icon {
+  fill: #0866ff;
+}
+
+.share-row [data-share="viber"] .share-icon {
+  fill: #7360f2;
+}
+
+.share-row [data-share="wa"] .share-icon {
+  fill: #25d366;
+}
+
+.share-row [data-share="tg"] .share-icon {
+  fill: #26a5e4;
+}
+
+.share-row [data-share="x"] .share-icon {
+  fill: currentColor;
+}
+
 .share-row a:focus-visible,
 .share-row button:focus-visible {
   outline: 2px solid var(--gold);
