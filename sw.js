@@ -1,4 +1,4 @@
-const CACHE = "swertres-v14";
+const CACHE = "swertres-v15";
 
 const ASSETS = [
   "./",
@@ -13,6 +13,8 @@ const ASSETS = [
   "src/analytics.js",
   "src/app.js",
   "manifest.webmanifest",
+  "assets/icons/favicon.svg",
+  "assets/icons/favicon-32.png",
   "assets/icons/icon-192.png",
   "assets/icons/icon-512.png",
   "assets/icons/icon-maskable-512.png",

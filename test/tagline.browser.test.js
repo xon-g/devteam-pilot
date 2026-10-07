@@ -59,8 +59,8 @@ test('tagline markup has the break before "For fun lang." exactly once', () => {
   assert.strictEqual(html.split('For fun lang.').length - 1, 1);
 });
 
-test('sw.js cache is swertres-v14', () => {
-  assert.ok(fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8').includes('swertres-v14'));
+test('sw.js cache is swertres-v15', () => {
+  assert.ok(fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8').includes('swertres-v15'));
 });
 
 test('tagline renders "For fun lang." on its own line at 360px', { timeout: 90000 }, async () => {
