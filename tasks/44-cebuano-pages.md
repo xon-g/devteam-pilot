@@ -16,7 +16,7 @@ Read `PLAN.md`, `tasks/40-lang-pages.md`, `tasks/43-cebuano.md` (voice) and the 
 4. `page-lang.js`: remove the task-43 fallback special case only if it's no longer needed; keep the
    generic "no block for this language → Taglish" safety.
 5. Chrome (nav, not-affiliated, footer) already has `ceb` strings from task 43; reuse them.
-6. `sw.js` `CACHE` → `swertres-v38` (+ `?v=38` pins the og test demands).
+6. `sw.js` `CACHE` → `swertres-v37` (+ `?v=37` pins the og test demands).
 
 ## Acceptance tests (`npm test` passes in full; existing tests change only for version pins and
 language lists gaining `ceb`)
