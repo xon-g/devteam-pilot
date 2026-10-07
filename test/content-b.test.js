@@ -102,5 +102,5 @@ test('sitemap and sw list the new pages', () => {
     assert.ok(sm.includes(`<loc>https://lotto.xonicbox.com/${s}/</loc>`));
     assert.ok(sw.includes(`"${s}/"`));
   }
-  assert.ok(sw.includes('swertres-v35'));
+  assert.ok(sw.includes('swertres-v36'));
 });

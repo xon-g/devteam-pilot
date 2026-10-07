@@ -89,7 +89,7 @@ test('language picker', { timeout: 120000 }, async () => {
       heights: [...document.querySelectorAll('#lang-picker label')].map((l) => l.getBoundingClientRect().height),
     }));
     assert.ok(layout.sw <= 360, `scrollWidth ${layout.sw}`);
-    assert.strictEqual(layout.heights.length, 3);
+    assert.strictEqual(layout.heights.length, 4);
     for (const h of layout.heights) assert.ok(h >= 44, `picker label ${h}`);
     await shot(page, 'lang-top-360');
 
@@ -145,6 +145,60 @@ test('language picker', { timeout: 120000 }, async () => {
       assert.ok(!tl.includes(word), `Tagalog page still shows "${word}"`);
     }
     await shot(page, 'lang-result-tl-360');
+
+    // Cebuano: switch after a Taglish draw
+    await page.locator('#lang-picker span', { hasText: 'Taglish' }).click();
+    await drawIn(page, 'Bea');
+    const tgReasons = await page.evaluate(() => [...document.querySelectorAll('.reason')].map((r) => r.textContent));
+    const tgBalls = await page.evaluate(() => [...document.querySelectorAll('.digit')].map((d) => d.textContent.trim()));
+    await page.locator('#lang-picker span', { hasText: 'Cebuano' }).click();
+    assert.strictEqual(await htmlLang(page), 'ceb');
+    const ceb = await page.evaluate(async () => {
+      const { MOOD_REASONS_I18N } = await import('/devteam-pilot/src/reasons.js');
+      const { shareText } = await import('/devteam-pilot/src/lucky.js');
+      const vis = (id) => !document.getElementById(id).hidden;
+      return {
+        balls: [...document.querySelectorAll('.digit')].map((d) => d.textContent.trim()),
+        reasons: [...document.querySelectorAll('.reason')].map((r) => r.textContent),
+        tg: MOOD_REASONS_I18N.taglish.chill,
+        ceb: MOOD_REASONS_I18N.ceb.chill,
+        wa: decodeURIComponent(document.querySelector('a[data-share="wa"]').href),
+        shareHead: shareText([1, 2, 3], 'straight', 'Bea', '3d', 'ceb').split(':')[0],
+        visible: { taglish: vis('about-games'), en: vis('about-games-en'), tl: vis('about-games-tl'), ceb: vis('about-games-ceb') },
+        sectionLang: document.getElementById('about-games-ceb').lang,
+      };
+    });
+    assert.deepStrictEqual(ceb.balls, tgBalls);
+    tgReasons.forEach((r, i) => assert.strictEqual(ceb.reasons[i], ceb.ceb[ceb.tg.indexOf(r)]));
+    assert.ok(ceb.wa.includes(ceb.shareHead), ceb.wa);
+    assert.ok(ceb.wa.includes('Mga lucky number ni Bea'), ceb.wa);
+    assert.deepStrictEqual(ceb.visible, { taglish: false, en: false, tl: false, ceb: true });
+    assert.strictEqual(ceb.sectionLang, 'ceb');
+    const cebText = await bodyText(page);
+    for (const word of ['Pindutin', 'Kumusta ka', 'Pumili', 'Tungkol', 'Copy link', 'Save image', 'Next draw']) {
+      assert.ok(!cebText.includes(word), `Cebuano page still shows "${word}"`);
+    }
+    const cebLayout = await page.evaluate(() => ({
+      sw: document.documentElement.scrollWidth,
+      labels: [...document.querySelectorAll('#lang-picker label')].map((l) => {
+        const sp = l.querySelector('span');
+        return { h: l.getBoundingClientRect().height, clipped: sp.scrollWidth > sp.clientWidth };
+      }),
+    }));
+    assert.ok(cebLayout.sw <= 360, `scrollWidth ${cebLayout.sw}`);
+    assert.strictEqual(cebLayout.labels.length, 4);
+    for (const l of cebLayout.labels) assert.ok(l.h >= 44 && !l.clipped, JSON.stringify(l));
+    await shot(page, 'lang-result-ceb-360');
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.screenshot({ path: fileURLToPath(new URL('../.smoke/lang-top-ceb-360.png', import.meta.url)) });
+
+    // Reload keeps Cebuano; content pages fall back to Taglish
+    await page.reload({ waitUntil: 'load' });
+    assert.strictEqual(await page.evaluate(() => localStorage.getItem('lang')), 'ceb');
+    assert.strictEqual(await htmlLang(page), 'ceb');
+    await page.goto(new URL('about/', url).href, { waitUntil: 'load' });
+    assert.strictEqual(await page.evaluate(() => document.querySelector('[data-lang-block="taglish"]').hidden), false);
+    assert.strictEqual(await htmlLang(page), 'fil');
     assert.deepStrictEqual(errors, []);
     await ctx.close();
 

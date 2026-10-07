@@ -64,5 +64,27 @@ const MOOD_REASONS_TL = {
   ewan: ["Ayos lang na hindi ayos, bes", "Mood: naglo-load pa...", "Hindi rin namin alam, pero kasama mo kami", "Hanapin muna natin ang timpla mo", "Halo-halong pakiramdam? Sige lang", "Puwede pa ring mangarap, kahit hindi pa malinaw"]
 };
 
-export const REASONS_I18N = { taglish: REASONS, en: REASONS_EN, tl: REASONS_TL };
-export const MOOD_REASONS_I18N = { taglish: MOOD_REASONS, en: MOOD_REASONS_EN, tl: MOOD_REASONS_TL };
+const REASONS_CEB = {
+  0: ["Bag-ong sinugdan, bes. Walay stress una.", "Walay imposible, joke lang!", "Reset button sa imong kinabuhi ni", "Kalma ra, chill ra"],
+  1: ["Puwede na mangandoy", "Ikaw ang bida karon", "Number one ka sa akong kasingkasing, ing-ana", "Nag-inusara pero lig-on"],
+  2: ["Naa pa diay katahom ang kinabuhi", "Duha mo? Swerte ninyo!", "Doble ang good vibes, bes", "Bahinon nato ang merienda"],
+  3: ["Sa ikatulong higayon ang swerte, matod nila", "Laban lang, kapit lang", "Ganahan kaayo ko ani nga energy", "Good vibes ang dating"],
+  4: ["Lahi ang aura nimo karon", "Lig-on ka, murag balay ni lola", "Naka-tiil sa yuta pero andam na", "Padayon lang ana, idol"],
+  5: ["High five sa imong kaugalingon!", "Slay ang imong energy karon", "Sa tunga ka? Ikaw ang balanse, bes", "Pak, ing-ana gyud!"],
+  6: ["Nag-manifest lang ug good vibes", "Takos ka sa pahulay ug ice cream", "Nindot sa imong pagmata, aminon na", "Aura points: +6,000"],
+  7: ["Imong era ni, bes", "Kilig levels: 7/7", "Main character energy unlocked", "Lucky seven, swerte ka sa mga higala"],
+  8: ["Walay kataposang good vibes, murag 8 nga nahigda", "Sana all gipanalanginan", "Kaya nimo na, bayani!", "Hayag kaayo imong nawong karon"],
+  9: ["Anaa ka sa cloud nine karon, ing-ana", "Taray nimo, aminon na", "Ikaw na! Ikaw na gyud!", "Kusog ang kaisog, kusog ang aura"]
+};
+
+const MOOD_REASONS_CEB = {
+  masaya: ["Nindot kaayo imong kalipay karon, makatakod ka bes", "Maayo imong mood? Sana all!", "Pahiyom pa lang, ulam na", "Naa pa diay katahom ang kinabuhi", "Malipayon ka? Takos ka ana", "Positive vibes lang, ing-ana"],
+  pagod: ["Pahulay una, dili ka robot", "Kape una before tanan", "Kapoy pero gwapa/gwapo gihapon", "Takos ka sa taas nga katulog", "Gamay na lang nga kapit, bes", "Rest day sa hunahuna, bisan karon lang"],
+  stressed: ["Ginhawa una. Sulod... gawas... ayan", "Usa-usa ra ka lakang, kaya nimo na", "Dili tanan kinahanglan karon, bes", "Padayon lang, kapit lang", "Stress? Dili ka niya takos", "Gakos gikan sa internet, bes"],
+  kinikilig: ["Uy, kinsa na? Isugid na gyud!", "Kilig levels: lapas na sa chart", "Sana all naay gikilig-kilig", "Blooming kaayo ka, makita gyud", "Crush nimo na o crush ka niya?", "Pa-fall season, amping sa kasingkasing"],
+  chill: ["Kalma ra, chill ra", "Walay apura, ikaw ang bida", "Petiks mode: gi-activate na", "Easy ra ta karon", "Kape, tsismis, good vibes", "Sunod lang sa agos, bes"],
+  ewan: ["Okay ra nga dili okay, bes", "Mood: buffering...", "Ambot sad namo, pero kauban ka namo", "Pangitaon una nato imong vibe", "Sagol-sagol nga gibati? Sige lang", "Puwede gihapon mangandoy, bisan ambot"]
+};
+
+export const REASONS_I18N = { taglish: REASONS, en: REASONS_EN, tl: REASONS_TL, ceb: REASONS_CEB };
+export const MOOD_REASONS_I18N = { taglish: MOOD_REASONS, en: MOOD_REASONS_EN, tl: MOOD_REASONS_TL, ceb: MOOD_REASONS_CEB };

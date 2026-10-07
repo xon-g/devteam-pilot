@@ -1,6 +1,6 @@
 import { randomInt } from './lucky.js';
 
-const LANG_KEYS = ['taglish', 'en', 'tl'];
+const LANG_KEYS = ['taglish', 'en', 'tl', 'ceb'];
 
 export const NAME_ROASTS = [
   "{name}? Pangalan pa lang, pang-main character na",
@@ -167,10 +167,65 @@ const AGE_ROASTS_TL = [
     "{age}? Ang dami nang napagdaanan, saludo!" ] }
 ];
 
-export const NAME_ROASTS_I18N = { taglish: NAME_ROASTS, en: NAME_ROASTS_EN, tl: NAME_ROASTS_TL };
-export const LONG_NAME_ROASTS_I18N = { taglish: LONG_NAME_ROASTS, en: LONG_NAME_ROASTS_EN, tl: LONG_NAME_ROASTS_TL };
-export const SHORT_NAME_ROASTS_I18N = { taglish: SHORT_NAME_ROASTS, en: SHORT_NAME_ROASTS_EN, tl: SHORT_NAME_ROASTS_TL };
-export const AGE_ROASTS_I18N = { taglish: AGE_ROASTS, en: AGE_ROASTS_EN, tl: AGE_ROASTS_TL };
+const NAME_ROASTS_CEB = [
+  "{name}? Pangalan pa lang, pang-main character na",
+  "Uy {name}, idol! Nindot kaayo sa imong ngalan",
+  "{name}? Sana all naay ingon ana nga ngalan",
+  "Hello {name}! Puwede na mangandoy, joke lang",
+  "{name}... murag ngalan sa akong crush kaniadto, aray",
+  "Si {name} na usab? Sige na, ikaw na",
+  "{name}, pak ing-ana! Slay ang ngalan",
+  "Kilala ka namo, {name}. Kanunay ulahi, joke lang",
+  "{name}? Murag bida sa teleserye",
+  "{name}, nikaon na ka? Joke lang, bunot una"
+];
+const LONG_NAME_ROASTS_CEB = [
+  "{name}? Taas kaayo, pang-roll call sa graduation",
+  "Hingal mi sa imong ngalan, {name}. Joke lang",
+  "{name}: tibuok ngalan gyud? Pormal kaayo"
+];
+const SHORT_NAME_ROASTS_CEB = [
+  "{name}? Tipid sa letra, dagaya sa vibes",
+  "{name} ra? Mubo pero lig-on",
+  "{name}! Usa ka ginhawa ra, human na. Sana all"
+];
+const AGE_ROASTS_CEB = [
+  { min: 18, max: 21, lines: [
+    "{age}? Bata pa! Naa pay baon gikan ni Mama?",
+    "{age} pa lang? TikTok kid gyud",
+    "Presko kaayo sa {age}, sana all",
+    "{age}? Bag-o lang legal, hinay-hinay una bes" ] },
+  { min: 22, max: 29, lines: [
+    "{age}? Panahon sa quarter-life crisis, kapit lang",
+    "{age} ka? Tinuod ang adulting, aray",
+    "Sa {age}, puwede na mangandoy",
+    "{age}? Prime nimo ni, bes. Slay!" ] },
+  { min: 30, max: 39, lines: [
+    "{age}? Welcome sa panahon sa tita/tito",
+    "{age} na pero 20s ang aura, joke lang",
+    "Sa {age}, dili na puwede puyat, bes",
+    "{age}? Sakit na ang likod pero go gihapon" ] },
+  { min: 40, max: 49, lines: [
+    "{age}? Fine wine ka, bes. Mas nindot pa",
+    "{age} pero kusog gihapon ang dating",
+    "Sa {age}, naa pa diay katahom ang kinabuhi",
+    "{age}? Idol sa tibuok barangay" ] },
+  { min: 50, max: 59, lines: [
+    "{age}? 90s kid ka gihapon sa kasingkasing",
+    "{age} na? Lahi gyud, walay kupas",
+    "Sa {age}, ikaw na ang boss, bes",
+    "{age}? Duol na ang senior discount, joke lang" ] },
+  { min: 60, max: 120, lines: [
+    "{age}? Senior discount, abli na!",
+    "{age} ug blooming gihapon, sana all",
+    "Sa {age}, ikaw ang OG idol",
+    "{age}? Daghan na kaayo kag naagian, saludo!" ] }
+];
+
+export const NAME_ROASTS_I18N = { taglish: NAME_ROASTS, en: NAME_ROASTS_EN, tl: NAME_ROASTS_TL, ceb: NAME_ROASTS_CEB };
+export const LONG_NAME_ROASTS_I18N = { taglish: LONG_NAME_ROASTS, en: LONG_NAME_ROASTS_EN, tl: LONG_NAME_ROASTS_TL, ceb: LONG_NAME_ROASTS_CEB };
+export const SHORT_NAME_ROASTS_I18N = { taglish: SHORT_NAME_ROASTS, en: SHORT_NAME_ROASTS_EN, tl: SHORT_NAME_ROASTS_TL, ceb: SHORT_NAME_ROASTS_CEB };
+export const AGE_ROASTS_I18N = { taglish: AGE_ROASTS, en: AGE_ROASTS_EN, tl: AGE_ROASTS_TL, ceb: AGE_ROASTS_CEB };
 
 export function fill(template, key, value) {
   return template.split(`{${key}}`).join(String(value));

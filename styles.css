@@ -932,8 +932,8 @@ mark.check {
 }
 
 .lang-picker {
-  grid-template-columns: repeat(3, 1fr);
-  width: min(100%, 20rem);
+  grid-template-columns: repeat(4, 1fr);
+  width: min(100%, 24rem);
   margin: 0.75rem auto 0;
 }
 
