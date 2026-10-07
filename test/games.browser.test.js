@@ -155,7 +155,7 @@ test('game picker', { timeout: 120000 }, async () => {
     await page.screenshot({ path: '.smoke/swertres-360x740.png', fullPage: false });
 
     // rename: title, not-affiliated note clear of the footer, no sideways scroll
-    assert.ok((await page.evaluate(() => document.title)).includes('PCSO Lucky Number Generator'));
+    assert.ok((await page.evaluate(() => document.title)).includes('Lotto Lucky Numbers PH'));
     await page.locator('#not-affiliated').scrollIntoViewIfNeeded();
     assert.strictEqual(await page.locator('#not-affiliated').isVisible(), true);
     const boxes = await page.evaluate(() => {

@@ -17,7 +17,7 @@ const ogHtml = `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PCSO Lucky Numbers</title>
+  <title>Lotto Lucky Numbers PH</title>
   <style>
     body {
       margin: 0;
@@ -55,8 +55,8 @@ const ogHtml = `<!DOCTYPE html>
 </head>
 <body>
   <div class="card">
-    <h1>PCSO</h1>
-    <p style="font-size: 48px; color: #FFA500; margin: 20px 0;">Lucky Numbers</p>
+    <h1>Lotto</h1>
+    <p style="font-size: 48px; color: #FFA500; margin: 20px 0;">Lucky Numbers PH</p>
     <p class="disclaimer">For entertainment only. 18+.</p>
   </div>
 </body>

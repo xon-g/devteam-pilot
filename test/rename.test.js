@@ -8,9 +8,9 @@ const html = read('index.html');
 const meta = (attr, key) =>
   html.match(new RegExp(`<meta[^>]+${attr}=["']${key}["'][^>]+content=["']([^"']*)["']`, 'i'))?.[1];
 
-test('site is named PCSO Lucky Numbers', () => {
-  const name = 'PCSO Lucky Numbers';
-  assert.ok(html.match(/<title>([^<]*)<\/title>/)[1].startsWith('PCSO Lucky Number'));
+test('site is named Lotto Lucky Numbers PH', () => {
+  const name = 'Lotto Lucky Numbers PH';
+  assert.ok(html.match(/<title>([^<]*)<\/title>/)[1].includes(name));
   assert.strictEqual(meta('property', 'og:title'), html.match(/<title>([^<]*)<\/title>/)[1]);
   assert.strictEqual(meta('property', 'og:site_name'), name);
   assert.strictEqual(meta('name', 'twitter:title'), html.match(/<title>([^<]*)<\/title>/)[1]);
@@ -31,9 +31,15 @@ test('#not-affiliated note', () => {
 
 test('manifest and og-image', () => {
   const manifest = JSON.parse(read('manifest.webmanifest'));
-  assert.strictEqual(manifest.name, 'PCSO Lucky Numbers');
-  assert.strictEqual(manifest.short_name, 'PCSO Lucky');
+  assert.strictEqual(manifest.name, 'Lotto Lucky Numbers PH');
+  assert.strictEqual(manifest.short_name, 'Lotto Lucky PH');
   const png = fs.readFileSync(fileURLToPath(new URL('../assets/og-image.png', import.meta.url)));
   assert.strictEqual(png.readUInt32BE(16), 1200);
   assert.strictEqual(png.readUInt32BE(20), 630);
+});
+
+test('no "PCSO Lucky" in index.html, manifest or llms.txt; title and h1 carry the name', () => {
+  for (const f of ['index.html', 'manifest.webmanifest', 'llms.txt']) assert.ok(!read(f).includes('PCSO Lucky'), f);
+  assert.ok(html.match(/<title>([^<]*)<\/title>/)[1].includes('Lotto Lucky Numbers PH'));
+  assert.ok(html.includes('Lotto <span>Lucky</span> Numbers PH'));
 });

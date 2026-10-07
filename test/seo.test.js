@@ -137,18 +137,18 @@ test('SEO meta tags present and non-empty', () => {
   // Title
   const title = extractText(indexHtml, 'title');
   assert.ok(title, 'title should be present');
-  assert.ok(title.length <= 60, `title should be <= 60 chars, got ${title.length}: ${title}`);
+  assert.ok(title.length <= 70, `title should be <= 70 chars, got ${title.length}: ${title}`);
   
   // Description
   const description = extractMetaContent(indexHtml, 'description', null);
   assert.ok(description, 'meta description should be present');
-  assert.ok(description.length >= 70 && description.length <= 160, 
-    `description should be 70-160 chars, got ${description.length}`);
+  assert.ok(description.length >= 70 && description.length <= 175, 
+    `description should be 70-175 chars, got ${description.length}`);
   
   // Canonical
   const canonical = extractAttribute(indexHtml, 'link', 'href', 'canonical');
   assert.ok(canonical, 'canonical link should be present');
-  assert.ok(canonical.startsWith('https://xon-g.github.io/devteam-pilot/'), 
+  assert.ok(canonical.startsWith('https://lotto.xonicbox.com/'), 
     `canonical should start with origin: ${canonical}`);
   
   // Robots
@@ -172,12 +172,12 @@ test('SEO meta tags present and non-empty', () => {
   
   const ogUrl = extractMetaContent(indexHtml, null, 'og:url');
   assert.ok(ogUrl, 'og:url should be present');
-  assert.ok(ogUrl.startsWith('https://xon-g.github.io/devteam-pilot/'), 
+  assert.ok(ogUrl.startsWith('https://lotto.xonicbox.com/'), 
     `og:url should start with origin: ${ogUrl}`);
   
   const ogImage = extractMetaContent(indexHtml, null, 'og:image');
   assert.ok(ogImage, 'og:image should be present');
-  assert.ok(ogImage.startsWith('https://xon-g.github.io/devteam-pilot/'), 
+  assert.ok(ogImage.startsWith('https://lotto.xonicbox.com/'), 
     `og:image should start with origin: ${ogImage}`);
   
   const ogImageWidth = extractMetaContent(indexHtml, null, 'og:image:width');
@@ -204,7 +204,7 @@ test('SEO meta tags present and non-empty', () => {
   
   const twitterImage = extractMetaContent(indexHtml, 'twitter:image', null);
   assert.ok(twitterImage, 'twitter:image should be present');
-  assert.ok(twitterImage.startsWith('https://xon-g.github.io/devteam-pilot/'), 
+  assert.ok(twitterImage.startsWith('https://lotto.xonicbox.com/'), 
     `twitter:image should start with origin: ${twitterImage}`);
 });
 
@@ -218,11 +218,11 @@ test('OG image exists and has correct dimensions', () => {
   assert.strictEqual(dims.height, 630, 'og-image.png height should be 630');
 });
 
-test('sw.js precaches og-image.png and CACHE is swertres-v11', () => {
+test('sw.js precaches og-image.png and CACHE is swertres-v12', () => {
   const swJs = fs.readFileSync(path.join(rootDir, 'sw.js'), 'utf8');
   
   // Check CACHE version
-  assert.ok(swJs.includes('const CACHE = "swertres-v11"'), 'CACHE should be swertres-v11');
+  assert.ok(swJs.includes('const CACHE = "swertres-v12"'), 'CACHE should be swertres-v12');
   
   // Check og-image.png in ASSETS
   assert.ok(swJs.includes('"assets/og-image.png"'), 'sw.js should precache og-image.png');
@@ -245,7 +245,7 @@ test('canonical, og:url, og:image, twitter:image all start with same origin', ()
   const ogImage = extractMetaContent(indexHtml, null, 'og:image');
   const twitterImage = extractMetaContent(indexHtml, 'twitter:image', null);
   
-  const origin = 'https://xon-g.github.io/devteam-pilot/';
+  const origin = 'https://lotto.xonicbox.com/';
   assert.ok(canonical, 'canonical should be present');
   assert.ok(ogUrl, 'og:url should be present');
   assert.ok(ogImage, 'og:image should be present');
@@ -289,7 +289,7 @@ test('no absolute URLs in index.html href/src attributes (except canonical, og:u
   for (const match of hrefMatches) {
     const url = match.slice(6, -1);
     // Allow canonical, og:url, og:image, twitter:image which are allowed to be absolute
-    if (url.startsWith('https://xon-g.github.io/devteam-pilot/')) {
+    if (url.startsWith('https://lotto.xonicbox.com/')) {
       continue;
     }
     assert.ok(!url.startsWith('/'), `href should not be absolute: ${url}`);

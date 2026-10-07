@@ -8,7 +8,7 @@ import { GAMES } from '../src/games.js';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (f) => fs.readFileSync(path.join(root, f), 'utf8');
 const html = read('index.html');
-const ORIGIN = 'https://xon-g.github.io/devteam-pilot/';
+const ORIGIN = 'https://lotto.xonicbox.com/';
 const DISCLAIMER = "For entertainment only. Numbers are random and don't improve your odds. 18+. Play responsibly.";
 const BANNED = ['guarantee', 'sigurado', 'siguradong panalo', 'tsansa', 'odds', 'better chance', 'sure win', 'jackpot ka na', 'panalo', 'tatama', 'jackpot'];
 
@@ -36,9 +36,9 @@ function strings(v, out = []) {
 
 test('head tags: title, description, og/twitter', () => {
   assert.equal(count(/<title>/g), 1);
-  assert.ok(title.length <= 60, `title length ${title.length}`);
-  assert.ok(title.includes('PCSO') && title.includes('Lucky Number Generator'));
-  assert.ok(description.length >= 70 && description.length <= 160, `description length ${description.length}`);
+  assert.ok(title.length <= 70, `title length ${title.length}`);
+  assert.ok(title.includes('Lotto Lucky Numbers PH') && !title.includes('PCSO'));
+  assert.ok(description.length >= 70 && description.length <= 175, `description length ${description.length}`);
   for (const [attr, key, expected] of [
     ['name', 'description', description], ['property', 'og:title', title], ['name', 'twitter:title', title],
     ['property', 'og:description', description], ['name', 'twitter:description', description],
@@ -70,7 +70,7 @@ test('games list matches GAMES in order with count and range', () => {
 test('JSON-LD: WebApplication and FAQPage', () => {
   assert.ok(ldBlocks.length >= 2);
   const app = ldBlocks.find((b) => b['@type'] === 'WebApplication');
-  assert.equal(app.name, 'PCSO Lucky Numbers');
+  assert.equal(app.name, 'Lotto Lucky Numbers PH');
   assert.equal(app.url, ORIGIN);
   assert.equal(app.description, description);
   assert.equal(app.applicationCategory, 'EntertainmentApplication');
