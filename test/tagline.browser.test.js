@@ -1,3 +1,4 @@
+import { launchStubbed } from './ads-helpers.js';
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { spawn } from 'node:child_process';
@@ -53,8 +54,8 @@ function startServer(port) {
 
 const DISCLAIMER = "For entertainment only. Numbers are random and don't improve your odds. 18+. Play responsibly.";
 
-test('sw.js contains swertres-v38', () => {
-  assert.ok(fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8').includes('swertres-v38'));
+test('sw.js contains swertres-v39', () => {
+  assert.ok(fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8').includes('swertres-v39'));
 });
 
 test('disclaimer texts are at least 12.5px and clear of the fixed footer', { timeout: 90000 }, async () => {
@@ -64,7 +65,7 @@ test('disclaimer texts are at least 12.5px and clear of the fixed footer', { tim
   try {
     await ready;
     const chromium = await loadChromium();
-    browser = await chromium.launch();
+    browser = await launchStubbed(chromium);
     for (const [width, height] of [[360, 740], [1280, 800]]) {
       const context = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' });
       const page = await context.newPage();
@@ -113,7 +114,7 @@ test('tagline renders "For fun lang." on its own line at 360px', { timeout: 9000
   try {
     await ready;
     const chromium = await loadChromium();
-    browser = await chromium.launch();
+    browser = await launchStubbed(chromium);
     const context = await browser.newContext({ viewport: { width: 360, height: 780 }, reducedMotion: 'reduce' });
     const page = await context.newPage();
     await page.goto(`http://localhost:${port}/`, { waitUntil: 'load' });

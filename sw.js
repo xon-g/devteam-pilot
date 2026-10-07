@@ -1,4 +1,4 @@
-const CACHE = "swertres-v38";
+const CACHE = "swertres-v39";
 
 const ASSETS = [
   "./",
@@ -18,6 +18,7 @@ const ASSETS = [
   "src/roast.js",
   "src/analytics.js",
   "src/app.js",
+  "src/ads.js",
   "src/config.js",
   "src/share.js",
   "src/card.js",
@@ -72,6 +73,12 @@ self.addEventListener('fetch', (event) => {
   // Check if same origin (no protocol/host/port change)
   const selfUrl = new URL(self.location.href);
   if (url.origin !== selfUrl.origin) {
+    return;
+  }
+
+  // Ads: never cache or serve from cache (ads.txt, Google ad hosts)
+  const host = url.hostname;
+  if (url.pathname.endsWith('/ads.txt') || ['googlesyndication.com', 'doubleclick.net', 'googleadservices.com', 'google.com', 'gstatic.com'].some((d) => host === d || host.endsWith('.' + d))) {
     return;
   }
 

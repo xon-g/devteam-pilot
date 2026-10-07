@@ -219,11 +219,11 @@ test('OG image exists and has correct dimensions', () => {
   assert.strictEqual(dims.height, 630, 'og-image.png height should be 630');
 });
 
-test('sw.js precaches og-image.png and CACHE is swertres-v38', () => {
+test('sw.js precaches og-image.png and CACHE is swertres-v39', () => {
   const swJs = fs.readFileSync(path.join(rootDir, 'sw.js'), 'utf8');
   
   // Check CACHE version
-  assert.ok(swJs.includes('const CACHE = "swertres-v38"'), 'CACHE should be swertres-v38');
+  assert.ok(swJs.includes('const CACHE = "swertres-v39"'), 'CACHE should be swertres-v39');
   
   // Check og-image.png in ASSETS
   assert.ok(swJs.includes('"assets/og-image.png"'), 'sw.js should precache og-image.png');
@@ -306,6 +306,7 @@ test('no absolute URLs in index.html href/src attributes (except canonical, og:u
   for (const match of srcMatches) {
     const url = match.slice(5, -1);
     if (url === 'https://gc.zgo.at/count.js') continue; // GoatCounter
+    if (url.startsWith('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-')) continue; // AdSense (generated, task 46)
     assert.ok(!url.startsWith('/'), `src should not be absolute: ${url}`);
     assert.ok(!url.startsWith('http'), `src should not be absolute: ${url}`);
   }

@@ -1,4 +1,6 @@
 import { test } from 'node:test';
+import { readConfig } from './ads-helpers.js';
+import { headSnippet, HEAD_PAGES } from '../scripts/ads.js';
 import assert from 'node:assert';
 import fs from 'node:fs';
 
@@ -21,7 +23,7 @@ for (const [slug, { h1, title }] of Object.entries(PAGES)) {
     assert.ok(html.includes(`<title>${title}</title>`));
     assert.ok(html.includes(`<h1>${h1}</h1>`));
     const scripts = [...html.matchAll(/<script\b([^>]*)>/g)].map((m) => m[1].trim());
-    assert.strictEqual(scripts.length, 3); // + page-lang.js (task 40)
+    assert.strictEqual(scripts.length, 3 + (headSnippet(readConfig().adsensePublisherId) && HEAD_PAGES.includes(`${slug}/index.html`) ? 1 : 0)); // + page-lang.js (task 40)
     assert.ok(html.indexOf('location.replace') < html.indexOf('data-goatcounter'));
     assert.ok(html.indexOf('<script>') < html.indexOf('<meta name="viewport"'));
     assert.ok(html.includes(`<link rel="canonical" href="https://lotto.xonicbox.com/${slug}/">`));
@@ -30,7 +32,11 @@ for (const [slug, { h1, title }] of Object.entries(PAGES)) {
     assert.strictEqual(gc(html).length, 1);
     assert.strictEqual(og(html), og(HOME));
     assert.ok(!/(href|src)="\//.test(html));
-    assert.ok(!/adsbygoogle|googlesyndication/.test(html));
+    {
+      const snip = headSnippet(readConfig().adsensePublisherId);
+      assert.strictEqual(html.split(snip || '\0').length - 1, snip && HEAD_PAGES.includes(`${slug}/index.html`) ? 1 : 0);
+      assert.ok(!/adsbygoogle|googlesyndication/.test(html.replace(snip || '\0', '')));
+    }
     assert.ok(text(html).split(' ').length >= 300);
     assert.ok(/<section lang="en">\s*<h2>English summary<\/h2>/.test(html));
     assert.ok(html.includes('<footer id="disclaimer">For entertainment only. Numbers are random and don\'t improve your odds. 18+. Play responsibly.</footer>'));
@@ -82,6 +88,6 @@ test('sitemap and service worker', () => {
   const sm = read('sitemap.xml');
   for (const s of Object.keys(PAGES)) assert.ok(sm.includes(`<loc>https://lotto.xonicbox.com/${s}/</loc>`));
   const sw = read('sw.js');
-  assert.ok(sw.includes('const CACHE = "swertres-v38"'));
+  assert.ok(sw.includes('const CACHE = "swertres-v39"'));
   for (const s of Object.keys(PAGES)) assert.ok(sw.includes(`"${s}/"`));
 });

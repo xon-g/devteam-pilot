@@ -1,3 +1,4 @@
+import { launchStubbed } from './ads-helpers.js';
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { spawn } from 'node:child_process';
@@ -60,7 +61,7 @@ test('game badges render at 320, 375 and 1280', { timeout: 90000 }, async () => 
   try {
     await ready;
     const chromium = await loadChromium();
-    browser = await chromium.launch();
+    browser = await launchStubbed(chromium);
     for (const width of [320, 375, 1280]) {
       const context = await browser.newContext({ viewport: { width, height: 800 }, reducedMotion: 'reduce' });
       const page = await context.newPage();

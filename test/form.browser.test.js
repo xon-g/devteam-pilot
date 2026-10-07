@@ -1,3 +1,4 @@
+import { launchStubbed } from './ads-helpers.js';
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { spawn } from 'node:child_process';
@@ -70,7 +71,7 @@ test('about-you form', { timeout: 90000 }, async () => {
   try {
     await ready;
     const chromium = await loadChromium();
-    browser = await chromium.launch();
+    browser = await launchStubbed(chromium);
     const context = await browser.newContext({ viewport: VIEWPORT, reducedMotion: 'reduce' });
     const page = await context.newPage();
     const errors = [];
@@ -178,7 +179,7 @@ test('screenshots', { timeout: 60000 }, async () => {
   try {
     await ready;
     const chromium = await loadChromium();
-    browser = await chromium.launch();
+    browser = await launchStubbed(chromium);
     fs.mkdirSync(new URL('../.smoke', import.meta.url), { recursive: true });
     for (const [w, h] of [[375, 812], [1280, 800]]) {
       const ctx = await browser.newContext({ viewport: { width: w, height: h }, reducedMotion: 'reduce' });

@@ -8,6 +8,7 @@ import { PCSO_RESULTS_URL, PCSO_FACEBOOK_URL, SITE_URL } from './config.js';
 import { shareLinks, isMobileUA, copyText, shareUrl } from './share.js';
 import { nextDraw, formatCountdown, drawLabel, loadSchedule } from './schedule.js';
 import { cardContent, cardFileName, drawCard } from './card.js';
+import { initAdSlot } from './ads.js';
 import { validateProfile, pickMoodReasonIndices, moodReasonLines } from './profile.js';
 
 // Register service worker if supported
@@ -513,3 +514,5 @@ loadSchedule().then((s) => {
   updateNextDraw();
 }).catch(() => {});
 setInterval(updateNextDraw, 30000);
+
+initAdSlot();

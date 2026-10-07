@@ -1,3 +1,4 @@
+import { launchStubbed } from './ads-helpers.js';
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { spawn } from 'node:child_process';
@@ -74,7 +75,7 @@ test('next draw row', { timeout: 120000 }, async () => {
   let browser;
   try {
     await ready;
-    browser = await (await loadChromium()).launch();
+    browser = await launchStubbed(await loadChromium());
     const { page, errors } = await open(browser, port);
     await page.waitForSelector('#next-draw:not([hidden])');
     const text = async () => (await page.textContent('#next-draw')).replace(/\s+/g, ' ');
@@ -111,7 +112,7 @@ test('page works when the schedule fails to load', { timeout: 120000 }, async ()
   let browser;
   try {
     await ready;
-    browser = await (await loadChromium()).launch();
+    browser = await launchStubbed(await loadChromium());
     const { page, errors } = await open(browser, port, { block: true });
     await page.fill('#name', 'Juan');
     await page.fill('#age', '30');

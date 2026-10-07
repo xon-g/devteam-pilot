@@ -1,3 +1,4 @@
+import { launchStubbed } from './ads-helpers.js';
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { spawn } from 'node:child_process';
@@ -88,7 +89,7 @@ test('instagram share', { timeout: 120000 }, async () => {
   try {
     await ready;
     const chromium = await loadChromium();
-    browser = await chromium.launch();
+    browser = await launchStubbed(chromium);
 
     // Share path
     const s = await setup(browser, port, vp, errors, () => {

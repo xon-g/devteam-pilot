@@ -102,6 +102,7 @@ test('no absolute URLs in index.html', () => {
   for (const match of srcMatches) {
     const url = match.slice(5, -1); // Extract URL from src="..."
     if (url === 'https://gc.zgo.at/count.js') continue; // GoatCounter
+    if (url.startsWith('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-')) continue; // AdSense (generated, task 46)
     assert.ok(!url.startsWith('/'), `src should not be absolute: ${url}`);
     assert.ok(!url.startsWith('http'), `src should not be absolute: ${url}`);
   }

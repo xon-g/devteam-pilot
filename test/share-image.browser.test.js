@@ -1,3 +1,4 @@
+import { launchStubbed } from './ads-helpers.js';
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { spawn } from 'node:child_process';
@@ -87,7 +88,7 @@ test('save image', { timeout: 120000 }, async () => {
   try {
     await ready;
     const chromium = await loadChromium();
-    browser = await chromium.launch();
+    browser = await launchStubbed(chromium);
 
     // Desktop download path
     const d = await setup(browser, port, { viewport: { width: 1280, height: 800 }, acceptDownloads: true }, errors,

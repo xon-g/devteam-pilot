@@ -1,3 +1,4 @@
+import { launchStubbed } from './ads-helpers.js';
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { spawn } from 'node:child_process';
@@ -59,7 +60,7 @@ test('Isang Numero draws one ball', { timeout: 90000 }, async () => {
   let browser;
   try {
     await ready;
-    browser = await (await loadChromium()).launch();
+    browser = await launchStubbed(await loadChromium());
     for (const width of [375, 1280]) {
       const context = await browser.newContext({ viewport: { width, height: 800 }, reducedMotion: 'reduce' });
       const page = await context.newPage();

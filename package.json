@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node scripts/serve.js",
     "og": "node scripts/make-og-image.js",
-    "test": "node --test"
+    "test": "node --test",
+    "ads": "node scripts/ads.js"
   }
 }

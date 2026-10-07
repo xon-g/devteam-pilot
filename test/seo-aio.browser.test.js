@@ -1,3 +1,4 @@
+import { launchStubbed } from './ads-helpers.js';
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { spawn } from 'node:child_process';
@@ -59,7 +60,7 @@ test('SEO/AIO: content readable without JS; FAQ and app work with JS', { timeout
   try {
     await ready;
     const url = `http://127.0.0.1:${port}/devteam-pilot/`;
-    browser = await (await loadChromium()).launch();
+    browser = await launchStubbed(await loadChromium());
 
     const noJs = await browser.newContext({ javaScriptEnabled: false });
     const p0 = await noJs.newPage();

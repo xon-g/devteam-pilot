@@ -1,3 +1,4 @@
+import { launchStubbed } from './ads-helpers.js';
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { spawn } from 'node:child_process';
@@ -73,7 +74,7 @@ for (const width of [375, 1280]) {
     try {
       await ready;
       const chromium = await loadChromium();
-      browser = await chromium.launch();
+      browser = await launchStubbed(chromium);
       const context = await browser.newContext({ viewport: { width, height: 812 } });
       const page = await context.newPage();
       const errors = [];

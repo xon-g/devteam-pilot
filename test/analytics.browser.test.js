@@ -1,3 +1,4 @@
+import { launchStubbed } from './ads-helpers.js';
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { spawn } from 'node:child_process';
@@ -58,7 +59,7 @@ const STUB = 'window.__gc = []; window.goatcounter = { count: (o) => window.__gc
 
 async function flow(url, blocked) {
   const chromium = await loadChromium();
-  const browser = await chromium.launch();
+  const browser = await launchStubbed(chromium);
   try {
     const context = await browser.newContext({ viewport: VIEWPORT, reducedMotion: 'reduce' });
     await context.route('https://gc.zgo.at/**', (route) => blocked

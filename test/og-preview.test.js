@@ -1,3 +1,4 @@
+import { launchStubbed } from './ads-helpers.js';
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { spawn } from 'node:child_process';
@@ -72,7 +73,7 @@ test('versioned og-image URL is served as image/png', { timeout: 60000 }, async 
     let chromium;
     try { chromium = (await import(`${PLAYWRIGHT}/index.mjs`)).chromium; }
     catch { chromium = createRequire(import.meta.url)(PLAYWRIGHT).chromium; }
-    browser = await chromium.launch();
+    browser = await launchStubbed(chromium);
     const page = await browser.newPage();
     const res = await page.goto(`http://localhost:${port}/assets/og-image.png?v=${swNum}`);
     assert.strictEqual(res.status(), 200);
