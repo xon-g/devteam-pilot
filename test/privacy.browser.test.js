@@ -63,7 +63,12 @@ test('privacy page: navigation, layout, contact links', { timeout: 120000 }, asy
     const page = await browser.newPage({ viewport: { width: 360, height: 740 } });
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
-    page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
+    const isAnalytics = (u) => /gc\.zgo\.at/.test(u || '');
+    page.on('console', (m) => {
+      if (m.type() !== 'error') return;
+      if (isAnalytics(m.text()) || isAnalytics(m.location().url)) return;
+      errors.push(m.text());
+    });
     await page.route('https://gc.zgo.at/**', (r) => r.abort());
     const base = `http://localhost:${port}/devteam-pilot/`;
     await page.goto(base);
@@ -82,7 +87,7 @@ test('privacy page: navigation, layout, contact links', { timeout: 120000 }, asy
     await page.click('.site-links a[href="../"]');
     await page.waitForURL(base);
     assert.ok(await page.isVisible('#draw'));
-    assert.deepStrictEqual(errors.filter((e) => !/gc\.zgo\.at|ERR_FAILED|Failed to load resource/.test(e)), []);
+    assert.deepStrictEqual(errors, []);
   } finally {
     if (browser) await browser.close();
     proc.kill();
