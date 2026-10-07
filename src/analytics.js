@@ -15,6 +15,8 @@ export function eventPath(kind, data = {}) {
       return 'share-tap';
     case 'share-done':
       return `share-done/${pick(VIA, d.via)}`;
+    case 'hire-click':
+      return 'hire-click';
     case 'pwa-install':
       return 'pwa-install';
     default:

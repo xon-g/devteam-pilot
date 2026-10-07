@@ -4,6 +4,7 @@ import { HTML_LANG, normalizeLang, t } from './i18n.js';
 import { createSound } from './sound.js';
 import { renderRoast, roastPicks } from './roast.js';
 import { eventPath, track } from './analytics.js';
+import { hireMailto } from './hire.js';
 import { PCSO_RESULTS_URL, PCSO_FACEBOOK_URL, SITE_URL } from './config.js';
 import { shareLinks, isMobileUA, copyText, shareUrl } from './share.js';
 import { nextDraw, formatCountdown, drawLabel, loadSchedule } from './schedule.js';
@@ -445,6 +446,18 @@ function updateSoundLabel() {
   soundButton.textContent = tr(sound.isEnabled() ? 'soundOn' : 'soundOff');
 }
 
+function applyHire() {
+  document.getElementById('hire-title').textContent = tr('hireTitle');
+  document.querySelector('.hire-text').textContent = tr('hireText');
+  const link = document.querySelector('.hire-link');
+  link.textContent = tr('hireCta');
+  link.href = hireMailto(lang);
+}
+
+document.querySelector('.hire-link').addEventListener('click', () => {
+  track(window.goatcounter, eventPath('hire-click'));
+});
+
 const NAV_KEYS = {
   'how-to-play/': 'navHow', 'lucky-numbers/': 'navLucky', 'responsible-gaming/': 'navResponsible',
   'about/': 'navAbout', 'contact/': 'navContact', 'privacy/': 'navPrivacy',
@@ -458,6 +471,7 @@ function applyStaticText() {
   });
   document.querySelectorAll('[data-i18n-lead]').forEach((el) => { el.firstChild.textContent = `${tr(el.dataset.i18nLead)} `; });
   document.getElementById('disclaimer').textContent = tr('disclaimer');
+  applyHire();
   const siteLinks = document.querySelector('.site-links');
   siteLinks.setAttribute('aria-label', tr('siteLinks'));
   siteLinks.querySelectorAll('a').forEach((a) => {
