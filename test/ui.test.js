@@ -86,6 +86,7 @@ test('page UI acceptance', { timeout: 60000 }, async () => {
     const chromium = await loadChromium();
     browser = await chromium.launch();
     const context = await browser.newContext({ viewport: VIEWPORT, reducedMotion: 'reduce' });
+    await context.route('https://gc.zgo.at/**', (route) => route.fulfill({ status: 200, contentType: 'application/javascript', body: '' }));
     const page = await context.newPage();
 
     const errors = [];
@@ -94,6 +95,7 @@ test('page UI acceptance', { timeout: 60000 }, async () => {
     page.on('pageerror', (err) => errors.push(err.message));
     page.on('request', (req) => {
       const { hostname, port: p } = new URL(req.url());
+      if (hostname === 'gc.zgo.at') return;
       if (hostname !== 'localhost' || p !== String(port)) foreign.push(req.url());
     });
 
