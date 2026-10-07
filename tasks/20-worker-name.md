@@ -8,4 +8,4 @@ says `devteam-pilot`, so every build warns and overrides the name.
 
 ## Acceptance (runnable)
 - `node -e "const c=require('fs').readFileSync('wrangler.jsonc','utf8');if(JSON.parse(c).name!=='lotto')process.exit(1)"`
-- `npm test` passes unchanged.
+- `npm test` passes.
