@@ -1,6 +1,7 @@
 // Draw schedule logic. DOM-free. Manila is a fixed UTC+8 (no DST), so no Intl tz data is used.
+import { t } from './i18n.js';
+
 const DAY_MS = 86400000;
-const DAY_NAMES = ['Linggo', 'Lunes', 'Martes', 'Miyerkoles', 'Huwebes', 'Biyernes', 'Sabado'];
 
 function offsetMs(schedule) {
   return (schedule && schedule.utcOffsetMinutes != null ? schedule.utcOffsetMinutes : 480) * 60000;
@@ -30,15 +31,16 @@ export function nextDraw(schedule, gameId, now) {
   return null;
 }
 
-export function formatCountdown(ms) {
+export function formatCountdown(ms, lang = 'taglish') {
+  const wrap = (s) => t(lang, 'countdownIn', { t: s });
   const mins = Math.floor(ms / 60000);
-  if (mins < 1) return 'in <1m';
+  if (mins < 1) return wrap('<1m');
   const days = Math.floor(mins / 1440);
   const hours = Math.floor((mins % 1440) / 60);
   const m = mins % 60;
-  if (days >= 1) return `in ${days}d ${hours}h`;
-  if (hours >= 1) return m ? `in ${hours}h ${m}m` : `in ${hours}h`;
-  return `in ${m}m`;
+  if (days >= 1) return wrap(`${days}d ${hours}h`);
+  if (hours >= 1) return wrap(m ? `${hours}h ${m}m` : `${hours}h`);
+  return wrap(`${m}m`);
 }
 
 export function formatDrawTime(time) {
@@ -48,13 +50,13 @@ export function formatDrawTime(time) {
   return `${h12}:${String(m).padStart(2, '0')} ${suffix}`;
 }
 
-export function drawLabel(draw, now, utcOffsetMinutes = 480) {
+export function drawLabel(draw, now, utcOffsetMinutes = 480, lang = 'taglish') {
   const off = utcOffsetMinutes * 60000;
   const diff = manilaDayNumber(draw.at, off) - manilaDayNumber(now, off);
-  const t = formatDrawTime(draw.time);
-  if (diff === 0) return `ngayong ${t}`;
-  if (diff === 1) return `bukas ${t}`;
-  return `${DAY_NAMES[draw.day]} ${t}`;
+  const time = formatDrawTime(draw.time);
+  if (diff === 0) return t(lang, 'drawToday', { time });
+  if (diff === 1) return t(lang, 'drawTomorrow', { time });
+  return `${t(lang, 'day.' + draw.day)} ${time}`;
 }
 
 export async function loadSchedule() {

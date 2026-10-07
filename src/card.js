@@ -1,17 +1,20 @@
+import { t } from './i18n.js';
+import { gameName } from './games.js';
+
 // Share card (1080x1920) for "Save image". DOM-free: drawCard takes a 2D context as an argument.
 const FONT = 'system-ui, sans-serif';
 
-export function cardContent({ game, numbersText, mode, name, drawText }) {
+export function cardContent({ game, numbersText, mode, name, drawText, lang = 'taglish' }) {
   const rambolito = Boolean(game && game.rambolito) && mode === 'rambolito';
   return {
     title: 'Lotto Lucky Numbers PH',
-    game: game.name,
-    forName: name ? `Para kay ${name}` : '',
+    game: gameName(game, lang),
+    forName: name ? t(lang, 'forName', { name }) : '',
     numbers: numbersText,
     modeLine: rambolito ? '(Rambolito)' : '',
-    draw: drawText ? `Next draw: ${drawText}` : '',
-    fun: 'Random, for fun only. 18+.',
-    disclaimer: 'Not affiliated with PCSO.',
+    draw: drawText ? t(lang, 'cardNextDraw', { when: drawText }) : '',
+    fun: t(lang, 'cardFun'),
+    disclaimer: t(lang, 'cardDisclaimer'),
     url: 'lotto.xonicbox.com',
   };
 }

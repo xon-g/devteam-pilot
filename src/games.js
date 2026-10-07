@@ -1,4 +1,5 @@
 import { randomInt } from './lucky.js';
+import { t } from './i18n.js';
 
 export const GAMES = [
   { id: '2d',   name: 'EZ2 (2D)',          kind: 'pick',  count: 2, min: 1, max: 31, rambolito: true  },
@@ -36,6 +37,10 @@ export function formatNumbers(game, nums) {
   return parts.join('-');
 }
 
-export function shortName(game) {
-  return game.name.replace(/\s*\(.*\)\s*$/, '');
+export function gameName(game, lang = 'taglish') {
+  return game.id === '1-58' ? t(lang, 'game.1-58') : game.name;
+}
+
+export function shortName(game, lang = 'taglish') {
+  return gameName(game, lang).replace(/\s*\(.*\)\s*$/, '');
 }
