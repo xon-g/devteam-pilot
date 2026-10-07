@@ -9,7 +9,7 @@ rule** (browser globals only inside `page.evaluate`). Don't restyle the site.
 In `src/config.js` add:
 ```js
 export const PCSO_RESULTS_URL = 'https://www.pcso.gov.ph/SearchLottoResult.aspx';
-export const PCSO_FACEBOOK_URL = 'https://www.facebook.com/PCSOPhilippines';
+export const PCSO_FACEBOOK_URL = 'https://www.facebook.com/pcsoofficialsocialmedia';
 ```
 (Both unverified from our side: pcso.gov.ph answers 403 to scripts and Facebook hides page names.
 The owner checks them in a browser before merging; see PR notes.)
@@ -21,7 +21,7 @@ In `index.html`, directly **above** `#not-affiliated`:
 <p id="official-results" class="official-results fine-print">
   Opisyal na resulta ng <span id="results-game">Swertres (3D)</span>:
   <a data-results="site" href="https://www.pcso.gov.ph/SearchLottoResult.aspx" target="_blank" rel="noopener noreferrer">PCSO website</a>
-  · <a data-results="facebook" href="https://www.facebook.com/PCSOPhilippines" target="_blank" rel="noopener noreferrer">PCSO Facebook</a>
+  · <a data-results="facebook" href="https://www.facebook.com/pcsoofficialsocialmedia" target="_blank" rel="noopener noreferrer">PCSO Facebook</a>
 </p>
 ```
 - Works without JS (static hrefs). In `src/app.js` `applyGame`: set `#results-game` text to `game.name`,
