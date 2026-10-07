@@ -379,6 +379,17 @@ main {
   background: radial-gradient(circle at 35% 30%, #fff 0%, #ffd1e1 35%, var(--pink) 75%, #c2185b 100%);
 }
 
+.moods span {
+  gap: 0.35rem;
+}
+
+.moods span::before {
+  content: attr(data-emoji) / "";
+  flex: none;
+  font-size: 1.1em;
+  line-height: 1;
+}
+
 .games input:checked + span,
 .moods input:checked + span {
   background: var(--gold);
