@@ -59,8 +59,8 @@ for (const page of PAGES) {
   });
 }
 
-test('sw.js precaches page-lang.js under swertres-v34', () => {
+test('sw.js precaches page-lang.js under swertres-v35', () => {
   const sw = read('sw.js');
   assert.ok(sw.includes('"src/page-lang.js"'));
-  assert.ok(sw.includes('swertres-v34'));
+  assert.ok(sw.includes('swertres-v35'));
 });

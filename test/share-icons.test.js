@@ -7,7 +7,7 @@ const html = read('index.html');
 const row = html.slice(html.indexOf('id="share-row"'), html.indexOf('</nav>', html.indexOf('id="share-row"')));
 
 test('brand path data is inlined verbatim', () => {
-  for (const slug of ['facebook', 'messenger', 'viber', 'whatsapp', 'telegram', 'x', 'tiktok']) {
+  for (const slug of ['facebook', 'messenger', 'viber', 'whatsapp', 'telegram', 'x', 'tiktok', 'instagram']) {
     const d = read(`assets/icons/brands/${slug}.svg`).match(/<path d="([^"]+)"/)[1];
     assert.ok(html.includes(`d="${d}"`), slug);
   }
@@ -19,6 +19,6 @@ test('share row has no img and no https in svg', () => {
   for (const m of row.matchAll(/<svg[\s\S]*?<\/svg>/g)) assert.ok(!m[0].includes('https://'));
 });
 
-test('sw.js CACHE is swertres-v34', () => {
-  assert.ok(read('sw.js').includes('const CACHE = "swertres-v34"'));
+test('sw.js CACHE is swertres-v35', () => {
+  assert.ok(read('sw.js').includes('const CACHE = "swertres-v35"'));
 });

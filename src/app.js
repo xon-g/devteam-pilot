@@ -67,6 +67,7 @@ let currentReasonIdx = [];
 let currentRoastPicks = [];
 let currentProfile = null;
 let statusKey = '';
+let statusVars = {};
 const tr = (key, vars) => t(lang, key, vars);
 
 let currentCombo = null;
@@ -271,9 +272,10 @@ function renderResultText() {
   roastEl.hidden = roastEl.children.length === 0;
 }
 
-function setStatus(key) {
+function setStatus(key, vars = {}) {
   statusKey = key;
-  shareStatus.textContent = key ? tr(key) : '';
+  statusVars = vars;
+  shareStatus.textContent = key ? tr(key, vars) : '';
 }
 
 function currentShareText() {
@@ -333,7 +335,10 @@ async function cardFile() {
   return { blob, fileName, file: new File([blob], fileName, { type: 'image/png' }) };
 }
 
-async function shareTiktok() {
+const APP_NAMES = { tiktok: 'TikTok', ig: 'Instagram' };
+
+async function shareToApp(appKey) {
+  const app = APP_NAMES[appKey];
   try {
     await navigator.clipboard.writeText(copyText(currentShareText(), SITE_URL));
   } catch (err) {
@@ -344,17 +349,17 @@ async function shareTiktok() {
     if (navigator.canShare?.({ files: [file] })) {
       try {
         await navigator.share({ files: [file] });
-        setStatus('statusTiktokShared');
+        setStatus('statusAppShared', { app });
         return;
       } catch (err) {
         if (err && err.name === 'AbortError') return;
       }
     }
     downloadBlob(blob, fileName);
-    setStatus('statusTiktokSaved');
+    setStatus('statusAppSaved', { app });
   } catch (err) {
     setStatus('statusSaveFail');
-    console.warn('TikTok share error:', err);
+    console.warn(`${app} share error:`, err);
   }
 }
 
@@ -386,7 +391,7 @@ async function handleRowClick(e) {
   const via = el.dataset.share;
   track(window.goatcounter, eventPath('share-done', { via }));
   if (via === 'img') return saveImage();
-  if (via === 'tiktok') return shareTiktok();
+  if (via in APP_NAMES) return shareToApp(via);
   if (via !== 'copy') return;
   try {
     await navigator.clipboard.writeText(copyText(currentShareText(), SITE_URL));
@@ -474,7 +479,7 @@ function applyLang() {
   resultsGame.textContent = gameName(currentGame, lang);
   eyebrow.textContent = currentGame.id === '3d' ? 'Swertres · 3D' : gameName(currentGame, lang);
   if (!currentCombo) comboOutput.textContent = tr('prompt');
-  shareStatus.textContent = statusKey ? tr(statusKey) : '';
+  shareStatus.textContent = statusKey ? tr(statusKey, statusVars) : '';
   renderResultText();
   if (currentCombo) updateShareRow();
   updateNextDraw();

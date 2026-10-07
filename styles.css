@@ -917,6 +917,10 @@ mark.check {
   fill: #26a5e4;
 }
 
+.share-row [data-share="ig"] .share-icon {
+  fill: #ff0069;
+}
+
 .share-row [data-share="x"] .share-icon {
   fill: currentColor;
 }
