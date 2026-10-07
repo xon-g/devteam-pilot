@@ -163,26 +163,34 @@ async function draw() {
       }
       sound.play('chaching');
     } else {
-      // Roll animation
-      for (let r = 0; r < 8; r++) {
+      // Roll animation: frame delays decelerate (ease-out) from 45ms to 140ms
+      const frames = 10;
+      for (let r = 0; r < frames; r++) {
         for (let j = 0; j < n; j++) {
           digitElements[j].textContent = ballText(game, game.min + randomInt(span));
+          digitElements[j].classList.remove('landed');
           digitElements[j].classList.add('rolling');
         }
         sound.play('tick');
-        await new Promise(res => setTimeout(res, 70));
+        const t = r / (frames - 1);
+        const delay = 45 + (140 - 45) * (1 - (1 - t) * (1 - t));
+        await new Promise(res => setTimeout(res, delay));
       }
 
       currentCombo = drawNumbers(game);
 
       // Settle left to right
       for (let i = 0; i < n; i++) {
-        digitElements[i].textContent = ballText(game, currentCombo[i]);
-        digitElements[i].classList.remove('rolling');
+        const ball = digitElements[i];
+        ball.textContent = ballText(game, currentCombo[i]);
+        ball.classList.remove('rolling');
+        ball.classList.remove('landed');
+        void ball.offsetWidth;
+        ball.classList.add('landed');
         reasonElements[i].textContent = moodReasons[i];
         miniElements[i].textContent = ballText(game, currentCombo[i]);
         sound.play('ding', i);
-        await new Promise(res => setTimeout(res, 100));
+        await new Promise(res => setTimeout(res, 120));
       }
       sound.play('chaching');
     }
