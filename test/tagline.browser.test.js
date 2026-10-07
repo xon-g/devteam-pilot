@@ -51,16 +51,59 @@ function startServer(port) {
   return { proc, ready };
 }
 
+const DISCLAIMER = "For entertainment only. Numbers are random and don't improve your odds. 18+. Play responsibly.";
+
+test('sw.js contains swertres-v16', () => {
+  assert.ok(fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8').includes('swertres-v16'));
+});
+
+test('disclaimer texts are 10px and clear of the fixed footer', { timeout: 90000 }, async () => {
+  const port = await getFreePort();
+  const { proc, ready } = startServer(port);
+  let browser;
+  try {
+    await ready;
+    const chromium = await loadChromium();
+    browser = await chromium.launch();
+    for (const [width, height] of [[360, 740], [1280, 800]]) {
+      const context = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' });
+      const page = await context.newPage();
+      await page.goto(`http://localhost:${port}/`, { waitUntil: 'load' });
+      await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+      const r = await page.evaluate(() => {
+        const fs = (id) => getComputedStyle(document.getElementById(id)).fontSize;
+        const d = document.getElementById('disclaimer').getBoundingClientRect();
+        const p = document.getElementById('privacy-note').getBoundingClientRect();
+        return {
+          sizes: [fs('disclaimer'), fs('not-affiliated'), fs('privacy-note')],
+          text: document.getElementById('disclaimer').textContent.trim(),
+          dTop: d.top, dBottom: d.bottom, dHeight: d.height, dLeft: d.left, dRight: d.right,
+          pBottom: p.bottom,
+          scrollWidth: document.documentElement.scrollWidth,
+          innerWidth: window.innerWidth, innerHeight: window.innerHeight,
+        };
+      });
+      const tag = `${width}px`;
+      assert.deepStrictEqual(r.sizes, ['10px', '10px', '10px'], tag);
+      assert.strictEqual(r.text, DISCLAIMER, tag);
+      assert.ok(r.dTop >= 0 && r.dBottom <= r.innerHeight && r.dLeft >= 0 && r.dRight <= r.innerWidth, `${tag} disclaimer outside viewport`);
+      if (width === 360) assert.ok(r.dHeight <= 48, `${tag} height ${r.dHeight}`);
+      assert.ok(r.pBottom <= r.dTop, `${tag} privacy-note ${r.pBottom} behind footer ${r.dTop}`);
+      assert.ok(r.scrollWidth <= r.innerWidth, `${tag} overflow ${r.scrollWidth}`);
+      await context.close();
+    }
+  } finally {
+    if (browser) await browser.close();
+    proc.kill();
+  }
+});
+
 test('tagline markup has the break before "For fun lang." exactly once', () => {
   const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
   const m = html.match(/<p class="tagline">([^]*?)<\/p>/);
   assert.ok(m, 'tagline paragraph missing');
   assert.ok(m[1].includes('6/42–6/58.<br>For fun lang.'), m[1]);
   assert.strictEqual(html.split('For fun lang.').length - 1, 1);
-});
-
-test('sw.js cache is swertres-v15', () => {
-  assert.ok(fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8').includes('swertres-v15'));
 });
 
 test('tagline renders "For fun lang." on its own line at 360px', { timeout: 90000 }, async () => {
