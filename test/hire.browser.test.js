@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const PLAYWRIGHT = '/usr/local/lib/node_modules/playwright';
-const SHOTS = process.env.HIRE_SHOTS || '';
+const SHOTS = process.env.HIRE_SHOTS || fileURLToPath(new URL('../.smoke', import.meta.url));
 
 async function loadChromium() {
   try {
@@ -52,7 +52,7 @@ test('hire card: layout, languages, analytics', { timeout: 180000 }, async () =>
   try {
     await ready;
     for (const path of ['/', '/about/']) {
-      for (const width of [320, 1280]) {
+      for (const width of [320, 360, 1280]) {
         const page = await open(browser, `http://localhost:${port}${path}`, width);
         await page.locator('#hire').scrollIntoViewIfNeeded();
         assert.ok(await page.locator('#hire').isVisible());
@@ -65,14 +65,22 @@ test('hire card: layout, languages, analytics', { timeout: 180000 }, async () =>
           const hire = document.querySelector('#hire').getBoundingClientRect();
           const nav = document.querySelector('.site-links').getBoundingClientRect();
           const foot = document.querySelector('#disclaimer').getBoundingClientRect();
-          return { hireBottom: hire.bottom, navTop: nav.top, navBottom: nav.bottom, footTop: foot.top, hireTop: hire.top };
+          return { hireBottom: hire.bottom, navTop: nav.top, navBottom: Math.max(...[...document.querySelectorAll('.site-links a')].map((a) => a.getBoundingClientRect().bottom)), footTop: foot.top, hireTop: hire.top };
         });
         assert.ok(r.hireBottom <= r.navTop + 1, 'card above footer nav');
         assert.ok(r.hireTop >= 0 && r.hireBottom <= r.footTop, 'card fully above the fixed disclaimer');
-        if (SHOTS && path === '/' && (width === 1280 || width === 320)) {
+        assert.ok(r.navBottom <= r.footTop, `site links end above the fixed disclaimer on ${path} at ${width}`);
+        if (path === '/') {
+          const gap = await page.evaluate(() => {
+            const note = [...document.querySelectorAll('.about-games')].find((s) => !s.hidden).getBoundingClientRect();
+            return document.querySelector('#hire').getBoundingClientRect().top - note.bottom;
+          });
+          assert.ok(gap <= 40, `gap above hire card ${gap}px at ${width}`);
+        }
+        if (SHOTS && path === '/' && (width === 1280 || width === 360)) {
           fs.mkdirSync(SHOTS, { recursive: true });
           await page.locator('#hire').scrollIntoViewIfNeeded();
-          await page.screenshot({ path: `${SHOTS}/hire-home-${width === 320 ? 360 : 1280}.png` });
+          await page.screenshot({ path: `${SHOTS}/hire-home-${width}.png` });
         }
         await page.context().close();
       }

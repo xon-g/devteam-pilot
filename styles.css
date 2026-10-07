@@ -685,7 +685,7 @@ footer#disclaimer {
 /* Crawlable about / FAQ section (below the app, clear of the fixed footer) */
 .about-games {
   grid-area: about;
-  padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+  padding-bottom: var(--space-1);
   padding-top: var(--space-1);
   color: var(--muted);
   font-size: var(--step-0);
@@ -837,13 +837,9 @@ body.content-page .hire {
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.25rem 1rem;
-  padding: 0.5rem 1rem 3rem;
+  padding: 0.5rem 1rem calc(4.5rem + env(safe-area-inset-bottom));
   font-size: var(--step--1);
   line-height: var(--lh-snug);
-}
-
-body.content-page .site-links {
-  padding-bottom: 4.5rem;
 }
 
 .site-links a {
