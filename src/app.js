@@ -6,6 +6,7 @@ import { eventPath, track } from './analytics.js';
 import { PCSO_RESULTS_URL, PCSO_FACEBOOK_URL, SITE_URL } from './config.js';
 import { shareLinks, isMobileUA, copyText, shareUrl } from './share.js';
 import { nextDraw, formatCountdown, drawLabel, loadSchedule } from './schedule.js';
+import { cardContent, cardFileName, drawCard } from './card.js';
 import { validateProfile, pickMoodReasons } from './profile.js';
 
 // Register service worker if supported
@@ -268,11 +269,58 @@ function updateShareRow() {
   shareRow.hidden = false;
 }
 
+function cardBlob() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1080;
+  canvas.height = 1920;
+  const drawText = nextDrawEl.hidden
+    ? ''
+    : `${document.getElementById('next-draw-when').textContent}`.trim();
+  const content = cardContent({
+    game: currentGame,
+    numbersText: formatNumbers(currentGame, currentCombo),
+    mode: currentMode(),
+    name: currentName,
+    drawText
+  });
+  drawCard(canvas.getContext('2d'), content, { width: 1080, height: 1920 });
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob failed'))), 'image/png');
+  });
+}
+
+async function saveImage() {
+  try {
+    const blob = await cardBlob();
+    const fileName = cardFileName(currentGame.id, formatNumbers(currentGame, currentCombo));
+    const file = new File([blob], fileName, { type: 'image/png' });
+    if (navigator.canShare?.({ files: [file] })) {
+      await navigator.share({ files: [file], text: currentShareText(), url: shareUrl(SITE_URL, 'img') });
+      shareStatus.textContent = 'Naibahagi na!';
+      return;
+    }
+    const href = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = href;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(href), 1000);
+    shareStatus.textContent = 'Na-save na ang image!';
+  } catch (err) {
+    if (err && err.name === 'AbortError') return;
+    shareStatus.textContent = 'Hindi ma-save';
+    console.warn('Save image error:', err);
+  }
+}
+
 async function handleRowClick(e) {
   const el = e.target.closest('[data-share]');
   if (!el) return;
   const via = el.dataset.share;
   track(window.goatcounter, eventPath('share-done', { via }));
+  if (via === 'img') return saveImage();
   if (via !== 'copy') return;
   try {
     await navigator.clipboard.writeText(copyText(currentShareText(), SITE_URL));
