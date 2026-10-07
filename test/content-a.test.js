@@ -66,12 +66,12 @@ test('lucky-numbers content', () => {
 test('site-links nav on every page', () => {
   const nav = (h) => h.match(/<nav class="site-links"[^>]*>(.*?)<\/nav>/)[1];
   const links = (h) => [...nav(h).matchAll(/<a href="([^"]*)"([^>]*)>([^<]*)<\/a>/g)].map((m) => [m[1], m[3], m[2]]);
-  assert.deepStrictEqual(links(HOME).map((l) => l[1]), ['How to play', 'Lucky numbers?', 'Privacy']);
-  assert.deepStrictEqual(links(HOME).map((l) => l[0]), ['how-to-play/', 'lucky-numbers/', 'privacy/']);
+  assert.deepStrictEqual(links(HOME).map((l) => l[1]), ['How to play', 'Lucky numbers?', 'Responsible gaming', 'About', 'Contact', 'Privacy']);
+  assert.deepStrictEqual(links(HOME).map((l) => l[0]), ['how-to-play/', 'lucky-numbers/', 'responsible-gaming/', 'about/', 'contact/', 'privacy/']);
   assert.ok(!nav(HOME).includes('aria-current'));
   for (const [slug, label] of [['privacy', 'Privacy'], ['how-to-play', 'How to play'], ['lucky-numbers', 'Lucky numbers?']]) {
     const l = links(read(`${slug}/index.html`));
-    assert.deepStrictEqual(l.map((x) => x[1]), ['Home', 'How to play', 'Lucky numbers?', 'Privacy']);
+    assert.deepStrictEqual(l.map((x) => x[1]), ['Home', 'How to play', 'Lucky numbers?', 'Responsible gaming', 'About', 'Contact', 'Privacy']);
     assert.strictEqual(l.filter((x) => x[2].includes('aria-current="page"')).length, 1);
     assert.ok(l.find((x) => x[1] === label)[2].includes('aria-current="page"'));
     assert.deepStrictEqual(l.filter((x) => !x[2].includes('aria-current')).map((x) => x[0]).every((h) => h.startsWith('../')), true);
@@ -82,6 +82,6 @@ test('sitemap and service worker', () => {
   const sm = read('sitemap.xml');
   for (const s of Object.keys(PAGES)) assert.ok(sm.includes(`<loc>https://lotto.xonicbox.com/${s}/</loc>`));
   const sw = read('sw.js');
-  assert.ok(sw.includes('const CACHE = "swertres-v25"'));
+  assert.ok(sw.includes('const CACHE = "swertres-v26"'));
   for (const s of Object.keys(PAGES)) assert.ok(sw.includes(`"${s}/"`));
 });
