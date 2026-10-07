@@ -4,6 +4,7 @@ import { createSound } from './sound.js';
 import { roastLines } from './roast.js';
 import { eventPath, track } from './analytics.js';
 import { PCSO_RESULTS_URL, PCSO_FACEBOOK_URL } from './config.js';
+import { nextDraw, formatCountdown, drawLabel, loadSchedule } from './schedule.js';
 import { validateProfile, pickMoodReasons } from './profile.js';
 
 // Register service worker if supported
@@ -37,6 +38,19 @@ const officialResults = document.getElementById('official-results');
 const resultsGame = document.getElementById('results-game');
 officialResults.querySelector('[data-results="site"]').href = PCSO_RESULTS_URL;
 officialResults.querySelector('[data-results="facebook"]').href = PCSO_FACEBOOK_URL;
+
+const nextDrawEl = document.getElementById('next-draw');
+let schedule = null;
+
+function updateNextDraw() {
+  const now = new Date();
+  const draw = schedule ? nextDraw(schedule, currentGame.id, now) : null;
+  nextDrawEl.hidden = !draw;
+  if (!draw) return;
+  document.getElementById('next-draw-game').textContent = currentGame.name;
+  document.getElementById('next-draw-when').textContent = drawLabel(draw, now, schedule.utcOffsetMinutes);
+  document.getElementById('next-draw-in').textContent = formatCountdown(draw.at.getTime() - now.getTime());
+}
 
 const sound = createSound(() => {
   const C = window.AudioContext || window.webkitAudioContext;
@@ -107,6 +121,7 @@ function applyGame(game) {
   modeGroup.hidden = !game.rambolito;
   resultsGame.textContent = game.name;
   officialResults.hidden = game.id === '1-58';
+  updateNextDraw();
   eyebrow.textContent = game.id === '3d' ? 'Swertres · 3D' : game.name;
 }
 let currentName = '';
@@ -279,3 +294,8 @@ form.addEventListener('change', (e) => {
 });
 applyGame(pickedGame());
 checkForm();
+loadSchedule().then((s) => {
+  schedule = s;
+  updateNextDraw();
+}).catch(() => {});
+setInterval(updateNextDraw, 30000);

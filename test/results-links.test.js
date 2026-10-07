@@ -33,7 +33,15 @@ test('index.html has one results row before #not-affiliated with correct links',
 test('src has no network calls and only config mentions the hosts', () => {
   for (const f of fs.readdirSync(path.join(ROOT, 'src'))) {
     const src = read(`src/${f}`);
-    assert.ok(!/fetch\(|XMLHttpRequest|sendBeacon/.test(src), `${f} makes network calls`);
+    assert.ok(!/XMLHttpRequest|sendBeacon/.test(src), `${f} makes network calls`);
+    const fetches = src.match(/fetch\(/g) || [];
+    if (f === 'schedule.js') {
+      assert.strictEqual(fetches.length, 1, 'schedule.js should have exactly one fetch(');
+      assert.ok(/fetch\(new URL\([^)]*import\.meta\.url\)\)/.test(src), 'fetch must use import.meta.url');
+      assert.ok(!/http/.test(src), 'schedule.js has an http literal');
+    } else {
+      assert.strictEqual(fetches.length, 0, `${f} makes network calls`);
+    }
     if (f !== 'config.js') assert.ok(!/pcso\.gov\.ph|facebook\.com/.test(src), `${f} mentions hosts`);
   }
 });
@@ -45,6 +53,6 @@ test('contact page links the results URL with noopener', () => {
   assert.ok(/rel="[^"]*noopener/.test(a[0]));
 });
 
-test('sw.js has swertres-v27', () => {
-  assert.ok(read('sw.js').includes('swertres-v27'));
+test('sw.js has swertres-v28', () => {
+  assert.ok(read('sw.js').includes('swertres-v28'));
 });
