@@ -52,11 +52,11 @@ test('links and scripts are safe and relative', () => {
 });
 
 test('home footer links, sitemap, service worker', () => {
-  assert.ok(home.includes('<nav class="site-links" aria-label="Site links"><a href="how-to-play/">How to play</a><a href="lucky-numbers/">Lucky numbers?</a><a href="privacy/">Privacy</a></nav>'));
+  assert.ok(home.includes('<nav class="site-links" aria-label="Site links"><a href="how-to-play/">How to play</a><a href="lucky-numbers/">Lucky numbers?</a><a href="responsible-gaming/">Responsible gaming</a><a href="about/">About</a><a href="contact/">Contact</a><a href="privacy/">Privacy</a></nav>'));
   assert.ok(home.indexOf('class="site-links"') < home.indexOf('<footer id="disclaimer">'));
   assert.ok(/id="privacy-note"[\s\S]*<a href="privacy\/">Basahin ang privacy policy<\/a>\.<\/p>/.test(home));
   assert.ok(read('sitemap.xml').includes('<loc>https://lotto.xonicbox.com/privacy/</loc>'));
   const sw = read('sw.js');
-  assert.ok(sw.includes('"swertres-v25"'));
+  assert.ok(sw.includes('"swertres-v26"'));
   for (const a of ['"privacy/"', '"src/config.js"', '"src/contact.js"']) assert.ok(sw.includes(a), a);
 });

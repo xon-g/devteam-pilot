@@ -91,7 +91,7 @@ test('JSON-LD: WebApplication and FAQPage', () => {
 
 test('sitemap.xml and robots.txt', () => {
   const sm = read('sitemap.xml');
-  assert.deepEqual([...sm.matchAll(/<loc>([^<]*)<\/loc>/g)].map((m) => m[1]), [ORIGIN, `${ORIGIN}privacy/`, `${ORIGIN}how-to-play/`, `${ORIGIN}lucky-numbers/`]);
+  assert.deepEqual([...sm.matchAll(/<loc>([^<]*)<\/loc>/g)].map((m) => m[1]), [ORIGIN, `${ORIGIN}privacy/`, `${ORIGIN}how-to-play/`, `${ORIGIN}lucky-numbers/`, `${ORIGIN}responsible-gaming/`, `${ORIGIN}about/`, `${ORIGIN}contact/`]);
   assert.match(sm.match(/<lastmod>([^<]*)<\/lastmod>/)[1], /^\d{4}-\d{2}-\d{2}$/);
   const robots = read('robots.txt');
   assert.ok(robots.split('\n').includes(`Sitemap: ${ORIGIN}sitemap.xml`));
