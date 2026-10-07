@@ -3,6 +3,7 @@ import assert from 'node:assert';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { PCSO_RESULTS_URL, PCSO_FACEBOOK_URL } from '../src/config.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -218,11 +219,11 @@ test('OG image exists and has correct dimensions', () => {
   assert.strictEqual(dims.height, 630, 'og-image.png height should be 630');
 });
 
-test('sw.js precaches og-image.png and CACHE is swertres-v26', () => {
+test('sw.js precaches og-image.png and CACHE is swertres-v27', () => {
   const swJs = fs.readFileSync(path.join(rootDir, 'sw.js'), 'utf8');
   
   // Check CACHE version
-  assert.ok(swJs.includes('const CACHE = "swertres-v26"'), 'CACHE should be swertres-v25');
+  assert.ok(swJs.includes('const CACHE = "swertres-v27"'), 'CACHE should be swertres-v27');
   
   // Check og-image.png in ASSETS
   assert.ok(swJs.includes('"assets/og-image.png"'), 'sw.js should precache og-image.png');
@@ -290,6 +291,10 @@ test('no absolute URLs in index.html href/src attributes (except canonical, og:u
     const url = match.slice(6, -1);
     // Allow canonical, og:url, og:image, twitter:image which are allowed to be absolute
     if (url.startsWith('https://lotto.xonicbox.com/')) {
+      continue;
+    }
+    // Official PCSO links (task 31) are intentionally absolute
+    if (url === PCSO_RESULTS_URL || url === PCSO_FACEBOOK_URL) {
       continue;
     }
     assert.ok(!url.startsWith('/'), `href should not be absolute: ${url}`);

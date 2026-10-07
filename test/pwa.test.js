@@ -3,6 +3,7 @@ import assert from 'node:assert';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { PCSO_RESULTS_URL, PCSO_FACEBOOK_URL } from '../src/config.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -86,6 +87,10 @@ test('no absolute URLs in index.html', () => {
     const url = match.slice(6, -1); // Extract URL from href="..."
     // Allow canonical links (rel="canonical") to have absolute URLs
     if (url.startsWith('https://lotto.xonicbox.com/')) {
+      continue;
+    }
+    // Official PCSO links (task 31) are intentionally absolute
+    if (url === PCSO_RESULTS_URL || url === PCSO_FACEBOOK_URL) {
       continue;
     }
     assert.ok(!url.startsWith('/'), `href should not be absolute: ${url}`);
