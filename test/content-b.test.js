@@ -22,7 +22,7 @@ for (const [slug, { h1, title, page, checks }] of Object.entries(PAGES)) {
     assert.ok(html.includes(`<title>${title}</title>`));
     assert.ok(html.includes(`<h1>${h1}</h1>`));
     const scripts = [...html.matchAll(/<script\b([^>]*)>/g)].map((m) => m[1].trim());
-    assert.strictEqual(scripts.length, slug === 'contact' ? 3 : 2);
+    assert.strictEqual(scripts.length, slug === 'contact' ? 4 : 3);
     if (slug === 'contact') assert.ok(scripts.includes('type="module" src="../src/contact.js"'));
     assert.ok(html.indexOf('location.replace') < html.indexOf('data-goatcounter'));
     assert.ok(html.indexOf('<script>') < html.indexOf('<meta name="viewport"'));
@@ -49,7 +49,7 @@ for (const [slug, { h1, title, page, checks }] of Object.entries(PAGES)) {
       const sec = b.slice(b.indexOf(`## Page ${page}:`), b.indexOf(`## Page ${page + 1}:`));
       expected = (sec.match(/\[CHECK/g) || []).length;
     }
-    assert.strictEqual((html.match(/class="check"/g) || []).length, expected);
+    assert.strictEqual((html.split('data-lang-block="en"')[0].match(/class="check"/g) || []).length, expected); // Taglish block only
   });
 }
 
@@ -102,5 +102,5 @@ test('sitemap and sw list the new pages', () => {
     assert.ok(sm.includes(`<loc>https://lotto.xonicbox.com/${s}/</loc>`));
     assert.ok(sw.includes(`"${s}/"`));
   }
-  assert.ok(sw.includes('swertres-v32'));
+  assert.ok(sw.includes('swertres-v33'));
 });
