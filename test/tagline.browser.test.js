@@ -54,8 +54,8 @@ function startServer(port) {
 
 const DISCLAIMER = "For entertainment only. Numbers are random and don't improve your odds. 18+. Play responsibly.";
 
-test('sw.js contains swertres-v40', () => {
-  assert.ok(fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8').includes('swertres-v40'));
+test('sw.js contains swertres-v41', () => {
+  assert.ok(fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8').includes('swertres-v41'));
 });
 
 test('disclaimer texts are at least 12.5px and clear of the fixed footer', { timeout: 90000 }, async () => {
