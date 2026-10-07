@@ -3,6 +3,7 @@ import assert from 'node:assert';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { PCSO_RESULTS_URL, PCSO_FACEBOOK_URL } from '../src/config.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -89,7 +90,7 @@ test('no absolute URLs in index.html', () => {
       continue;
     }
     // Official PCSO links (task 31) are intentionally absolute
-    if (url === 'https://www.pcso.gov.ph/SearchLottoResult.aspx' || url === 'https://www.facebook.com/PCSOPhilippines') {
+    if (url === PCSO_RESULTS_URL || url === PCSO_FACEBOOK_URL) {
       continue;
     }
     assert.ok(!url.startsWith('/'), `href should not be absolute: ${url}`);

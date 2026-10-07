@@ -58,7 +58,7 @@ const GAMES = [
   ['6-55', 'Grand Lotto 6/55'], ['6-58', 'Ultra Lotto 6/58'],
 ];
 const RESULTS_URL = 'https://www.pcso.gov.ph/SearchLottoResult.aspx';
-const FACEBOOK_URL = 'https://www.facebook.com/PCSOPhilippines';
+const FACEBOOK_URL = 'https://www.facebook.com/pcsoofficialsocialmedia';
 
 test('official results links', { timeout: 120000 }, async () => {
   const port = await getFreePort();
