@@ -58,8 +58,9 @@ export function drawCard(ctx, content, { width = 1080, height = 1920 } = {}) {
   };
 
   text(content.title, 260, 64, '#ffffff', '700');
-  text(content.game, 360, 52, '#ffc93c');
-  text(content.forName, 440, 44, '#ffffff', '500');
+  const fitText = (str, base) => fitFontSize((str || '').length, width - 120, base);
+  text(content.game, 360, fitText(content.game, 52), '#ffc93c');
+  text(content.forName, 440, fitText(content.forName, 44), '#ffffff', '500');
 
   const size = fitFontSize(content.numbers.length, width - 120, 220);
   text(content.numbers, 960, size, gold(960 - size / 2, 960 + size / 2), '800');

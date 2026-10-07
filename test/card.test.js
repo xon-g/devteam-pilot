@@ -76,3 +76,20 @@ test('card.js is DOM-free and cached by sw.js', () => {
   assert.ok(sw.includes('swertres-v30'));
   assert.ok(sw.includes('"src/card.js"'));
 });
+
+test('drawCard shrinks a long name to fit', () => {
+  const fonts = [];
+  let font = '';
+  const calls = [];
+  const ctx = new Proxy({ fillText: (t) => calls.push({ t, font }), createLinearGradient: () => ({ addColorStop() {} }) }, {
+    get: (o, k) => (k in o ? o[k] : () => {}),
+    set: (o, k, v) => { if (k === 'font') font = v; o[k] = v; return true; },
+  });
+  const content = cardContent({ game: getGame('3d'), numbersText: '5-7-5', mode: 'straight', name: 'A'.repeat(40), drawText: '' });
+  drawCard(ctx, content, { width: 1080, height: 1920 });
+  const call = calls.find((k) => k.t === content.forName);
+  const size = Number(/(\d+)px/.exec(call.font)[1]);
+  fonts.push(size);
+  assert.ok(size < 44, `size ${size}`);
+  assert.ok(size >= fitFontSize(1000, 960, 44), `size ${size}`);
+});

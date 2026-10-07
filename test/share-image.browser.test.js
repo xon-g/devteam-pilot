@@ -157,6 +157,17 @@ test('save image', { timeout: 120000 }, async () => {
     assert.strictEqual(await a.page.textContent('#share-status'), '');
     await a.context.close();
 
+    // Share rejects with NotAllowedError (Safari): fall back to download
+    const n = await setup(browser, port, { viewport: { width: 1280, height: 800 }, acceptDownloads: true }, errors, () => {
+      navigator.canShare = () => true;
+      navigator.share = async () => { throw new DOMException('expired', 'NotAllowedError'); };
+    });
+    await draw(n.page);
+    const [dl2] = await Promise.all([n.page.waitForEvent('download'), n.page.click('#save-image')]);
+    assert.match(dl2.suggestedFilename(), /\.png$/);
+    await n.page.waitForFunction(() => document.querySelector('#share-status').textContent === 'Na-save na ang image!');
+    await n.context.close();
+
     // Mobile layout
     const m = await setup(browser, port, { viewport: ANDROID_VIEW }, errors);
     await draw(m.page);

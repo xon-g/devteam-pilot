@@ -289,24 +289,33 @@ function cardBlob() {
   });
 }
 
+function downloadBlob(blob, fileName) {
+  const href = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = href;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(href), 1000);
+}
+
 async function saveImage() {
   try {
     const blob = await cardBlob();
     const fileName = cardFileName(currentGame.id, formatNumbers(currentGame, currentCombo));
     const file = new File([blob], fileName, { type: 'image/png' });
     if (navigator.canShare?.({ files: [file] })) {
-      await navigator.share({ files: [file], text: currentShareText(), url: shareUrl(SITE_URL, 'img') });
-      shareStatus.textContent = 'Naibahagi na!';
-      return;
+      try {
+        await navigator.share({ files: [file], text: currentShareText(), url: shareUrl(SITE_URL, 'img') });
+        shareStatus.textContent = 'Naibahagi na!';
+        return;
+      } catch (err) {
+        if (err && err.name === 'AbortError') return;
+        // e.g. Safari NotAllowedError after user activation expired: fall back to download
+      }
     }
-    const href = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = href;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(href), 1000);
+    downloadBlob(blob, fileName);
     shareStatus.textContent = 'Na-save na ang image!';
   } catch (err) {
     if (err && err.name === 'AbortError') return;
