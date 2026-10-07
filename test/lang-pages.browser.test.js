@@ -76,14 +76,16 @@ test('content page language picker', { timeout: 180000 }, async () => {
       page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
       page.on('pageerror', (e) => errors.push(String(e)));
       await page.goto(`${base}${p}/`, { waitUntil: 'load' });
-      assert.deepStrictEqual(await visible(page), { taglish: true, en: false, tl: false }, p);
+      assert.deepStrictEqual(await visible(page), { taglish: true, en: false, tl: false, ceb: false }, p);
       assert.strictEqual(await htmlLang(page), 'fil', p);
       const layout = await page.evaluate(() => ({
         sw: document.documentElement.scrollWidth,
         heights: [...document.querySelectorAll('#lang-picker label')].map((l) => l.getBoundingClientRect().height),
+        clipped: [...document.querySelectorAll('#lang-picker label')].filter((l) => l.scrollWidth > l.clientWidth || l.getBoundingClientRect().right > 360).length,
       }));
       assert.ok(layout.sw <= 360, `${p} scrollWidth ${layout.sw}`);
-      assert.strictEqual(layout.heights.length, 3);
+      assert.strictEqual(layout.heights.length, 4);
+      assert.strictEqual(layout.clipped, 0, `${p} picker clipped`);
       for (const h of layout.heights) assert.ok(h >= 44, `${p} picker label ${h}`);
       assert.deepStrictEqual(errors, [], p);
       await ctx.close();
@@ -94,18 +96,30 @@ test('content page language picker', { timeout: 180000 }, async () => {
     const page = await ctx.newPage();
     await page.goto(`${base}about/`, { waitUntil: 'load' });
     await page.locator('#lang-picker span', { hasText: 'English' }).click();
-    assert.deepStrictEqual(await visible(page), { taglish: false, en: true, tl: false });
+    assert.deepStrictEqual(await visible(page), { taglish: false, en: true, tl: false, ceb: false });
     await page.goto(`${base}privacy/`, { waitUntil: 'load' });
-    assert.deepStrictEqual(await visible(page), { taglish: false, en: true, tl: false });
+    assert.deepStrictEqual(await visible(page), { taglish: false, en: true, tl: false, ceb: false });
     assert.strictEqual(await htmlLang(page), 'en');
     const en = await bodyText(page);
     for (const w of ['Tungkol', 'Hindi', 'namin', 'Walang']) assert.ok(!en.includes(w), `English privacy has ${w}`);
     assert.ok(en.includes('GoatCounter') && en.includes('Google'));
     await shot(page, 'privacy-en-360');
     await page.locator('#lang-picker span', { hasText: 'Tagalog' }).click();
-    assert.deepStrictEqual(await visible(page), { taglish: false, en: false, tl: true });
+    assert.deepStrictEqual(await visible(page), { taglish: false, en: false, tl: true, ceb: false });
     assert.strictEqual(await htmlLang(page), 'fil');
     await shot(page, 'privacy-tl-360');
+    await page.locator('#lang-picker span', { hasText: 'Cebuano' }).click();
+    assert.deepStrictEqual(await visible(page), { taglish: false, en: false, tl: false, ceb: true });
+    assert.strictEqual(await htmlLang(page), 'ceb');
+    const ceb = await bodyText(page);
+    for (const w of ['Tungkol', 'namin', 'Walang', 'We ']) assert.ok(!ceb.includes(w), `Cebuano privacy has ${w}`);
+    assert.ok(ceb.includes('GoatCounter') && ceb.includes('Google'));
+    await shot(page, 'privacy-ceb-360');
+    await page.goto(`${base}about/`, { waitUntil: 'load' });
+    assert.deepStrictEqual(await visible(page), { taglish: false, en: false, tl: false, ceb: true });
+    await page.goto(base, { waitUntil: 'load' });
+    assert.strictEqual(await page.locator('input[name="lang"][value="ceb"]').isChecked(), true);
+    await page.locator('#lang-picker span', { hasText: 'Tagalog' }).click();
     await page.goto(`${base}how-to-play/`, { waitUntil: 'load' });
     const tl = await bodyText(page);
     for (const w of ['Next draw', 'For entertainment only']) assert.ok(!tl.includes(w), `Tagalog page has ${w}`);
@@ -124,7 +138,7 @@ test('content page language picker', { timeout: 180000 }, async () => {
     bpage.on('pageerror', (e) => berrors.push(String(e)));
     for (const p of PAGES) {
       await bpage.goto(`${base}${p}/`, { waitUntil: 'load' });
-      assert.deepStrictEqual(await visible(bpage), { taglish: true, en: false, tl: false }, p);
+      assert.deepStrictEqual(await visible(bpage), { taglish: true, en: false, tl: false, ceb: false }, p);
     }
     assert.deepStrictEqual(berrors, []);
     await bctx.close();

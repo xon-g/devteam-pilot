@@ -19,6 +19,6 @@ test('share row has no img and no https in svg', () => {
   for (const m of row.matchAll(/<svg[\s\S]*?<\/svg>/g)) assert.ok(!m[0].includes('https://'));
 });
 
-test('sw.js CACHE is swertres-v36', () => {
-  assert.ok(read('sw.js').includes('const CACHE = "swertres-v36"'));
+test('sw.js CACHE is swertres-v37', () => {
+  assert.ok(read('sw.js').includes('const CACHE = "swertres-v37"'));
 });
