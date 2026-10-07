@@ -56,7 +56,7 @@ test('centred fine print: privacy note, official results, not-affiliated, hire',
           };
           const section = [...document.querySelectorAll('.about-games')].find((s) => !s.hidden);
           const note = section.querySelector('.fine-print');
-          const out = { privacy: gap(note, section), noteVisible: note.getBoundingClientRect().width > 0 };
+          const out = { privacy: gap(note, document.querySelector('main')), noteVisible: note.getBoundingClientRect().width > 0 };
           for (const id of ['official-results', 'not-affiliated']) {
             const el = document.getElementById(id);
             out[id] = el.getBoundingClientRect().width > 0 ? gap(el, document.querySelector('main')) : null;
