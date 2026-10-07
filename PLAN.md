@@ -16,7 +16,7 @@ repo's visibility is the owner's call.
 - `npm start` = tiny Node static server (`scripts/serve.js`, `node:http` only, PORT env, default 4173).
 
 ## GitHub Pages rule
-- The site must work when served from a subpath (`https://xon-g.github.io/devteam-pilot/`).
+- The site must work when served from a subpath as well as from the root (`https://lotto.xonicbox.com/`).
   Every URL in HTML, CSS, JS, the manifest and the service worker is **relative** (no leading `/`).
 - `scripts/serve.js` accepts `BASE_PATH` (e.g. `/devteam-pilot/`) so tests can serve the site
   from a subpath like Pages does. Default `/`.

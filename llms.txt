@@ -1,10 +1,10 @@
-# PCSO Lucky Numbers
+# Lotto Lucky Numbers PH
 
 > Free random number generator for PCSO games (Swertres, EZ2, 4D, 6D, Lotto 6/42 to 6/58), for fun only.
 
 ## What it is
 
-Gumagawa ang PCSO Lucky Number Generator ng random na numero para sa saya lang. Maaari kang pumili ayon sa mood, pangalan at edad, pero hindi ito hula sa resulta ng bola.
+Gumagawa ang Lotto Lucky Numbers PH ng random na numero para sa saya lang. Maaari kang pumili ayon sa mood, pangalan at edad, pero hindi ito hula sa resulta ng bola.
 
 ## Games
 
@@ -20,7 +20,7 @@ Gumagawa ang PCSO Lucky Number Generator ng random na numero para sa saya lang. 
 
 ## FAQ
 
-- Ano ang PCSO Lucky Number Generator? Isang libreng website na gumagawa ng random na numero para sa mga laro ng PCSO, gaya ng Swertres at Lotto. Pumili ka ng laro at mood, tapos pindutin ang Bunot na!
+- Ano ang Lotto Lucky Numbers PH? Isang libreng website na gumagawa ng random na numero para sa mga laro ng PCSO, gaya ng Swertres at Lotto. Pumili ka ng laro at mood, tapos pindutin ang Bunot na!
 - Libre ba ito? Oo, libre ito at walang bayad o account na kailangan.
 - Hinuhulaan ba nito ang lalabas na numero? Hindi. Purely random ang mga numero at walang paraan para mahulaan ang resulta ng bola, kaya para sa saya lang ito.
 - Anong mga laro ang kasama? Kasama ang EZ2 (2D), Swertres (3D), 4D Lotto, 6D Lotto, Lotto 6/42, Mega Lotto 6/45, Super Lotto 6/49, Grand Lotto 6/55, Ultra Lotto 6/58.
@@ -33,4 +33,4 @@ For entertainment only. Numbers are random and don't improve your odds. 18+. Pla
 
 ## Link
 
-- https://xon-g.github.io/devteam-pilot/
+- https://lotto.xonicbox.com/

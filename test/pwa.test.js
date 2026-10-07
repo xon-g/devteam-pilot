@@ -28,8 +28,8 @@ test('manifest.webmanifest exists and is valid JSON', () => {
   const content = fs.readFileSync(manifestPath, 'utf8');
   const manifest = JSON.parse(content);
   
-  assert.strictEqual(manifest.name, 'PCSO Lucky Numbers', 'name should be "PCSO Lucky Numbers"');
-  assert.strictEqual(manifest.short_name, 'PCSO Lucky', 'short_name should be "PCSO Lucky"');
+  assert.strictEqual(manifest.name, 'Lotto Lucky Numbers PH', 'name should be "Lotto Lucky Numbers PH"');
+  assert.strictEqual(manifest.short_name, 'Lotto Lucky PH', 'short_name should be "Lotto Lucky PH"');
   assert.strictEqual(manifest.start_url, './', 'start_url should be "./"');
   assert.strictEqual(manifest.scope, './', 'scope should be "./"');
   assert.strictEqual(manifest.display, 'standalone', 'display should be "standalone"');
@@ -85,7 +85,7 @@ test('no absolute URLs in index.html', () => {
   for (const match of hrefMatches) {
     const url = match.slice(6, -1); // Extract URL from href="..."
     // Allow canonical links (rel="canonical") to have absolute URLs
-    if (url.startsWith('https://xon-g.github.io/devteam-pilot/')) {
+    if (url.startsWith('https://lotto.xonicbox.com/')) {
       continue;
     }
     assert.ok(!url.startsWith('/'), `href should not be absolute: ${url}`);

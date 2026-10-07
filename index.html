@@ -1,30 +1,35 @@
 <!DOCTYPE html>
 <html lang="fil">
 <head>
-  <!-- Placeholder origin for SEO tags - change to your GitHub Pages URL -->
-  <!-- https://xon-g.github.io/devteam-pilot/ -->
   <meta charset="UTF-8">
+  <script>
+  (function () {
+    if (location.hostname !== 'xon-g.github.io') return;
+    var p = location.pathname.replace(/^\/devteam-pilot/, '') || '/';
+    location.replace('https://lotto.xonicbox.com' + p + location.search + location.hash);
+  })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PCSO Lucky Number Generator – Swertres, EZ2, Lotto</title>
-  <meta name="description" content="Libreng random number generator para sa mga laro ng PCSO: Swertres, EZ2, 4D, 6D at Lotto. Pili ayon sa mood, for fun lang. 18+.">
-  <link rel="canonical" href="https://xon-g.github.io/devteam-pilot/">
+  <title>Lotto Lucky Numbers PH – Swertres, EZ2, Lotto Lucky Number Generator</title>
+  <meta name="description" content="Free, for-fun random lucky-number generator for Philippine PCSO lotto games: Swertres, EZ2, 4D, 6D and Lotto 6/42 to 6/58. Entertainment only, 18+. Not affiliated with PCSO.">
+  <link rel="canonical" href="https://lotto.xonicbox.com/">
   <meta name="robots" content="index,follow">
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="PCSO Lucky Numbers">
-  <meta property="og:title" content="PCSO Lucky Number Generator – Swertres, EZ2, Lotto">
-  <meta property="og:description" content="Libreng random number generator para sa mga laro ng PCSO: Swertres, EZ2, 4D, 6D at Lotto. Pili ayon sa mood, for fun lang. 18+.">
-  <meta property="og:url" content="https://xon-g.github.io/devteam-pilot/">
-  <meta property="og:image" content="https://xon-g.github.io/devteam-pilot/assets/og-image.png">
+  <meta property="og:site_name" content="Lotto Lucky Numbers PH">
+  <meta property="og:title" content="Lotto Lucky Numbers PH – Swertres, EZ2, Lotto Lucky Number Generator">
+  <meta property="og:description" content="Free, for-fun random lucky-number generator for Philippine PCSO lotto games: Swertres, EZ2, 4D, 6D and Lotto 6/42 to 6/58. Entertainment only, 18+. Not affiliated with PCSO.">
+  <meta property="og:url" content="https://lotto.xonicbox.com/">
+  <meta property="og:image" content="https://lotto.xonicbox.com/assets/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="PCSO Lucky Numbers - random na numero para sa PCSO games">
+  <meta property="og:image:alt" content="Lotto Lucky Numbers PH - random lucky numbers para sa Swertres, EZ2 at Lotto">
   <meta property="og:locale" content="fil_PH">
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="PCSO Lucky Number Generator – Swertres, EZ2, Lotto">
-  <meta name="twitter:description" content="Libreng random number generator para sa mga laro ng PCSO: Swertres, EZ2, 4D, 6D at Lotto. Pili ayon sa mood, for fun lang. 18+.">
-  <meta name="twitter:image" content="https://xon-g.github.io/devteam-pilot/assets/og-image.png">
+  <meta name="twitter:title" content="Lotto Lucky Numbers PH – Swertres, EZ2, Lotto Lucky Number Generator">
+  <meta name="twitter:description" content="Free, for-fun random lucky-number generator for Philippine PCSO lotto games: Swertres, EZ2, 4D, 6D and Lotto 6/42 to 6/58. Entertainment only, 18+. Not affiliated with PCSO.">
+  <meta name="twitter:image" content="https://lotto.xonicbox.com/assets/og-image.png">
   <meta name="theme-color" content="#12061f">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
@@ -33,9 +38,9 @@
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "PCSO Lucky Numbers",
-    "url": "https://xon-g.github.io/devteam-pilot/",
-    "description": "Libreng random number generator para sa mga laro ng PCSO: Swertres, EZ2, 4D, 6D at Lotto. Pili ayon sa mood, for fun lang. 18+.",
+    "name": "Lotto Lucky Numbers PH",
+    "url": "https://lotto.xonicbox.com/",
+    "description": "Free, for-fun random lucky-number generator for Philippine PCSO lotto games: Swertres, EZ2, 4D, 6D and Lotto 6/42 to 6/58. Entertainment only, 18+. Not affiliated with PCSO.",
     "applicationCategory": "EntertainmentApplication",
     "operatingSystem": "Any",
     "inLanguage": [
@@ -57,7 +62,7 @@
     "mainEntity": [
       {
         "@type": "Question",
-        "name": "Ano ang PCSO Lucky Number Generator?",
+        "name": "Ano ang Lotto Lucky Numbers PH?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Isang libreng website na gumagawa ng random na numero para sa mga laro ng PCSO, gaya ng Swertres at Lotto. Pumili ka ng laro at mood, tapos pindutin ang Bunot na!"
@@ -110,8 +115,8 @@
 <body>
   <header id="header">
     <p class="eyebrow">Lucky Number Generator</p>
-    <h1 class="title">PCSO <span>Lucky</span> Numbers</h1>
-    <p class="tagline">Pili ng laro, isang tapik. Good vibes lang.</p>
+    <h1 class="title">Lotto <span>Lucky</span> Numbers PH</h1>
+    <p class="tagline">Lucky numbers para sa Swertres, EZ2, 4D, 6D at Lotto 6/42–6/58. For fun lang.</p>
     <button id="sound" type="button" class="sound-toggle" aria-pressed="true">🔊 Tunog: On</button>
   </header>
 
@@ -209,7 +214,7 @@
       <li>Ultra Lotto 6/58: 6 numbers, 1–58, walang ulit</li>
     </ul>
     <h2>FAQ</h2>
-    <details><summary>Ano ang PCSO Lucky Number Generator?</summary><p>Isang libreng website na gumagawa ng random na numero para sa mga laro ng PCSO, gaya ng Swertres at Lotto. Pumili ka ng laro at mood, tapos pindutin ang Bunot na!</p></details>
+    <details><summary>Ano ang Lotto Lucky Numbers PH?</summary><p>Isang libreng website na gumagawa ng random na numero para sa mga laro ng PCSO, gaya ng Swertres at Lotto. Pumili ka ng laro at mood, tapos pindutin ang Bunot na!</p></details>
     <details><summary>Libre ba ito?</summary><p>Oo, libre ito at walang bayad o account na kailangan.</p></details>
     <details><summary>Hinuhulaan ba nito ang lalabas na numero?</summary><p>Hindi. Purely random ang mga numero at walang paraan para mahulaan ang resulta ng bola, kaya para sa saya lang ito.</p></details>
     <details><summary>Anong mga laro ang kasama?</summary><p>Kasama ang EZ2 (2D), Swertres (3D), 4D Lotto, 6D Lotto, Lotto 6/42, Mega Lotto 6/45, Super Lotto 6/49, Grand Lotto 6/55, Ultra Lotto 6/58.</p></details>
