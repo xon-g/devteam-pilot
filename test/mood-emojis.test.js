@@ -17,5 +17,5 @@ test('styles.css draws the emoji and sw.js is v20', () => {
   const css = read('styles.css');
   assert.ok(css.includes('.moods span::before'));
   assert.ok(css.includes('attr(data-emoji)'));
-  assert.ok(read('sw.js').includes('swertres-v33'));
+  assert.ok(read('sw.js').includes('swertres-v34'));
 });

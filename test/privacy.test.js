@@ -57,6 +57,6 @@ test('home footer links, sitemap, service worker', () => {
   assert.ok(/id="privacy-note"[\s\S]*<a href="privacy\/">Basahin ang privacy policy<\/a>\.<\/p>/.test(home));
   assert.ok(read('sitemap.xml').includes('<loc>https://lotto.xonicbox.com/privacy/</loc>'));
   const sw = read('sw.js');
-  assert.ok(sw.includes('"swertres-v33"'));
+  assert.ok(sw.includes('"swertres-v34"'));
   for (const a of ['"privacy/"', '"src/config.js"', '"src/contact.js"']) assert.ok(sw.includes(a), a);
 });

@@ -327,11 +327,40 @@ function downloadBlob(blob, fileName) {
   setTimeout(() => URL.revokeObjectURL(href), 1000);
 }
 
+async function cardFile() {
+  const blob = await cardBlob();
+  const fileName = cardFileName(currentGame.id, formatNumbers(currentGame, currentCombo));
+  return { blob, fileName, file: new File([blob], fileName, { type: 'image/png' }) };
+}
+
+async function shareTiktok() {
+  try {
+    await navigator.clipboard.writeText(copyText(currentShareText(), SITE_URL));
+  } catch (err) {
+    // clipboard is best-effort
+  }
+  try {
+    const { blob, fileName, file } = await cardFile();
+    if (navigator.canShare?.({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file] });
+        setStatus('statusTiktokShared');
+        return;
+      } catch (err) {
+        if (err && err.name === 'AbortError') return;
+      }
+    }
+    downloadBlob(blob, fileName);
+    setStatus('statusTiktokSaved');
+  } catch (err) {
+    setStatus('statusSaveFail');
+    console.warn('TikTok share error:', err);
+  }
+}
+
 async function saveImage() {
   try {
-    const blob = await cardBlob();
-    const fileName = cardFileName(currentGame.id, formatNumbers(currentGame, currentCombo));
-    const file = new File([blob], fileName, { type: 'image/png' });
+    const { blob, fileName, file } = await cardFile();
     if (navigator.canShare?.({ files: [file] })) {
       try {
         await navigator.share({ files: [file], text: currentShareText(), url: shareUrl(SITE_URL, 'img') });
@@ -357,6 +386,7 @@ async function handleRowClick(e) {
   const via = el.dataset.share;
   track(window.goatcounter, eventPath('share-done', { via }));
   if (via === 'img') return saveImage();
+  if (via === 'tiktok') return shareTiktok();
   if (via !== 'copy') return;
   try {
     await navigator.clipboard.writeText(copyText(currentShareText(), SITE_URL));
