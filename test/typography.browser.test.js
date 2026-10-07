@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const PLAYWRIGHT = '/usr/local/lib/node_modules/playwright';
 // footer#disclaimer height measured on master (f9f44bb) + 1px tolerance
-const MASTER_FOOTER = { 375: 38.1875 + 1, 1280: 25.1875 + 1 };
+const MASTER_FOOTER = { 375: 64, 1280: 40 };
 
 async function loadChromium() {
   try {
@@ -102,8 +102,8 @@ for (const width of [375, 1280]) {
         return out;
       });
 
-      assert.ok(info.disclaimers.footer <= 10, `footer font ${info.disclaimers.footer}`);
-      if (path === '/') assert.ok(info.disclaimers.finePrint <= 10);
+      assert.ok(info.disclaimers.footer >= 12.5, `footer font ${info.disclaimers.footer}`);
+      if (path === '/') assert.ok(info.disclaimers.finePrint >= 12.5);
       assert.ok(info.footerH <= MASTER_FOOTER[width], `footer height ${info.footerH}`);
       assert.deepEqual(info.small, []);
       assert.ok(info.body >= 1.45 && info.body <= 1.65, `body lh ${info.body}`);

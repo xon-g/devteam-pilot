@@ -47,6 +47,6 @@ test('index.html GoatCounter tag and privacy note', () => {
 
 test('sw.js cache bumped, no gc caching', () => {
   const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
-  assert.ok(sw.includes('"swertres-v37"'));
+  assert.ok(sw.includes('"swertres-v38"'));
   assert.ok(!sw.includes('zgo.at'));
 });

@@ -53,11 +53,11 @@ function startServer(port) {
 
 const DISCLAIMER = "For entertainment only. Numbers are random and don't improve your odds. 18+. Play responsibly.";
 
-test('sw.js contains swertres-v37', () => {
-  assert.ok(fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8').includes('swertres-v37'));
+test('sw.js contains swertres-v38', () => {
+  assert.ok(fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8').includes('swertres-v38'));
 });
 
-test('disclaimer texts are 10px and clear of the fixed footer', { timeout: 90000 }, async () => {
+test('disclaimer texts are at least 12.5px and clear of the fixed footer', { timeout: 90000 }, async () => {
   const port = await getFreePort();
   const { proc, ready } = startServer(port);
   let browser;
@@ -84,7 +84,7 @@ test('disclaimer texts are 10px and clear of the fixed footer', { timeout: 90000
         };
       });
       const tag = `${width}px`;
-      assert.deepStrictEqual(r.sizes, ['10px', '10px', '10px'], tag);
+      assert.deepStrictEqual(r.sizes, ['12.8px', '12.8px', '12.8px'], tag);
       assert.strictEqual(r.text, DISCLAIMER, tag);
       assert.ok(r.dTop >= 0 && r.dBottom <= r.innerHeight && r.dLeft >= 0 && r.dRight <= r.innerWidth, `${tag} disclaimer outside viewport`);
       if (width === 360) assert.ok(r.dHeight <= 48, `${tag} height ${r.dHeight}`);

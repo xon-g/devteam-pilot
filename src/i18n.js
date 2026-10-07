@@ -198,7 +198,7 @@ export const STRINGS = {
     'soundOff': '🔇 Tunog: Sirado',
     'fieldName': 'Ngalan',
     'fieldAge': 'Edad',
-    'optional': '(dili kinahanglan)',
+    'optional': '(opsyonal)',
     'required': '(kinahanglan)',
     'legendGame': 'Unsang dula?',
     'legendMood': 'Unsa imong gibati?',
