@@ -150,7 +150,7 @@ test('share row', { timeout: 120000 }, async () => {
     await draw(s.page);
     assert.ok(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'no h-scroll');
     const hs = await s.page.$$eval('#share-row [data-share]', (els) => els.filter((e) => e.offsetParent).map((e) => e.getBoundingClientRect().height));
-    assert.strictEqual(hs.length, 7);
+    assert.strictEqual(hs.length, 8);
     assert.ok(hs.every((h) => h >= 44), `heights ${hs}`);
     await s.context.close();
 
