@@ -78,7 +78,7 @@ test('game picker', { timeout: 120000 }, async () => {
     await page.goto(`http://localhost:${port}/`, { waitUntil: 'load' });
 
     // 1
-    assert.strictEqual(await page.locator('input[name="game"]').count(), 9);
+    assert.strictEqual(await page.locator('input[name="game"]').count(), 10);
     assert.strictEqual(await page.locator('input[name="game"][value="3d"]').isChecked(), true);
     assert.strictEqual((await balls(page)).length, 3);
     assert.strictEqual(await page.locator('#mode-group').isVisible(), true);
@@ -121,7 +121,7 @@ test('game picker', { timeout: 120000 }, async () => {
       assert.ok(m.overflow <= 0, `${vp.width}: sideways scroll`);
       assert.ok(m.inside, `${vp.width}: ball outside .balls`);
       assert.ok(!m.clipped, `${vp.width}: ball text clipped`);
-      assert.strictEqual(m.chips.length, 9);
+      assert.strictEqual(m.chips.length, 10);
       for (const h of m.chips) assert.ok(h >= 44, `${vp.width}: chip height ${h}`);
     }
     await page.setViewportSize({ width: 360, height: 740 });

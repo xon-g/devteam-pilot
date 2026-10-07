@@ -50,8 +50,8 @@ function startServer(port) {
   });
   return { proc, ready };
 }
-const CODES = ['2D', '3D', '4D', '6D', '42', '45', '49', '55', '58'];
-const TEXTS = ['EZ2 (2D)', 'Swertres (3D)', '4D Lotto', '6D Lotto', 'Lotto 6/42', 'Mega Lotto 6/45', 'Super Lotto 6/49', 'Grand Lotto 6/55', 'Ultra Lotto 6/58'];
+const CODES = ['2D', '3D', '4D', '6D', '42', '45', '49', '55', '58', '1'];
+const TEXTS = ['EZ2 (2D)', 'Swertres (3D)', '4D Lotto', '6D Lotto', 'Lotto 6/42', 'Mega Lotto 6/45', 'Super Lotto 6/49', 'Grand Lotto 6/55', 'Ultra Lotto 6/58', 'Isang Numero (1–58)'];
 
 test('game badges render at 320, 375 and 1280', { timeout: 90000 }, async () => {
   const port = await getFreePort();
@@ -75,7 +75,7 @@ test('game badges render at 320, 375 and 1280', { timeout: 90000 }, async () => 
         }),
       }));
       assert.ok(r.sw <= r.cw, `no horizontal scroll at ${width}`);
-      assert.strictEqual(r.spans.length, 9);
+      assert.strictEqual(r.spans.length, 10);
       r.spans.forEach((s, i) => {
         assert.strictEqual(s.text, TEXTS[i]);
         assert.notStrictEqual(s.content, 'none');
@@ -85,7 +85,7 @@ test('game badges render at 320, 375 and 1280', { timeout: 90000 }, async () => 
         assert.strictEqual(s.bg.includes('255, 209, 225') || s.bg.includes('194, 24, 91'), i >= 4, `pink only for lotto (${i})`);
         assert.ok(s.bottom - s.top >= 44, `span height ${s.bottom - s.top}`);
       });
-      for (let i = 0; i < 9; i++) for (let j = i + 1; j < 9; j++) {
+      for (let i = 0; i < 10; i++) for (let j = i + 1; j < 10; j++) {
         const a = r.spans[i], b = r.spans[j];
         const overlap = a.left < b.right - 0.5 && b.left < a.right - 0.5 && a.top < b.bottom - 0.5 && b.top < a.bottom - 0.5;
         assert.ok(!overlap, `spans ${i} and ${j} overlap at ${width}`);

@@ -7,11 +7,11 @@ import { GAMES, getGame, drawNumbers, formatNumbers } from '../src/games.js';
 import { shareText } from '../src/lucky.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
-const IDS = ['2d', '3d', '4d', '6d', '6-42', '6-45', '6-49', '6-55', '6-58'];
+const IDS = ['2d', '3d', '4d', '6d', '6-42', '6-45', '6-49', '6-55', '6-58', '1-58'];
 
 test('GAMES list', () => {
-  assert.strictEqual(GAMES.length, 9);
-  assert.strictEqual(new Set(GAMES.map((g) => g.id)).size, 9);
+  assert.strictEqual(GAMES.length, 10);
+  assert.strictEqual(new Set(GAMES.map((g) => g.id)).size, 10);
   for (const id of IDS) assert.ok(GAMES.some((g) => g.id === id), `missing ${id}`);
   assert.strictEqual(getGame('nope').id, '3d');
   assert.strictEqual(getGame('6-58').name, 'Ultra Lotto 6/58');

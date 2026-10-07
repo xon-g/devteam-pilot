@@ -122,6 +122,7 @@ main {
   justify-items: center;
 }
 
+.balls[data-count="1"] { --n: 1; }
 .balls[data-count="2"] { --n: 2; }
 .balls[data-count="4"] { --n: 4; --ball: clamp(60px, 19vw, 100px); }
 .balls[data-count="6"] { --n: 6; --ball: clamp(44px, 13vw, 76px); gap: clamp(0.25rem, 1.5vw, 0.75rem); }
@@ -361,6 +362,10 @@ main {
   text-align: left;
   line-height: 1.15;
   padding: 0.35rem 0.75rem 0.35rem 0.4rem;
+}
+
+@media (max-width: 359px), (min-width: 561px) {
+  .games span { font-size: 0.78rem; padding-right: 0.4rem; gap: 0.25rem; }
 }
 
 @media (max-width: 560px) {

@@ -10,6 +10,7 @@ export const GAMES = [
   { id: '6-49', name: 'Super Lotto 6/49',  kind: 'lotto', count: 6, min: 1, max: 49, rambolito: false },
   { id: '6-55', name: 'Grand Lotto 6/55',  kind: 'lotto', count: 6, min: 1, max: 55, rambolito: false },
   { id: '6-58', name: 'Ultra Lotto 6/58',  kind: 'lotto', count: 6, min: 1, max: 58, rambolito: false },
+  { id: '1-58', name: 'Isang Numero (1–58)', kind: 'pick', count: 1, min: 1, max: 58, rambolito: false },
 ];
 
 export const DEFAULT_GAME = '3d';
