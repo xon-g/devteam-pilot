@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node scripts/serve.js",
+    "og": "node scripts/make-og-image.js",
     "test": "node --test"
   }
 }

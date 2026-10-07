@@ -67,3 +67,6 @@ No storage beyond the service worker's cache, no network calls, no backend. Reas
 3. `tasks/03-copy-share.md`: Copy/Share button and copy safety check.
 4. `tasks/04-pwa.md`: manifest, icons, service worker (offline), BASE_PATH subpath serving.
 5. `tasks/05-seo-og.md`: title/description, Open Graph + Twitter tags, canonical, share image.
+
+## Share preview (og-image)
+`assets/og-image.png` is rendered from the site's own `styles.css` by `npm run og`. Any task that changes the look runs `npm run og` and commits the PNG. Facebook/Messenger cache previews per URL, so every `sw.js` `CACHE` bump also bumps the `?v=NN` on `og:image`, `og:image:secure_url` and `twitter:image` in `index.html` and `privacy/index.html` (`test/og-preview.test.js` enforces it).

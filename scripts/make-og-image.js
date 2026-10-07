@@ -3,95 +3,54 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const assetsDir = path.join(__dirname, '..', 'assets');
+const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
+const assetsDir = path.join(root, 'assets');
+const css = fs.readFileSync(path.join(root, 'styles.css'), 'utf8'); // the live site's styles.css
 
-// Ensure assets directory exists
-if (!fs.existsSync(assetsDir)) {
-  fs.mkdirSync(assetsDir, { recursive: true });
-}
+// Fixed numbers, real .digit markup: no randomness so the card is reproducible.
+const balls = [7, 1, 3].map((n) => `<div class="digit">${n}</div>`).join('');
 
-// HTML content for the OG image card (1200x630)
-const ogHtml = `<!DOCTYPE html>
+const html = `<!DOCTYPE html>
 <html lang="fil">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lotto Lucky Numbers PH</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      width: 1200px;
-      height: 630px;
-      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .card {
-      background: white;
-      border-radius: 20px;
-      padding: 60px;
-      text-align: center;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-    }
-    h1 {
-      font-size: 80px;
-      font-weight: bold;
-      color: #FFD700;
-      margin: 0 0 20px 0;
-      text-transform: uppercase;
-    }
-    .disclaimer {
-      font-size: 36px;
-      color: #333;
-      font-weight: bold;
-      margin-top: 40px;
-    }
-  </style>
+<meta charset="UTF-8">
+<style>${css}</style>
+<style>
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; text-align: center; min-height: 0; }
+  body::before { height: 630px; }
+  .eyebrow { margin: 0; font-size: 28px; }
+  .title { font-size: 88px; }
+  .tagline { margin: 0; font-size: 34px; }
+  .balls { --ball: 150px; margin-top: 8px; gap: 32px; }
+  .balls .digit { font-size: 92px; }
+  .note { margin: 0; font-size: 24px; color: var(--muted); }
+</style>
 </head>
 <body>
-  <div class="card">
-    <h1>Lotto</h1>
-    <p style="font-size: 48px; color: #FFA500; margin: 20px 0;">Lucky Numbers PH</p>
-    <p class="disclaimer">For entertainment only. 18+.</p>
-  </div>
+  <p class="eyebrow">Lucky Number Generator</p>
+  <h1 class="title">Lotto <span>Lucky</span> Numbers PH</h1>
+  <p class="tagline">Lucky numbers para sa Swertres, EZ2 at Lotto. For fun lang!</p>
+  <div class="balls">${balls}</div>
+  <p class="note">For entertainment only. 18+. Not affiliated with PCSO.</p>
 </body>
 </html>`;
 
-async function generateOgImage() {
-  const browser = await chromium.launch();
-  const context = await browser.newContext();
-  const page = await context.newPage();
-  
-  // Set the viewport to match the OG image dimensions
-  await page.setViewportSize({ width: 1200, height: 630 });
-  
-  // Set HTML content as the page content
-  await page.setContent(ogHtml);
-  
-  // Wait for the page to fully render
-  await page.waitForLoadState('networkidle');
-  
-  // Take a screenshot and save as PNG
-  const outputPath = path.join(assetsDir, 'og-image.png');
-  await page.screenshot({ path: outputPath, type: 'png' });
-  
-  await browser.close();
-  console.log(`Generated: ${outputPath} (1200x630)`);
-}
-
 async function main() {
+  fs.mkdirSync(assetsDir, { recursive: true });
+  const browser = await chromium.launch();
   try {
-    await generateOgImage();
-    console.log('OG image generated successfully!');
-  } catch (err) {
-    console.error('Error generating OG image:', err);
-    process.exit(1);
+    const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
+    await page.setContent(html);
+    await page.evaluate(() => document.fonts.ready);
+    await page.screenshot({ path: path.join(assetsDir, 'og-image.png'), type: 'png' });
+  } finally {
+    await browser.close();
   }
+  console.log('Generated assets/og-image.png (1200x630)');
 }
 
-main();
+main().catch((err) => {
+  console.error('Error generating OG image:', err);
+  process.exit(1);
+});
