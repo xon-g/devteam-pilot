@@ -95,7 +95,7 @@ body::before {
   background: radial-gradient(120% 80% at 50% 0%, var(--bg-2) 0%, var(--bg) 60%);
 }
 
-header, main, #about-games, #ad-slot {
+header, main, #about-games, #ad-slot, .hire {
   width: min(100% - 2rem, 34rem);
   margin-inline: auto;
 }
@@ -785,6 +785,52 @@ body.content-page {
 .page li {
   margin-bottom: 0.4em;
 }
+
+.hire {
+  box-sizing: border-box;
+  margin-block: var(--space-4) var(--space-1);
+  padding: var(--space-3);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  text-align: center;
+  color: var(--muted);
+  font-size: var(--step--1);
+  line-height: var(--lh-snug);
+  overflow-wrap: anywhere;
+}
+
+body.content-page .hire {
+  width: min(100% - 2rem, 65ch);
+}
+
+.hire p {
+  margin: 0;
+}
+
+.hire-title {
+  color: var(--text);
+  font-size: var(--step-0);
+  font-weight: var(--w-medium);
+  margin-bottom: var(--space-1) !important;
+}
+
+.hire-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin-top: var(--space-2);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: var(--w-medium);
+}
+
+.hire-link:hover { border-color: var(--muted); }
+.hire-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 
 .site-links {
   display: flex;
