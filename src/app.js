@@ -3,6 +3,7 @@ import { DEFAULT_GAME, drawNumbers, formatNumbers, getGame } from './games.js';
 import { createSound } from './sound.js';
 import { roastLines } from './roast.js';
 import { eventPath, track } from './analytics.js';
+import { PCSO_RESULTS_URL, PCSO_FACEBOOK_URL } from './config.js';
 import { validateProfile, pickMoodReasons } from './profile.js';
 
 // Register service worker if supported
@@ -32,6 +33,10 @@ const ageInput = document.getElementById('age');
 const formStatus = document.getElementById('form-status');
 const forName = document.getElementById('for-name');
 const roastEl = document.getElementById('roast');
+const officialResults = document.getElementById('official-results');
+const resultsGame = document.getElementById('results-game');
+officialResults.querySelector('[data-results="site"]').href = PCSO_RESULTS_URL;
+officialResults.querySelector('[data-results="facebook"]').href = PCSO_FACEBOOK_URL;
 
 const sound = createSound(() => {
   const C = window.AudioContext || window.webkitAudioContext;
@@ -100,6 +105,8 @@ function applyGame(game) {
   shareButton.disabled = true;
   shareStatus.textContent = '';
   modeGroup.hidden = !game.rambolito;
+  resultsGame.textContent = game.name;
+  officialResults.hidden = game.id === '1-58';
   eyebrow.textContent = game.id === '3d' ? 'Swertres · 3D' : game.name;
 }
 let currentName = '';

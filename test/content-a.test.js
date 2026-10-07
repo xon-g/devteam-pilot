@@ -82,6 +82,6 @@ test('sitemap and service worker', () => {
   const sm = read('sitemap.xml');
   for (const s of Object.keys(PAGES)) assert.ok(sm.includes(`<loc>https://lotto.xonicbox.com/${s}/</loc>`));
   const sw = read('sw.js');
-  assert.ok(sw.includes('const CACHE = "swertres-v26"'));
+  assert.ok(sw.includes('const CACHE = "swertres-v27"'));
   for (const s of Object.keys(PAGES)) assert.ok(sw.includes(`"${s}/"`));
 });

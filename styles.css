@@ -827,3 +827,14 @@ mark.check {
   padding: 0 0.25em;
   border-radius: 3px;
 }
+
+/* Official results link row (links only; tap targets >= 24px) */
+.official-results[hidden] {
+  display: none;
+}
+
+.official-results a {
+  display: inline-block;
+  min-height: 24px;
+  line-height: 24px;
+}
