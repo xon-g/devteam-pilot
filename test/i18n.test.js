@@ -14,18 +14,19 @@ import { getGame } from '../src/games.js';
 const placeholders = (s) => [...String(s).matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort().join(',');
 
 test('constants and normalizeLang', () => {
-  assert.deepStrictEqual(LANGS, ['taglish', 'en', 'tl']);
+  assert.deepStrictEqual(LANGS, ['taglish', 'en', 'tl', 'ceb']);
   assert.strictEqual(DEFAULT_LANG, 'taglish');
-  assert.deepStrictEqual(LANG_LABELS, { taglish: 'Taglish', en: 'English', tl: 'Tagalog' });
-  assert.deepStrictEqual(HTML_LANG, { taglish: 'fil', en: 'en', tl: 'fil' });
+  assert.deepStrictEqual(LANG_LABELS, { taglish: 'Taglish', en: 'English', tl: 'Tagalog', ceb: 'Cebuano' });
+  assert.deepStrictEqual(HTML_LANG, { taglish: 'fil', en: 'en', tl: 'fil', ceb: 'ceb' });
   assert.strictEqual(normalizeLang('en'), 'en');
   assert.strictEqual(normalizeLang('tl'), 'tl');
+  assert.strictEqual(normalizeLang('ceb'), 'ceb');
   for (const bad of ['EN', '', null, undefined, 'fr']) assert.strictEqual(normalizeLang(bad), 'taglish');
 });
 
 test('STRINGS: same keys, non-empty, same placeholders', () => {
   const keys = Object.keys(STRINGS.taglish).sort();
-  for (const lang of ['en', 'tl']) {
+  for (const lang of ['en', 'tl', 'ceb']) {
     assert.deepStrictEqual(Object.keys(STRINGS[lang]).sort(), keys, lang);
     for (const k of keys) {
       const v = STRINGS[lang][k];
@@ -38,6 +39,7 @@ test('STRINGS: same keys, non-empty, same placeholders', () => {
 test('t() looks up, falls back and fills placeholders', () => {
   assert.strictEqual(t('en', 'forName', { name: 'Bea' }), 'For Bea');
   assert.strictEqual(t('tl', 'forName', { name: 'Bea' }), 'Para kay Bea');
+  assert.strictEqual(t('ceb', 'forName', { name: 'Bea' }), 'Para kang Bea');
   assert.strictEqual(t('xx', 'draw'), 'Bunot na!');
   assert.strictEqual(t('en', 'no.such.key'), 'no.such.key');
   assert.strictEqual(t('en', 'forName'), 'For {name}');
@@ -45,7 +47,7 @@ test('t() looks up, falls back and fills placeholders', () => {
 
 function checkLines(label, tables) {
   const base = tables.taglish;
-  for (const lang of ['en', 'tl']) {
+  for (const lang of ['en', 'tl', 'ceb']) {
     assert.strictEqual(tables[lang].length, base.length, `${label} ${lang} length`);
     let same = 0;
     base.forEach((line, i) => {
@@ -104,6 +106,8 @@ test('Taglish is the default everywhere', () => {
   assert.ok(shareText([5], 'straight', '', '1-58', 'en').startsWith('My One Number lucky numbers: 05'));
   assert.ok(shareText(combo, 'straight', 'Bea', '3d', 'en').startsWith('Swertres lucky numbers for Bea: 1-2-3'));
   assert.ok(shareText(combo, 'straight', 'Bea', '3d', 'tl').startsWith('Mga lucky number ni Bea sa Swertres: 1-2-3'));
+  assert.ok(shareText(combo, 'straight', 'Bea', '3d', 'ceb').startsWith('Mga lucky number ni Bea sa Swertres: 1-2-3'));
+  assert.ok(shareText([5], 'straight', '', '1-58', 'ceb').startsWith('Mga lucky number nako sa Usa ka Numero: 05'));
 
   for (let i = 0; i < 20; i++) {
     const lines = roastLines({ name: 'Bea', age: 25 });
@@ -126,6 +130,9 @@ test('Taglish is the default everywhere', () => {
   const c = { game: getGame('3d'), numbersText: '1-2-3', mode: 'straight', name: 'Bea', drawText: 'bukas 2:00 PM' };
   assert.deepStrictEqual(cardContent(c), cardContent({ ...c, lang: 'taglish' }));
   assert.strictEqual(cardContent({ ...c, lang: 'en' }).forName, 'For Bea');
+  assert.strictEqual(drawLabel(draw, now, 480, 'ceb'), 'karong 2:00 PM');
+  assert.strictEqual(formatCountdown(125 * 60000, 'ceb'), 'human sa 2h 5m');
+  assert.strictEqual(cardContent({ ...c, lang: 'ceb' }).forName, 'Para kang Bea');
 });
 
 test('validateProfile returns a code that has a message in every language', () => {
