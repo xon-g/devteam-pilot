@@ -642,3 +642,67 @@ footer#disclaimer {
 }
 
 .about-games .lore { font-style: italic; }
+
+/* Content pages (privacy etc.) */
+body.content-page {
+  display: block;
+}
+
+.page {
+  width: min(100% - 2rem, 65ch);
+  margin-inline: auto;
+  line-height: 1.65;
+  padding-bottom: 1rem;
+}
+
+.page h1 {
+  margin: 0.5rem 0 0.25rem;
+  color: var(--gold);
+}
+
+.page h2 {
+  margin: 2rem 0 0.5rem;
+  font-size: 1.2rem;
+  color: var(--gold);
+}
+
+.page a,
+.fine-print a,
+.home-link {
+  color: var(--gold);
+  text-decoration: underline;
+  overflow-wrap: anywhere;
+}
+
+.home-link {
+  text-decoration: none;
+  color: var(--muted);
+}
+
+.page li {
+  margin-bottom: 0.4rem;
+}
+
+.site-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem 1rem;
+  padding: 0.5rem 1rem 3rem;
+  font-size: 0.8125rem;
+}
+
+body.content-page .site-links {
+  padding-bottom: 4.5rem;
+}
+
+.site-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  color: var(--muted);
+}
+
+.site-links a[aria-current="page"] {
+  color: var(--gold);
+}

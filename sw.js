@@ -1,8 +1,9 @@
-const CACHE = "swertres-v21";
+const CACHE = "swertres-v22";
 
 const ASSETS = [
   "./",
   "index.html",
+  "privacy/",
   "styles.css",
   "src/lucky.js",
   "src/games.js",
@@ -12,6 +13,8 @@ const ASSETS = [
   "src/roast.js",
   "src/analytics.js",
   "src/app.js",
+  "src/config.js",
+  "src/contact.js",
   "manifest.webmanifest",
   "assets/icons/favicon.svg",
   "assets/icons/favicon-32.png",

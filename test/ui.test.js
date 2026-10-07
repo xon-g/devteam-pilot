@@ -68,7 +68,7 @@ async function draw(page) {
 }
 
 test('banned phrases absent from index.html and src/*.js (disclaimer excluded)', () => {
-  const files = ['index.html', ...fs.readdirSync(new URL('../src', import.meta.url)).filter((f) => f.endsWith('.js')).map((f) => `src/${f}`)];
+  const files = ['index.html', 'privacy/index.html', ...fs.readdirSync(new URL('../src', import.meta.url)).filter((f) => f.endsWith('.js')).map((f) => `src/${f}`)];
   for (const file of files) {
     const text = fs.readFileSync(new URL(`../${file}`, import.meta.url), 'utf8').split(DISCLAIMER).join('').toLowerCase();
     for (const phrase of BANNED) {
