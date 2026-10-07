@@ -53,6 +53,6 @@ test('contact page links the results URL with noopener', () => {
   assert.ok(/rel="[^"]*noopener/.test(a[0]));
 });
 
-test('sw.js has swertres-v41', () => {
-  assert.ok(read('sw.js').includes('swertres-v41'));
+test('sw.js has swertres-v42', () => {
+  assert.ok(read('sw.js').includes('swertres-v42'));
 });

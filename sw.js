@@ -1,4 +1,4 @@
-const CACHE = "swertres-v41";
+const CACHE = "swertres-v42";
 
 const ASSETS = [
   "./",
