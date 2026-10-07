@@ -67,7 +67,17 @@ Consent banner/CMP, Auto ads, other networks, more than one ad unit, ads on `pri
   them; the 5 head pages contain `<!-- adsense:start --><!-- adsense:end -->` inside `<head>`;
   privacy and responsible-gaming have no ad markers; `index.html` `#ad-slot` contains exactly
   `<!-- adslot:start --><!-- adslot:end -->` and `hidden`.
+  **These committed-state checks (and any existing test that asserts "no ad code" / "`#ad-slot`
+  hidden with no children") must follow the config**, not hard-code the empty state: with the
+  committed default they assert the above; with an ID set they assert exactly the generated
+  output (`headSnippet` once in `<head>` of the 5 pages, `ads.txt === adsTxt(id)`, slot content
+  `=== slotSnippet(cfg)`) and still nothing on privacy/responsible-gaming. Prove it with a test
+  that copies the repo (served files + `test/` + `scripts/`) to a temp dir, sets
+  `pub-0000000000000000` (`adsEnabled: false`), runs `apply`, then runs the **non-browser** tests
+  with `node --test` in that dir (env var to skip itself) and expects exit 0. So the README flow
+  (set ID → `npm run ads` → `npm test`) works when the owner's ID arrives.
 - In sync: `apply` on a temp copy of the repo with the committed config changes no file.
+- `apply` throws (naming the file) if a page that should carry markers is missing them.
 - `validateConfig`: accepts the default and `{pub-0000000000000000, false, ""}` and
   `{pub-0000000000000000, true, "1234567890"}`; throws for `ca-pub-…`, 15/17 digits, leading
   space, slot `"123"`, `adsEnabled: true` with empty ID, `adsEnabled: true` with empty slot,
