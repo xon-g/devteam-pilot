@@ -4,7 +4,11 @@ Branch: `task/46-adsense`. Start from the latest `master` **after task 45 is mer
 approved `task/45-responsive-spacing` head if it isn't merged yet; the hand-off says which).
 Bump the service-worker `CACHE` one above the base (v39 if the base is at v38).
 Static site, no build step on Cloudflare; generated files are committed. No new dependencies.
-**The publisher ID stays `""` and `adsEnabled` stays `false` in every commit.** Never add a real ID.
+**Amended 2026-10-07: the owner sent the publisher ID `pub-3853433283026565`.** Build and test everything
+with the empty default first (one commit), then a **last, separate commit** sets only
+`"adsensePublisherId": "pub-3853433283026565"` in `ads.config.json` and runs `npm run ads` (generated
+output only, no hand edits). `adsEnabled` stays `false` and `adSlotId` stays `""` in every commit; no
+other real ID anywhere (tests use `pub-0000000000000000` / `1234567890`).
 
 ## Why
 The owner wants AdSense approval. When the owner sends the publisher ID, one config change plus
@@ -88,7 +92,8 @@ Consent banner/CMP, Auto ads, other networks, more than one ad unit, ads on `pri
   once on the 5 pages and absent from privacy and responsible-gaming, the slot is empty; with
   `adsEnabled: true` + slot: the `<ins>` is inside `#ad-slot` in `index.html` only. `apply` twice
   is idempotent; back to empty → identical to the committed files.
-- Browser (Playwright, 375×667 and 1280×800), **ID empty** (repo as committed): load `/`, draw
+- Browser (Playwright, 375×667 and 1280×800), **ID empty** (a served temp copy with the config reset
+  to the empty default and `apply` run; not the committed repo, which now carries the real ID): load `/`, draw
   once, visit `/how-to-play/`: no request to any host containing `googlesyndication`,
   `doubleclick` or `adservice`; `window.adsbygoogle` is `undefined` (read inside `page.evaluate`);
   `#ad-slot` hidden with height 0.
@@ -108,6 +113,13 @@ Consent banner/CMP, Auto ads, other networks, more than one ad unit, ads on `pri
 - Sitemap: every `*/index.html` page (plus `/`) is a `<loc>` on `https://lotto.xonicbox.com/…/`
   and every `<loc>` maps to a page; `robots.txt` names the sitemap.
 - Test context rule: browser globals only inside `page.evaluate`; DOM-free logic in `scripts/ads.js`.
+- With the real ID committed: every test that loads the committed repo in a browser routes
+  `**/*googlesyndication.com/**` (and `doubleclick`/`adservice`) to an empty stub, so no test reaches the
+  internet. The committed-state checks then assert `ads.txt` is exactly
+  `google.com, pub-3853433283026565, DIRECT, f08c47fec0942fa0`, the head script with
+  `client=ca-pub-3853433283026565` is once in `<head>` of the 5 pages, nothing on privacy/responsible-gaming,
+  and `#ad-slot` is still empty and hidden (`adsEnabled` false).
+- `dt-test` passes both on the empty-default commit and on the final ID commit.
 - `dt-smoke` passes.
 
 ## Report
