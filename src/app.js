@@ -2,6 +2,7 @@ import { rambolitoCombos, randomInt, shareText } from './lucky.js';
 import { DEFAULT_GAME, drawNumbers, formatNumbers, getGame } from './games.js';
 import { createSound } from './sound.js';
 import { roastLines } from './roast.js';
+import { eventPath, track } from './analytics.js';
 import { validateProfile, pickMoodReasons } from './profile.js';
 
 // Register service worker if supported
@@ -211,9 +212,11 @@ async function draw() {
   reasonsList.hidden = false;
   updateDisplay();
   shareButton.disabled = false;
+  track(window.goatcounter, eventPath('draw', { game: game.id, mood: profile.mood, mode: currentMode() }));
 }
 
 async function handleShare() {
+  track(window.goatcounter, eventPath('share-tap'));
   const text = shareText(currentCombo, currentMode(), currentName, currentGame.id);
 
   try {
@@ -222,9 +225,11 @@ async function handleShare() {
         text: text
       });
       shareStatus.textContent = 'Naibahagi na!';
+      track(window.goatcounter, eventPath('share-done', { via: 'native' }));
     } else {
       await navigator.clipboard.writeText(text);
       shareStatus.textContent = 'Nakopya na!';
+      track(window.goatcounter, eventPath('share-done', { via: 'copy' }));
     }
   } catch (err) {
     if (err.name === 'AbortError') {
@@ -236,6 +241,7 @@ async function handleShare() {
   }
 }
 
+window.addEventListener('appinstalled', () => track(window.goatcounter, eventPath('pwa-install')));
 drawButton.addEventListener('click', draw);
 shareButton.addEventListener('click', handleShare);
 soundButton.addEventListener('click', () => {

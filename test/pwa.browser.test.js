@@ -63,6 +63,7 @@ test('PWA browser test - offline mode', { timeout: 60000 }, async () => {
     const chromium = await loadChromium();
     browser = await chromium.launch();
     context = await browser.newContext();
+    await context.route('https://gc.zgo.at/**', (route) => route.fulfill({ status: 200, contentType: 'application/javascript', body: '' }));
     const page = await context.newPage();
 
     const errors = [];
@@ -76,6 +77,7 @@ test('PWA browser test - offline mode', { timeout: 60000 }, async () => {
     
     page.on('request', (req) => {
       const url = new URL(req.url());
+      if (url.hostname === 'gc.zgo.at') return;
       if (url.hostname !== '127.0.0.1' && url.hostname !== 'localhost') {
         foreignRequests.push(req.url());
       }
