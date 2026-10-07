@@ -52,8 +52,8 @@ function startServer(port) {
 }
 
 
-const ORDER = ['Facebook', 'Messenger', 'Viber', 'WhatsApp', 'Telegram', 'X', 'Copy link'];
-const IDS = ['fb', 'msgr', 'viber', 'wa', 'tg', 'x', 'copy'];
+const ORDER = ['Facebook', 'Messenger', 'Viber', 'WhatsApp', 'Telegram', 'X', 'Copy link', 'Save image'];
+const IDS = ['fb', 'msgr', 'viber', 'wa', 'tg', 'x', 'copy', 'img'];
 const ANDROID = 'Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Mobile Safari/537.36';
 
 async function setup(browser, port, opts, errors) {
