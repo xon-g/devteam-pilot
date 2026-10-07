@@ -10,7 +10,7 @@ const ignored = read(".assetsignore")
 
 test("wrangler.jsonc has the expected static-assets config", () => {
   const cfg = JSON.parse(read("wrangler.jsonc"));
-  assert.equal(cfg.name, "devteam-pilot");
+  assert.equal(cfg.name, "lotto");
   assert.equal(cfg.assets.directory, ".");
   assert.match(cfg.compatibility_date, /^\d{4}-\d{2}-\d{2}$/);
   assert.equal("$schema" in cfg, false);
