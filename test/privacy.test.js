@@ -46,7 +46,7 @@ test('links and scripts are safe and relative', () => {
   for (const m of html.matchAll(/<a\b[^>]*target="_blank"[^>]*>/g)) assert.ok(/rel="[^"]*noopener/.test(m[0]), m[0]);
   assert.ok(!/(href|src)="\//.test(html));
   const srcs = [...html.matchAll(/<script\b([^>]*)>/g)].map((m) => m[1].trim());
-  assert.strictEqual(srcs.length, 3);
+  assert.strictEqual(srcs.length, 4); // + page-lang.js (task 40)
   assert.ok(srcs.includes('type="module" src="../src/contact.js"'));
   assert.ok(!/adsbygoogle|googlesyndication/.test(html));
 });
@@ -57,6 +57,6 @@ test('home footer links, sitemap, service worker', () => {
   assert.ok(/id="privacy-note"[\s\S]*<a href="privacy\/">Basahin ang privacy policy<\/a>\.<\/p>/.test(home));
   assert.ok(read('sitemap.xml').includes('<loc>https://lotto.xonicbox.com/privacy/</loc>'));
   const sw = read('sw.js');
-  assert.ok(sw.includes('"swertres-v32"'));
+  assert.ok(sw.includes('"swertres-v33"'));
   for (const a of ['"privacy/"', '"src/config.js"', '"src/contact.js"']) assert.ok(sw.includes(a), a);
 });

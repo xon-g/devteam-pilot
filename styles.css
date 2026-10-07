@@ -937,3 +937,8 @@ mark.check {
   padding: 0 0.5rem;
   font-size: var(--step--1);
 }
+
+.page [data-lang-block] {
+  width: 100%;
+  min-width: 0;
+}

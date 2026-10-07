@@ -21,7 +21,7 @@ for (const [slug, { h1, title }] of Object.entries(PAGES)) {
     assert.ok(html.includes(`<title>${title}</title>`));
     assert.ok(html.includes(`<h1>${h1}</h1>`));
     const scripts = [...html.matchAll(/<script\b([^>]*)>/g)].map((m) => m[1].trim());
-    assert.strictEqual(scripts.length, 2);
+    assert.strictEqual(scripts.length, 3); // + page-lang.js (task 40)
     assert.ok(html.indexOf('location.replace') < html.indexOf('data-goatcounter'));
     assert.ok(html.indexOf('<script>') < html.indexOf('<meta name="viewport"'));
     assert.ok(html.includes(`<link rel="canonical" href="https://lotto.xonicbox.com/${slug}/">`));
@@ -46,7 +46,7 @@ test('how-to-play content', () => {
   const html = read('how-to-play/index.html');
   for (const s of ['Swertres', 'EZ2', 'STL', '4D', '6D', 'Rambolito', '1 sa 1,000', '1 sa 40,475,358']) assert.ok(html.includes(s), s);
   assert.ok(/<div class="table-wrap">\s*<table>[\s\S]*<thead>[\s\S]*<th scope="col">/.test(html));
-  const marks = (html.match(/class="check"/g) || []).length;
+  const marks = (html.split('data-lang-block="en"')[0].match(/class="check"/g) || []).length;
   let expected = 21;
   if (fs.existsSync(BRIEF)) {
     const b = fs.readFileSync(BRIEF, 'utf8');
@@ -82,6 +82,6 @@ test('sitemap and service worker', () => {
   const sm = read('sitemap.xml');
   for (const s of Object.keys(PAGES)) assert.ok(sm.includes(`<loc>https://lotto.xonicbox.com/${s}/</loc>`));
   const sw = read('sw.js');
-  assert.ok(sw.includes('const CACHE = "swertres-v32"'));
+  assert.ok(sw.includes('const CACHE = "swertres-v33"'));
   for (const s of Object.keys(PAGES)) assert.ok(sw.includes(`"${s}/"`));
 });

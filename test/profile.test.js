@@ -73,9 +73,9 @@ test('privacy: no storage, network or innerHTML in src/', () => {
   const forbidden = ['localStorage', 'sessionStorage', 'document.cookie', 'XMLHttpRequest', 'innerHTML'];
   for (const f of fs.readdirSync(new URL('../src', import.meta.url)).filter((x) => x.endsWith('.js'))) {
     const text = fs.readFileSync(new URL(`../src/${f}`, import.meta.url), 'utf8');
-    // Task 39: app.js alone may use localStorage, for the language choice (disclosed on the privacy page).
+    // Tasks 39-40: app.js and page-lang.js alone may use localStorage, for the language choice (disclosed on the privacy page).
     for (const word of forbidden) {
-      if (word === 'localStorage' && f === 'app.js') continue;
+      if (word === 'localStorage' && (f === 'app.js' || f === 'page-lang.js')) continue;
       assert.ok(!text.includes(word), `${word} in src/${f}`);
     }
     // The schedule loader is the one same-origin fetch (see results-links.test.js).
