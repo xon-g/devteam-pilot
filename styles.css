@@ -357,6 +357,22 @@ main {
 
 .games span {
   gap: 0.35rem;
+  justify-content: flex-start;
+  text-align: left;
+  line-height: 1.15;
+  padding: 0.35rem 0.75rem 0.35rem 0.4rem;
+}
+
+@media (max-width: 560px) {
+  .games {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 561px) {
+  .about {
+    max-width: 26rem;
+  }
 }
 
 .games span::before {

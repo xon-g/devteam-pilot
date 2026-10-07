@@ -13,9 +13,9 @@ test('every mood span has its data-emoji', () => {
   for (const [v, e] of Object.entries(EMOJI)) assert.ok(found[v].includes(`data-emoji="${e}"`), v);
 });
 
-test('styles.css draws the emoji and sw.js is v18', () => {
+test('styles.css draws the emoji and sw.js is v19', () => {
   const css = read('styles.css');
   assert.ok(css.includes('.moods span::before'));
   assert.ok(css.includes('attr(data-emoji)'));
-  assert.ok(read('sw.js').includes('swertres-v18'));
+  assert.ok(read('sw.js').includes('swertres-v19'));
 });
