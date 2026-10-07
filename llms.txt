@@ -27,6 +27,12 @@ Gumagawa ang Lotto Lucky Numbers PH ng random na numero para sa saya lang. Maaar
 - Official ba ito ng PCSO? Hindi. Hindi ito official na PCSO site at hindi ito konektado sa PCSO.
 - Sine-save o ipinapadala ba ang name at age ko? Hindi. Nananatili ang name at age sa device mo, hindi sine-save at hindi ipinapadala kahit saan.
 
+## Pages
+
+- https://lotto.xonicbox.com/how-to-play/ : Plain-language guide to each PCSO game (Swertres, EZ2, STL, 4D, 6D, Lotto 6/42 to 6/58) with the chances of each.
+- https://lotto.xonicbox.com/lucky-numbers/ : Honest explainer on why lucky numbers are not real and every draw is independent and random.
+- https://lotto.xonicbox.com/privacy/ : Privacy policy.
+
 ## Disclaimer
 
 For entertainment only. Numbers are random and don't improve your odds. 18+. Play responsibly.

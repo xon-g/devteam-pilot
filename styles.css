@@ -797,3 +797,33 @@ body.content-page .site-links {
 .site-links a[aria-current="page"] {
   color: var(--gold);
 }
+
+.table-wrap {
+  overflow-x: auto;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 1em;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-wrap table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 30rem;
+  font-size: var(--step--1);
+}
+
+.table-wrap th,
+.table-wrap td {
+  padding: 0.4rem 0.6rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+mark.check {
+  background: rgba(255, 201, 60, 0.15);
+  color: var(--muted);
+  font-size: 0.8em;
+  padding: 0 0.25em;
+  border-radius: 3px;
+}
