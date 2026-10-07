@@ -54,7 +54,7 @@ test('drawCard draws each string once, in bounds', () => {
   for (const c of cases) {
     const content = cardContent(c);
     const calls = [];
-    const ctx = new Proxy({ fillText: (t, x, y) => calls.push({ t, x, y }), createLinearGradient: () => ({ addColorStop() {} }) }, {
+    const ctx = new Proxy({ fillText: (t, x, y, mw) => calls.push({ t, x, y, mw }), createLinearGradient: () => ({ addColorStop() {} }) }, {
       get: (o, k) => (k in o ? o[k] : () => {}),
       set: (o, k, v) => ((o[k] = v), true),
     });
@@ -65,6 +65,7 @@ test('drawCard draws each string once, in bounds', () => {
     assert.strictEqual(calls.length, Object.values(content).filter(Boolean).length);
     for (const k of calls) {
       assert.ok(k.x >= 0 && k.x <= 1080 && k.y >= 0 && k.y <= 1920);
+      assert.strictEqual(k.mw, 960);
     }
   }
 });

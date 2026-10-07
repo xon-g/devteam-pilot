@@ -54,7 +54,7 @@ export function drawCard(ctx, content, { width = 1080, height = 1920 } = {}) {
     if (!str) return;
     ctx.font = `${weight} ${size}px ${FONT}`;
     ctx.fillStyle = fill;
-    ctx.fillText(str, cx, y);
+    ctx.fillText(str, cx, y, width - 120);
   };
 
   text(content.title, 260, 64, '#ffffff', '700');
