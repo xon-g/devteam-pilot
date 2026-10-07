@@ -42,9 +42,9 @@ test('favicon.ico wraps a 32x32 PNG', () => {
   assert.ok(ico.subarray(offset, offset + 8).equals(PNG_SIG));
 });
 
-test('sw.js precaches favicons under swertres-v19', () => {
+test('sw.js precaches favicons under swertres-v20', () => {
   const sw = read('sw.js').toString('utf8');
-  assert.ok(sw.includes('swertres-v19'));
+  assert.ok(sw.includes('swertres-v20'));
   assert.ok(sw.includes('assets/icons/favicon.svg'));
   assert.ok(sw.includes('assets/icons/favicon-32.png'));
 });

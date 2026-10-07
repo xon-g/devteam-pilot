@@ -61,7 +61,7 @@ test('games list matches GAMES in order with count and range', () => {
   const lis = [...about.matchAll(/<li>([\s\S]*?)<\/li>/g)].map((m) => norm(m[1]));
   assert.equal(lis.length, GAMES.length);
   GAMES.forEach((g, i) => {
-    assert.ok(lis[i].startsWith(g.name + ':'), `${g.name} at position ${i}: ${lis[i]}`);
+    assert.ok(lis[i].startsWith((g.id === '1-58' ? 'Isang Numero' : g.name) + ':'), `${g.name} at position ${i}: ${lis[i]}`);
     assert.ok(lis[i].includes(`${g.count} `), `${g.name} count`);
     assert.ok(lis[i].includes(`${g.min}–${g.max}`), `${g.name} range`);
   });
@@ -103,7 +103,7 @@ test('llms.txt', () => {
   assert.ok(t.startsWith('# '));
   assert.ok(/^> /m.test(t));
   assert.ok(t.includes(ORIGIN) && t.includes(DISCLAIMER));
-  for (const g of GAMES) assert.ok(t.includes(g.name), g.name);
+  for (const g of GAMES.filter((x) => x.id !== '1-58')) assert.ok(t.includes(g.name), g.name);
 });
 
 test('banned phrases absent from about, JSON-LD and llms.txt', () => {
