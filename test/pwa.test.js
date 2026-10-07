@@ -88,6 +88,10 @@ test('no absolute URLs in index.html', () => {
     if (url.startsWith('https://lotto.xonicbox.com/')) {
       continue;
     }
+    // Official PCSO links (task 31) are intentionally absolute
+    if (url === 'https://www.pcso.gov.ph/SearchLottoResult.aspx' || url === 'https://www.facebook.com/PCSOPhilippines') {
+      continue;
+    }
     assert.ok(!url.startsWith('/'), `href should not be absolute: ${url}`);
     assert.ok(!url.startsWith('http'), `href should not be absolute: ${url}`);
   }
