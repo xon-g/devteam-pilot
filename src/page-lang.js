@@ -16,7 +16,7 @@ let lang = 'taglish';
 try { lang = normalizeLang(localStorage.getItem('lang')); } catch { /* blocked storage: stay Taglish */ }
 
 function apply() {
-  // Stored language the page has no block for (e.g. Cebuano before task 44): show Taglish.
+  // Stored language the page has no block for: show Taglish.
   const blocks = [...document.querySelectorAll('[data-lang-block]')];
   const shown = blocks.some((el) => el.dataset.langBlock === lang) ? lang : 'taglish';
   document.documentElement.lang = HTML_LANG[shown];

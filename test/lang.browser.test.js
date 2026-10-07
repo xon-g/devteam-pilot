@@ -192,13 +192,13 @@ test('language picker', { timeout: 120000 }, async () => {
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({ path: fileURLToPath(new URL('../.smoke/lang-top-ceb-360.png', import.meta.url)) });
 
-    // Reload keeps Cebuano; content pages fall back to Taglish
+    // Reload keeps Cebuano; content pages show the Cebuano block
     await page.reload({ waitUntil: 'load' });
     assert.strictEqual(await page.evaluate(() => localStorage.getItem('lang')), 'ceb');
     assert.strictEqual(await htmlLang(page), 'ceb');
     await page.goto(new URL('about/', url).href, { waitUntil: 'load' });
-    assert.strictEqual(await page.evaluate(() => document.querySelector('[data-lang-block="taglish"]').hidden), false);
-    assert.strictEqual(await htmlLang(page), 'fil');
+    assert.strictEqual(await page.evaluate(() => document.querySelector('[data-lang-block="ceb"]').hidden), false);
+    assert.strictEqual(await htmlLang(page), 'ceb');
     assert.deepStrictEqual(errors, []);
     await ctx.close();
 

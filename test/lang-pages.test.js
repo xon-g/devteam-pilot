@@ -28,14 +28,15 @@ const hrefs = (s) => [...new Set([...s.matchAll(/href="([^"]*)"/g)].map((m) => m
 for (const page of PAGES) {
   const html = read(`${page}/index.html`);
 
-  test(`${page}: picker, script and three blocks`, () => {
+  test(`${page}: picker, script and four blocks`, () => {
     assert.strictEqual(count(html, /id="lang-picker"/g), 1);
     const radios = [...html.matchAll(/<input type="radio" name="lang" value="([^"]+)"/g)].map((m) => m[1]);
-    assert.deepStrictEqual(radios, ['taglish', 'en', 'tl']);
+    assert.deepStrictEqual(radios, ['taglish', 'en', 'tl', 'ceb']);
     assert.ok(html.includes('<script type="module" src="../src/page-lang.js"></script>'));
-    for (const name of ['taglish', 'en', 'tl']) assert.strictEqual(count(html, new RegExp(`data-lang-block="${name}"`, 'g')), 1, name);
+    for (const name of ['taglish', 'en', 'tl', 'ceb']) assert.strictEqual(count(html, new RegExp(`data-lang-block="${name}"`, 'g')), 1, name);
     assert.ok(/data-lang-block="en" lang="en" hidden/.test(html));
     assert.ok(/data-lang-block="tl" lang="fil" hidden/.test(html));
+    assert.ok(/data-lang-block="ceb" lang="ceb" hidden/.test(html));
     assert.ok(!/data-lang-block="taglish"[^>]*hidden/.test(html));
   });
 
@@ -43,7 +44,7 @@ for (const page of PAGES) {
     const tg = block(html, 'taglish').body;
     const base = stripSummary(tg);
     assert.ok(base.length < tg.length, 'taglish has an English summary');
-    for (const name of ['en', 'tl']) {
+    for (const name of ['en', 'tl', 'ceb']) {
       const b = block(html, name).body;
       assert.ok(!b.includes('English summary'), `${name} has no summary`);
       assert.strictEqual(count(b, /<h2\b/g), count(base, /<h2\b/g), `${name} h2`);
@@ -59,8 +60,8 @@ for (const page of PAGES) {
   });
 }
 
-test('sw.js precaches page-lang.js under swertres-v36', () => {
+test('sw.js precaches page-lang.js under swertres-v37', () => {
   const sw = read('sw.js');
   assert.ok(sw.includes('"src/page-lang.js"'));
-  assert.ok(sw.includes('swertres-v36'));
+  assert.ok(sw.includes('swertres-v37'));
 });
