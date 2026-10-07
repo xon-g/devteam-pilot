@@ -10,6 +10,29 @@
   --card: rgba(255, 255, 255, 0.06);
   --radius: 20px;
   --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* Type scale (major third, ~1.25) */
+  --step--2: 0.625rem;
+  --step--1: 0.8rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.563rem;
+  --step-3: clamp(1.9rem, 7vw, 2.75rem);
+
+  /* Line heights */
+  --lh-tight: 1.1;
+  --lh-snug: 1.3;
+  --lh-body: 1.55;
+
+  /* Weights */
+  --w-regular: 400;
+  --w-medium: 600;
+  --w-bold: 800;
+  --w-black: 900;
+
+  /* Tracking */
+  --track-caps: 0.08em;
+  --track-display: -0.02em;
 }
 
 * {
@@ -19,16 +42,40 @@
 html {
   background-color: var(--bg);
   color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
   font-family: var(--font);
+  font-size: var(--step-0);
+  line-height: var(--lh-body);
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
   min-height: 100dvh;
   color: var(--text);
   display: grid;
   grid-template-areas: "header" "main" "about" "banner" "disclaimer";
   grid-template-rows: auto 1fr auto auto auto;
+}
+
+h1, h2, h3 {
+  font-weight: var(--w-bold);
+  text-wrap: balance;
+}
+
+p, li {
+  text-wrap: pretty;
+}
+
+small {
+  font-size: 1em;
+}
+
+strong, b {
+  font-weight: var(--w-bold);
 }
 
 body::before {
@@ -53,18 +100,21 @@ header {
 }
 
 .eyebrow {
-  font-size: 0.75rem;
+  margin: 0 0 0.5em;
+  font-size: var(--step--1);
+  font-weight: var(--w-medium);
+  line-height: var(--lh-snug);
   color: var(--muted);
-  letter-spacing: 0.2em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
 .title {
   margin: 0;
-  font-size: clamp(1.9rem, 7vw, 2.75rem);
-  font-weight: 900;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
+  font-size: var(--step-3);
+  font-weight: var(--w-black);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--track-display);
 }
 
 .title span {
@@ -88,6 +138,9 @@ header {
   border: 1px solid var(--line);
   border-radius: 999px;
   font: inherit;
+  font-size: var(--step--1);
+  font-weight: var(--w-medium);
+  line-height: var(--lh-snug);
   cursor: pointer;
 }
 
@@ -136,7 +189,8 @@ main {
   display: grid;
   place-items: center;
   font-size: clamp(2.6rem, 11vw, 4.25rem);
-  font-weight: 900;
+  font-weight: var(--w-black);
+  line-height: var(--lh-tight);
   font-variant-numeric: tabular-nums;
   color: var(--bg-2);
   background: radial-gradient(circle at 35% 30%, #fff 0%, #fff3c4 35%, var(--gold) 70%, var(--gold-2) 100%);
@@ -228,8 +282,8 @@ main {
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem 0;
-  font-size: 1rem;
-  line-height: 1.35;
+  font-size: var(--step-0);
+  line-height: var(--lh-snug);
 }
 
 .reasons li:not(:last-child) {
@@ -245,8 +299,9 @@ main {
   border-radius: 50%;
   background: var(--gold);
   color: var(--bg-2);
-  font-weight: 900;
-  font-size: 0.875rem;
+  font-weight: var(--w-black);
+  font-size: var(--step--1);
+  line-height: 1;
 }
 
 #combo-output {
@@ -255,7 +310,8 @@ main {
   border-radius: 999px;
   padding: 0.6rem 1.25rem;
   color: var(--gold);
-  font-weight: 800;
+  font-weight: var(--w-bold);
+  line-height: var(--lh-snug);
   letter-spacing: 0.12em;
   font-variant-numeric: tabular-nums;
   text-wrap: balance;
@@ -298,7 +354,8 @@ main {
   justify-content: center;
   border-radius: 999px;
   color: var(--muted);
-  font-weight: 700;
+  font-weight: var(--w-medium);
+  line-height: var(--lh-snug);
   cursor: pointer;
 }
 
@@ -335,16 +392,17 @@ main {
   display: block;
   margin-bottom: 0.35rem;
   color: var(--muted);
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-size: var(--step--1);
+  font-weight: var(--w-bold);
+  line-height: var(--lh-snug);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--track-caps);
 }
 
 .field small,
 .moods legend small {
   text-transform: none;
-  font-weight: 400;
+  font-weight: var(--w-regular);
   letter-spacing: normal;
 }
 
@@ -357,7 +415,7 @@ main {
   border-radius: 12px;
   color: var(--text);
   font: inherit;
-  font-size: 1rem;
+  font-size: var(--step-0);
   padding: 0 0.75rem;
 }
 
@@ -399,7 +457,7 @@ main {
   border-radius: 999px;
   border: 1px solid var(--line);
   color: var(--muted);
-  font-weight: 700;
+  font-weight: var(--w-medium);
   cursor: pointer;
 }
 
@@ -437,7 +495,7 @@ main {
   border-radius: 50%;
   color: var(--bg);
   font-size: 0.6rem;
-  font-weight: 800;
+  font-weight: var(--w-bold);
   line-height: 1;
   background: radial-gradient(circle at 35% 30%, #fff 0%, #fff3c4 35%, var(--gold) 70%, var(--gold-2) 100%);
   box-shadow: 0 0 0 1px var(--bg);
@@ -471,7 +529,8 @@ main {
 }
 
 #form-status {
-  font-size: 0.85rem;
+  font-size: var(--step--1);
+  line-height: var(--lh-snug);
   color: var(--pink);
   min-height: 1.2em;
   margin: 0;
@@ -479,7 +538,9 @@ main {
 
 .for-name {
   color: var(--gold);
-  font-weight: 800;
+  font-size: var(--step-1);
+  font-weight: var(--w-bold);
+  line-height: var(--lh-snug);
   text-align: center;
   margin: 0;
   overflow-wrap: anywhere;
@@ -491,8 +552,9 @@ main {
   padding: 0;
   text-align: center;
   color: var(--pink);
-  font-weight: 600;
-  font-size: 0.95rem;
+  font-weight: var(--w-medium);
+  font-size: var(--step-0);
+  line-height: var(--lh-snug);
   display: grid;
   gap: 0.25rem;
   overflow-wrap: anywhere;
@@ -521,8 +583,9 @@ main {
   border-radius: 999px;
   background: linear-gradient(180deg, var(--gold), var(--gold-2));
   color: var(--bg);
-  font-size: 1.35rem;
-  font-weight: 900;
+  font-size: var(--step-1);
+  font-weight: var(--w-black);
+  line-height: var(--lh-snug);
   box-shadow: 0 10px 24px rgba(255, 159, 28, 0.35);
   cursor: pointer;
   border: none;
@@ -539,7 +602,9 @@ main {
   background: transparent;
   border: 1.5px solid var(--line);
   color: var(--text);
-  font-weight: 700;
+  font-size: var(--step-0);
+  font-weight: var(--w-medium);
+  line-height: var(--lh-snug);
   cursor: pointer;
 }
 
@@ -556,7 +621,8 @@ main {
 #share-status {
   min-height: 1.5rem;
   text-align: center;
-  font-size: 0.875rem;
+  font-size: var(--step--1);
+  line-height: var(--lh-snug);
 }
 
 /* Ad slot */
@@ -575,8 +641,9 @@ footer#disclaimer {
   backdrop-filter: blur(8px);
   border-top: 1px solid var(--line);
   color: var(--muted);
-  font-size: 0.625rem;
-  line-height: 1.3;
+  font-size: var(--step--2);
+  font-weight: var(--w-regular);
+  line-height: var(--lh-snug);
   text-align: center;
   padding: 0.35rem 0.75rem calc(0.35rem + env(safe-area-inset-bottom));
   z-index: 100;
@@ -597,8 +664,9 @@ footer#disclaimer {
 .fine-print {
   margin: 1.5rem 0 0;
   color: var(--muted);
-  font-size: 0.625rem;
-  line-height: 1.4;
+  font-size: var(--step--2);
+  font-weight: var(--w-regular);
+  line-height: var(--lh-snug);
   text-align: center;
 }
 
@@ -607,15 +675,26 @@ footer#disclaimer {
   grid-area: about;
   padding-bottom: calc(5rem + env(safe-area-inset-bottom));
   color: var(--muted);
-  font-size: 0.9rem;
-  line-height: 1.5;
+  font-size: var(--step-0);
+  line-height: var(--lh-body);
   overflow-wrap: anywhere;
+}
+
+.about-games p,
+.about-games ul {
+  max-width: 65ch;
+  margin-block: 0 0.75em;
+}
+
+.about-games p.fine-print {
+  margin-block: 1.5rem 0;
 }
 
 .about-games h2 {
   margin: 1.5rem 0 0.5rem;
   color: var(--text);
-  font-size: 1.1rem;
+  font-size: var(--step-1);
+  line-height: var(--lh-snug);
 }
 
 .about-games ul {
@@ -634,11 +713,12 @@ footer#disclaimer {
 .about-games summary {
   cursor: pointer;
   color: var(--text);
-  font-weight: 600;
+  font-weight: var(--w-medium);
 }
 
 .about-games details p {
   margin: 0.5rem 0 0;
+  max-width: none;
 }
 
 .about-games .lore { font-style: italic; }
@@ -651,18 +731,28 @@ body.content-page {
 .page {
   width: min(100% - 2rem, 65ch);
   margin-inline: auto;
-  line-height: 1.65;
   padding-bottom: 1rem;
+}
+
+.page p,
+.page ul {
+  max-width: 65ch;
+  margin-block: 0 0.75em;
 }
 
 .page h1 {
   margin: 0.5rem 0 0.25rem;
   color: var(--gold);
+  font-size: var(--step-3);
+  font-weight: var(--w-black);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--track-display);
 }
 
 .page h2 {
   margin: 2rem 0 0.5rem;
-  font-size: 1.2rem;
+  font-size: var(--step-1);
+  line-height: var(--lh-snug);
   color: var(--gold);
 }
 
@@ -680,7 +770,7 @@ body.content-page {
 }
 
 .page li {
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.4em;
 }
 
 .site-links {
@@ -689,7 +779,8 @@ body.content-page {
   justify-content: center;
   gap: 0.25rem 1rem;
   padding: 0.5rem 1rem 3rem;
-  font-size: 0.8125rem;
+  font-size: var(--step--1);
+  line-height: var(--lh-snug);
 }
 
 body.content-page .site-links {
