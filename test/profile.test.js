@@ -70,9 +70,11 @@ test('shareText with and without a name', () => {
 });
 
 test('privacy: no storage, network or innerHTML in src/', () => {
-  const forbidden = ['localStorage', 'sessionStorage', 'document.cookie', 'fetch(', 'XMLHttpRequest', 'innerHTML'];
+  const forbidden = ['localStorage', 'sessionStorage', 'document.cookie', 'XMLHttpRequest', 'innerHTML'];
   for (const f of fs.readdirSync(new URL('../src', import.meta.url)).filter((x) => x.endsWith('.js'))) {
     const text = fs.readFileSync(new URL(`../src/${f}`, import.meta.url), 'utf8');
     for (const word of forbidden) assert.ok(!text.includes(word), `${word} in src/${f}`);
+    // The schedule loader is the one same-origin fetch (see results-links.test.js).
+    if (f !== 'schedule.js') assert.ok(!text.includes('fetch('), `fetch( in src/${f}`);
   }
 });

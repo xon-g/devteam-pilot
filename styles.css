@@ -843,7 +843,7 @@ mark.check {
 
 .next-draw strong {
   color: var(--text);
-  font-weight: var(--w-bold, 700);
+  font-weight: var(--w-bold);
 }
 
 /* Official results link row (links only; tap targets >= 24px) */
