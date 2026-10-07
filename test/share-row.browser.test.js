@@ -52,8 +52,8 @@ function startServer(port) {
 }
 
 
-const ORDER = ['Facebook', 'Messenger', 'Viber', 'WhatsApp', 'Telegram', 'X', 'Copy link', 'Save image'];
-const IDS = ['fb', 'msgr', 'viber', 'wa', 'tg', 'x', 'copy', 'img'];
+const ORDER = ['Facebook', 'Messenger', 'Viber', 'WhatsApp', 'Telegram', 'X', 'TikTok', 'Copy link', 'Save image'];
+const IDS = ['fb', 'msgr', 'viber', 'wa', 'tg', 'x', 'tiktok', 'copy', 'img'];
 const ANDROID = 'Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Mobile Safari/537.36';
 
 async function setup(browser, port, opts, errors) {
@@ -105,7 +105,7 @@ test('share row', { timeout: 120000 }, async () => {
       const r = svgs[0].getBoundingClientRect();
       return { n: svgs.length, aria: svgs[0].getAttribute('aria-hidden'), w: r.width, h: r.height };
     }));
-    assert.strictEqual(icons.length, 8);
+    assert.strictEqual(icons.length, 9);
     for (const i of icons) if (i.w) assert.deepStrictEqual(i, { n: 1, aria: 'true', w: 20, h: 20 });
     const fills = await page.evaluate(() => {
       const f = (id) => getComputedStyle(document.querySelector(`[data-share="${id}"] svg`)).fill;
@@ -163,7 +163,7 @@ test('share row', { timeout: 120000 }, async () => {
     await draw(s.page);
     assert.ok(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'no h-scroll');
     const hs = await s.page.$$eval('#share-row [data-share]', (els) => els.filter((e) => e.offsetParent).map((e) => e.getBoundingClientRect().height));
-    assert.strictEqual(hs.length, 8);
+    assert.strictEqual(hs.length, 9);
     assert.ok(hs.every((h) => h >= 44), `heights ${hs}`);
     await s.page.locator('#share-row').screenshot({ path: '/home/node/projects/swertres/.smoke/share-row-360.png' });
     await s.context.close();

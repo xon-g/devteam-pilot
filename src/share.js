@@ -1,4 +1,4 @@
-export const SHARE_TARGETS = ['fb', 'msgr', 'viber', 'wa', 'tg', 'x', 'copy'];
+export const SHARE_TARGETS = ['fb', 'msgr', 'viber', 'wa', 'tg', 'x', 'tiktok', 'copy'];
 
 const LABELS = {
   fb: 'Facebook',
@@ -28,7 +28,7 @@ export function shareLinks(text, siteUrl) {
     tg: `https://t.me/share/url?url=${u('tg')}&text=${t}`,
     x: `https://twitter.com/intent/tweet?text=${t}&url=${u('x')}`,
   };
-  return SHARE_TARGETS.filter((id) => id !== 'copy').map((id) => ({ id, label: LABELS[id], href: hrefs[id] }));
+  return SHARE_TARGETS.filter((id) => id !== 'copy' && id !== 'tiktok').map((id) => ({ id, label: LABELS[id], href: hrefs[id] }));
 }
 
 export function isMobileUA(ua) {
