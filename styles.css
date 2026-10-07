@@ -926,3 +926,14 @@ mark.check {
   outline: 2px solid var(--gold);
   outline-offset: 2px;
 }
+
+.lang-picker {
+  grid-template-columns: repeat(3, 1fr);
+  width: min(100%, 20rem);
+  margin: 0.75rem auto 0;
+}
+
+.lang-picker span {
+  padding: 0 0.5rem;
+  font-size: var(--step--1);
+}

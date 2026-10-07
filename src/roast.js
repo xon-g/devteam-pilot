@@ -1,5 +1,7 @@
 import { randomInt } from './lucky.js';
 
+const LANG_KEYS = ['taglish', 'en', 'tl'];
+
 export const NAME_ROASTS = [
   "{name}? Pangalan pa lang, pang-main character na",
   "Uy {name}, lodi! Petmalu ang pangalan mo",
@@ -54,6 +56,122 @@ export const AGE_ROASTS = [
     "Sa {age}, ikaw ang OG lodi",
     "{age}? Ang dami nang napagdaanan, werpa!" ] }
 ];
+
+const NAME_ROASTS_EN = [
+  "{name}? Main character name already",
+  "Hey {name}, legend! What an awesome name",
+  "{name}? Must be nice having a name like that",
+  "Hello {name}! Dream big, just saying",
+  "{name}... sounds like my old crush's name, ouch",
+  "{name} again? Fine, you win",
+  "{name}, nailed it! That name is slaying",
+  "We know you, {name}. Always running late, kidding",
+  "{name}? It's giving soap-opera lead",
+  "{name}, have you eaten yet? Kidding, draw first"
+];
+const LONG_NAME_ROASTS_EN = [
+  "{name}? So long, like a graduation roll call",
+  "We're out of breath at your name, {name}. Kidding",
+  "{name}: the full name, really? So formal"
+];
+const SHORT_NAME_ROASTS_EN = [
+  "{name}? Short on letters, big on vibes",
+  "Just {name}? Short but solid",
+  "{name}! One breath and done. Lucky you"
+];
+const AGE_ROASTS_EN = [
+  { min: 18, max: 21, lines: [
+    "{age}? Still a youngster! Got an allowance from Mom?",
+    "Only {age}? A true TikTok kid",
+    "Fresh as can be at {age}, lucky you",
+    "{age}? Just turned legal, take it easy" ] },
+  { min: 22, max: 29, lines: [
+    "{age}? Quarter-life crisis era, hang in there",
+    "{age}? Adulting is real, ouch",
+    "At {age}, you're allowed to dream",
+    "{age}? This is your prime. Slay!" ] },
+  { min: 30, max: 39, lines: [
+    "{age}? Welcome to the auntie/uncle era",
+    "{age} with a 20s aura, kidding",
+    "At {age}, no more all-nighters",
+    "{age}? Sore back but still going" ] },
+  { min: 40, max: 49, lines: [
+    "{age}? Fine wine, you only get better",
+    "{age} and still turning heads",
+    "At {age}, life has some good stuff after all",
+    "{age}? Legend of the whole neighborhood" ] },
+  { min: 50, max: 59, lines: [
+    "{age}? Still a 90s kid at heart",
+    "{age} already? Amazing, never fades",
+    "At {age}, you're the boss",
+    "{age}? Senior discount soon, kidding" ] },
+  { min: 60, max: 120, lines: [
+    "{age}? Senior discount unlocked!",
+    "{age} and still blooming, lucky you",
+    "At {age}, you're the OG legend",
+    "{age}? You've been through so much, respect!" ] }
+];
+
+const NAME_ROASTS_TL = [
+  "{name}? Pangalan pa lang, bida na",
+  "Uy {name}, idol! Ang galing ng pangalan mo",
+  "{name}? Ang swerte ng may ganyang pangalan",
+  "Kumusta {name}! Puwede nang mangarap, biro lang",
+  "{name}... parang pangalan ng dati kong crush, aray",
+  "Si {name} na naman? Sige na, ikaw na",
+  "{name}, ang galing! Angat ang pangalan mo",
+  "Kilala ka namin, {name}. Laging huli, biro lang",
+  "{name}? Parang bida sa teleserye",
+  "{name}, kumain ka na ba? Biro lang, bunot muna"
+];
+const LONG_NAME_ROASTS_TL = [
+  "{name}? Ang haba, pang-roll call sa pagtatapos",
+  "Hingal kami sa pangalan mo, {name}. Biro lang",
+  "{name}: buong pangalan talaga? Pormal naman"
+];
+const SHORT_NAME_ROASTS_TL = [
+  "{name}? Tipid sa letra, bukas-palad sa saya",
+  "{name} lang? Maikli pero matibay",
+  "{name}! Isang hinga lang, tapos na. Ang swerte"
+];
+const AGE_ROASTS_TL = [
+  { min: 18, max: 21, lines: [
+    "{age}? Bata pa! May baon pa ba kay Mama?",
+    "{age} ka pa lang? Batang TikTok",
+    "Sariwang-sariwa sa {age}, ang swerte",
+    "{age}? Kalalegal lang, dahan-dahan muna bes" ] },
+  { min: 22, max: 29, lines: [
+    "{age}? Panahon ng quarter-life crisis, kapit lang",
+    "{age} ka? Totoo ang pagiging adult, aray",
+    "Sa {age}, puwede nang mangarap",
+    "{age}? Ito ang kasikatan mo, bes. Ang galing!" ] },
+  { min: 30, max: 39, lines: [
+    "{age}? Maligayang pagdating sa panahon ng tita/tito",
+    "{age} na pero pang-20s ang aura, biro lang",
+    "Sa {age}, bawal na ang puyat, bes",
+    "{age}? Masakit na ang likod pero tuloy pa rin" ] },
+  { min: 40, max: 49, lines: [
+    "{age}? Parang alak na tumatanda, bes. Lalong gumaganda",
+    "{age} pero malakas pa rin ang dating",
+    "Sa {age}, may ganda rin pala ang buhay",
+    "{age}? Idolo ng buong barangay" ] },
+  { min: 50, max: 59, lines: [
+    "{age}? Batang 90s ka pa rin sa puso",
+    "{age} na? Ang galing, hindi kumukupas",
+    "Sa {age}, ikaw na ang boss, bes",
+    "{age}? Malapit na ang diskwento ng senior, biro lang" ] },
+  { min: 60, max: 120, lines: [
+    "{age}? Diskwento ng senior, bukas na!",
+    "{age} at namumukadkad pa rin, ang swerte",
+    "Sa {age}, ikaw ang pinakaidolo",
+    "{age}? Ang dami nang napagdaanan, saludo!" ] }
+];
+
+export const NAME_ROASTS_I18N = { taglish: NAME_ROASTS, en: NAME_ROASTS_EN, tl: NAME_ROASTS_TL };
+export const LONG_NAME_ROASTS_I18N = { taglish: LONG_NAME_ROASTS, en: LONG_NAME_ROASTS_EN, tl: LONG_NAME_ROASTS_TL };
+export const SHORT_NAME_ROASTS_I18N = { taglish: SHORT_NAME_ROASTS, en: SHORT_NAME_ROASTS_EN, tl: SHORT_NAME_ROASTS_TL };
+export const AGE_ROASTS_I18N = { taglish: AGE_ROASTS, en: AGE_ROASTS_EN, tl: AGE_ROASTS_TL };
+
 export function fill(template, key, value) {
   return template.split(`{${key}}`).join(String(value));
 }
@@ -62,20 +180,43 @@ function pick(list) {
   return list[randomInt(list.length)];
 }
 
-export function nameRoast(name) {
+// A pick is {kind, bucket, index}: language-independent, so a result can be re-rendered in another language.
+export function nameRoastPick(name) {
   if (!name) return null;
   const len = Array.from(name).length;
-  const pool = len > 14 ? LONG_NAME_ROASTS : len <= 3 ? SHORT_NAME_ROASTS : NAME_ROASTS;
-  return fill(pick(pool), 'name', name);
+  const kind = len > 14 ? 'long' : len <= 3 ? 'short' : 'name';
+  const pool = kind === 'long' ? LONG_NAME_ROASTS : kind === 'short' ? SHORT_NAME_ROASTS : NAME_ROASTS;
+  return { kind, bucket: 0, index: randomInt(pool.length) };
 }
 
-export function ageRoast(age) {
+export function ageRoastPick(age) {
   if (age === null || age === undefined) return null;
-  const bucket = AGE_ROASTS.find((b) => age >= b.min && age <= b.max);
-  if (!bucket) return null;
-  return fill(pick(bucket.lines), 'age', age);
+  const bucket = AGE_ROASTS.findIndex((b) => age >= b.min && age <= b.max);
+  if (bucket < 0) return null;
+  return { kind: 'age', bucket, index: randomInt(AGE_ROASTS[bucket].lines.length) };
 }
 
-export function roastLines({ name, age }) {
-  return [nameRoast(name), ageRoast(age)].filter((line) => line !== null);
+export function roastPicks({ name, age }) {
+  return [nameRoastPick(name), ageRoastPick(age)].filter((p) => p !== null);
+}
+
+export function renderRoast(p, { name, age }, lang = 'taglish') {
+  const l = LANG_KEYS.includes(lang) ? lang : 'taglish';
+  if (p.kind === 'age') return fill(AGE_ROASTS_I18N[l][p.bucket].lines[p.index], 'age', age);
+  const table = p.kind === 'long' ? LONG_NAME_ROASTS_I18N : p.kind === 'short' ? SHORT_NAME_ROASTS_I18N : NAME_ROASTS_I18N;
+  return fill(table[l][p.index], 'name', name);
+}
+
+export function nameRoast(name, lang = 'taglish') {
+  const p = nameRoastPick(name);
+  return p ? renderRoast(p, { name }, lang) : null;
+}
+
+export function ageRoast(age, lang = 'taglish') {
+  const p = ageRoastPick(age);
+  return p ? renderRoast(p, { age }, lang) : null;
+}
+
+export function roastLines({ name, age }, lang = 'taglish') {
+  return roastPicks({ name, age }).map((p) => renderRoast(p, { name, age }, lang));
 }

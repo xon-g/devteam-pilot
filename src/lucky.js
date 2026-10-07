@@ -1,5 +1,6 @@
 import { REASONS } from './reasons.js';
 import { getGame, formatNumbers, shortName } from './games.js';
+import { t } from './i18n.js';
 
 export { REASONS };
 
@@ -50,11 +51,11 @@ export function rambolitoCombos(combo, gameId = '3d') {
   return Array.from(results).sort();
 }
 
-export function shareText(combo, mode, name = '', gameId = '3d') {
+export function shareText(combo, mode, name = '', gameId = '3d', lang = 'taglish') {
   const game = getGame(gameId);
-  const short = shortName(game);
-  const lead = name ? `${short} lucky numbers ni ${name}: ` : `${short} lucky numbers ko: `;
-  const tail = ' 🍀 For entertainment only. 18+.';
+  const short = shortName(game, lang);
+  const lead = name ? t(lang, 'shareLeadName', { short, name }) : t(lang, 'shareLeadSelf', { short });
+  const tail = t(lang, 'shareTail');
   if (!game.rambolito) {
     return `${lead}${formatNumbers(game, combo)}${tail}`;
   }

@@ -1,13 +1,14 @@
 import { rambolitoCombos, randomInt, shareText } from './lucky.js';
-import { DEFAULT_GAME, drawNumbers, formatNumbers, getGame } from './games.js';
+import { DEFAULT_GAME, drawNumbers, formatNumbers, gameName, getGame } from './games.js';
+import { HTML_LANG, normalizeLang, t } from './i18n.js';
 import { createSound } from './sound.js';
-import { roastLines } from './roast.js';
+import { renderRoast, roastPicks } from './roast.js';
 import { eventPath, track } from './analytics.js';
 import { PCSO_RESULTS_URL, PCSO_FACEBOOK_URL, SITE_URL } from './config.js';
 import { shareLinks, isMobileUA, copyText, shareUrl } from './share.js';
 import { nextDraw, formatCountdown, drawLabel, loadSchedule } from './schedule.js';
 import { cardContent, cardFileName, drawCard } from './card.js';
-import { validateProfile, pickMoodReasons } from './profile.js';
+import { validateProfile, pickMoodReasonIndices, moodReasonLines } from './profile.js';
 
 // Register service worker if supported
 if ('serviceWorker' in navigator) {
@@ -24,7 +25,6 @@ const ballsEl = document.querySelector('.balls');
 const eyebrow = document.querySelector('.eyebrow');
 const modeGroup = document.getElementById('mode-group');
 const comboOutput = document.getElementById('combo-output');
-const PROMPT = comboOutput.textContent;
 const drawButton = document.getElementById('draw');
 const shareButton = document.getElementById('share');
 const shareRow = document.getElementById('share-row');
@@ -50,9 +50,9 @@ function updateNextDraw() {
   const draw = schedule ? nextDraw(schedule, currentGame.id, now) : null;
   nextDrawEl.hidden = !draw;
   if (!draw) return;
-  document.getElementById('next-draw-game').textContent = currentGame.name;
-  document.getElementById('next-draw-when').textContent = drawLabel(draw, now, schedule.utcOffsetMinutes);
-  document.getElementById('next-draw-in').textContent = formatCountdown(draw.at.getTime() - now.getTime());
+  document.getElementById('next-draw-game').textContent = gameName(currentGame, lang);
+  document.getElementById('next-draw-when').textContent = drawLabel(draw, now, schedule.utcOffsetMinutes, lang);
+  document.getElementById('next-draw-in').textContent = formatCountdown(draw.at.getTime() - now.getTime(), lang);
 }
 
 const sound = createSound(() => {
@@ -60,6 +60,14 @@ const sound = createSound(() => {
   return C ? new C() : null;
 });
 const soundButton = document.getElementById('sound');
+
+let lang = 'taglish';
+try { lang = normalizeLang(localStorage.getItem('lang')); } catch { /* blocked storage: stay Taglish */ }
+let currentReasonIdx = [];
+let currentRoastPicks = [];
+let currentProfile = null;
+let statusKey = '';
+const tr = (key, vars) => t(lang, key, vars);
 
 let currentCombo = null;
 let currentGame = getGame(DEFAULT_GAME);
@@ -117,16 +125,16 @@ function applyGame(game) {
   reasonsList.hidden = true;
   forName.hidden = true;
   clearRoast();
-  comboOutput.textContent = PROMPT;
+  comboOutput.textContent = tr('prompt');
   comboOutput.classList.add('prompt');
   shareButton.disabled = true;
   shareRow.hidden = true;
-  shareStatus.textContent = '';
+  setStatus('');
   modeGroup.hidden = !game.rambolito;
-  resultsGame.textContent = game.name;
+  resultsGame.textContent = gameName(game, lang);
   officialResults.hidden = game.id === '1-58';
   updateNextDraw();
-  eyebrow.textContent = game.id === '3d' ? 'Swertres · 3D' : game.name;
+  eyebrow.textContent = game.id === '3d' ? 'Swertres · 3D' : gameName(game, lang);
 }
 let currentName = '';
 let moodTouched = false;
@@ -142,9 +150,9 @@ function checkForm() {
   if (result.ok) {
     formStatus.textContent = '';
   } else if (result.field === 'mood' && !moodTouched) {
-    formStatus.textContent = 'Pumili ng mood para makabunot.';
+    formStatus.textContent = tr('moodPick');
   } else {
-    formStatus.textContent = result.message;
+    formStatus.textContent = tr('err.' + result.code);
   }
 }
 
@@ -169,7 +177,8 @@ async function draw() {
   drawing = true;
   const game = currentGame;
   const n = game.count;
-  const moodReasons = pickMoodReasons(profile.mood, n);
+  const reasonIdx = pickMoodReasonIndices(profile.mood, n);
+  const moodReasons = moodReasonLines(profile.mood, reasonIdx, lang);
   currentName = profile.name;
   forName.hidden = true;
   clearRoast();
@@ -231,18 +240,10 @@ async function draw() {
   }
 
   comboOutput.classList.remove('prompt');
-  if (currentName) {
-    forName.textContent = `Para kay ${currentName}`;
-    forName.hidden = false;
-  } else {
-    forName.hidden = true;
-  }
-  for (const line of roastLines(profile)) {
-    const li = document.createElement('li');
-    li.textContent = line;
-    roastEl.appendChild(li);
-  }
-  roastEl.hidden = roastEl.children.length === 0;
+  currentReasonIdx = reasonIdx;
+  currentProfile = profile;
+  currentRoastPicks = roastPicks(profile);
+  renderResultText();
   reasonsList.hidden = false;
   updateDisplay();
   shareButton.disabled = false;
@@ -250,8 +251,33 @@ async function draw() {
   track(window.goatcounter, eventPath('draw', { game: game.id, mood: profile.mood, mode: currentMode() }));
 }
 
+function renderResultText() {
+  if (!currentCombo || !currentProfile) return;
+  reasonElements.forEach((el, i) => {
+    el.textContent = moodReasonLines(currentProfile.mood, [currentReasonIdx[i]], lang)[0];
+  });
+  if (currentName) {
+    forName.textContent = tr('forName', { name: currentName });
+    forName.hidden = false;
+  } else {
+    forName.hidden = true;
+  }
+  roastEl.textContent = '';
+  for (const p of currentRoastPicks) {
+    const li = document.createElement('li');
+    li.textContent = renderRoast(p, currentProfile, lang);
+    roastEl.appendChild(li);
+  }
+  roastEl.hidden = roastEl.children.length === 0;
+}
+
+function setStatus(key) {
+  statusKey = key;
+  shareStatus.textContent = key ? tr(key) : '';
+}
+
 function currentShareText() {
-  return shareText(currentCombo, currentMode(), currentName, currentGame.id);
+  return shareText(currentCombo, currentMode(), currentName, currentGame.id, lang);
 }
 
 function updateShareRow() {
@@ -281,7 +307,8 @@ function cardBlob() {
     numbersText: formatNumbers(currentGame, currentCombo),
     mode: currentMode(),
     name: currentName,
-    drawText
+    drawText,
+    lang
   });
   drawCard(canvas.getContext('2d'), content, { width: 1080, height: 1920 });
   return new Promise((resolve, reject) => {
@@ -308,7 +335,7 @@ async function saveImage() {
     if (navigator.canShare?.({ files: [file] })) {
       try {
         await navigator.share({ files: [file], text: currentShareText(), url: shareUrl(SITE_URL, 'img') });
-        shareStatus.textContent = 'Naibahagi na!';
+        setStatus('statusShared');
         return;
       } catch (err) {
         if (err && err.name === 'AbortError') return;
@@ -316,10 +343,10 @@ async function saveImage() {
       }
     }
     downloadBlob(blob, fileName);
-    shareStatus.textContent = 'Na-save na ang image!';
+    setStatus('statusSaved');
   } catch (err) {
     if (err && err.name === 'AbortError') return;
-    shareStatus.textContent = 'Hindi ma-save';
+    setStatus('statusSaveFail');
     console.warn('Save image error:', err);
   }
 }
@@ -333,9 +360,9 @@ async function handleRowClick(e) {
   if (via !== 'copy') return;
   try {
     await navigator.clipboard.writeText(copyText(currentShareText(), SITE_URL));
-    shareStatus.textContent = 'Nakopya na!';
+    setStatus('statusCopied');
   } catch (err) {
-    shareStatus.textContent = 'Hindi maibahagi';
+    setStatus('statusShareFail');
     console.error('Share error:', err);
   }
 }
@@ -350,18 +377,18 @@ async function handleShare() {
         text: text,
         url: shareUrl(SITE_URL, 'native')
       });
-      shareStatus.textContent = 'Naibahagi na!';
+      setStatus('statusShared');
       track(window.goatcounter, eventPath('share-done', { via: 'native' }));
     } else {
       await navigator.clipboard.writeText(copyText(text, SITE_URL));
-      shareStatus.textContent = 'Nakopya na!';
+      setStatus('statusCopied');
       track(window.goatcounter, eventPath('share-done', { via: 'copy' }));
     }
   } catch (err) {
     if (err.name === 'AbortError') {
       // User cancelled, do nothing
     } else {
-      shareStatus.textContent = 'Hindi maibahagi';
+      setStatus('statusShareFail');
       console.error('Share error:', err);
     }
   }
@@ -375,7 +402,62 @@ soundButton.addEventListener('click', () => {
   const on = !sound.isEnabled();
   sound.setEnabled(on);
   soundButton.setAttribute('aria-pressed', String(on));
-  soundButton.textContent = on ? '🔊 Tunog: On' : '🔇 Tunog: Off';
+  updateSoundLabel();
+});
+
+function updateSoundLabel() {
+  soundButton.textContent = tr(sound.isEnabled() ? 'soundOn' : 'soundOff');
+}
+
+const NAV_KEYS = {
+  'how-to-play/': 'navHow', 'lucky-numbers/': 'navLucky', 'responsible-gaming/': 'navResponsible',
+  'about/': 'navAbout', 'contact/': 'navContact', 'privacy/': 'navPrivacy',
+};
+
+function applyStaticText() {
+  document.documentElement.lang = HTML_LANG[lang];
+  document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = tr(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-aria-label]').forEach((el) => {
+    el.setAttribute('aria-label', tr(el.dataset.i18nAriaLabel));
+  });
+  document.querySelectorAll('[data-i18n-lead]').forEach((el) => { el.firstChild.textContent = `${tr(el.dataset.i18nLead)} `; });
+  document.getElementById('disclaimer').textContent = tr('disclaimer');
+  const siteLinks = document.querySelector('.site-links');
+  siteLinks.setAttribute('aria-label', tr('siteLinks'));
+  siteLinks.querySelectorAll('a').forEach((a) => {
+    const key = NAV_KEYS[a.getAttribute('href')];
+    if (key) a.textContent = tr(key);
+  });
+  document.querySelectorAll('[data-lang-block]').forEach((el) => { el.hidden = el.dataset.langBlock !== lang; });
+  // The tagline keeps its <br>: first and last child are the two text nodes.
+  const [line1, line2] = tr('tagline').split('\n');
+  const tagline = document.querySelector('.tagline');
+  tagline.firstChild.textContent = line1;
+  tagline.lastChild.textContent = line2;
+  updateSoundLabel();
+}
+
+function applyLang() {
+  applyStaticText();
+  const picked = document.querySelector(`input[name="lang"][value="${lang}"]`);
+  if (picked) picked.checked = true;
+  resultsGame.textContent = gameName(currentGame, lang);
+  eyebrow.textContent = currentGame.id === '3d' ? 'Swertres · 3D' : gameName(currentGame, lang);
+  if (!currentCombo) comboOutput.textContent = tr('prompt');
+  shareStatus.textContent = statusKey ? tr(statusKey) : '';
+  renderResultText();
+  if (currentCombo) updateShareRow();
+  updateNextDraw();
+  checkForm();
+}
+
+document.querySelectorAll('input[name="lang"]').forEach((radio) => {
+  radio.addEventListener('change', () => {
+    if (!radio.checked) return;
+    lang = normalizeLang(radio.value);
+    try { localStorage.setItem('lang', lang); } catch { /* blocked storage: keep going */ }
+    applyLang();
+  });
 });
 
 modeRadios.forEach(radio => {
@@ -390,7 +472,7 @@ form.addEventListener('change', (e) => {
   checkForm();
 });
 applyGame(pickedGame());
-checkForm();
+applyLang();
 loadSchedule().then((s) => {
   schedule = s;
   updateNextDraw();

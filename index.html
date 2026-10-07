@@ -20,8 +20,8 @@
   <meta property="og:title" content="Lotto Lucky Numbers PH – Swertres, EZ2, Lotto Lucky Number Generator">
   <meta property="og:description" content="Free, for-fun random lucky-number generator for Philippine PCSO lotto games: Swertres, EZ2, 4D, 6D and Lotto 6/42 to 6/58. Entertainment only, 18+. Not affiliated with PCSO.">
   <meta property="og:url" content="https://lotto.xonicbox.com/">
-  <meta property="og:image" content="https://lotto.xonicbox.com/assets/og-image.png?v=31">
-  <meta property="og:image:secure_url" content="https://lotto.xonicbox.com/assets/og-image.png?v=31">
+  <meta property="og:image" content="https://lotto.xonicbox.com/assets/og-image.png?v=32">
+  <meta property="og:image:secure_url" content="https://lotto.xonicbox.com/assets/og-image.png?v=32">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -31,7 +31,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Lotto Lucky Numbers PH – Swertres, EZ2, Lotto Lucky Number Generator">
   <meta name="twitter:description" content="Free, for-fun random lucky-number generator for Philippine PCSO lotto games: Swertres, EZ2, 4D, 6D and Lotto 6/42 to 6/58. Entertainment only, 18+. Not affiliated with PCSO.">
-  <meta name="twitter:image" content="https://lotto.xonicbox.com/assets/og-image.png?v=31">
+  <meta name="twitter:image" content="https://lotto.xonicbox.com/assets/og-image.png?v=32">
   <meta name="theme-color" content="#12061f">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
@@ -122,19 +122,24 @@
     <p class="eyebrow">Lucky Number Generator</p>
     <h1 class="title">Lotto <span>Lucky</span> Numbers PH</h1>
     <p class="tagline">Lucky numbers para sa Swertres, EZ2, 4D, 6D at Lotto 6/42–6/58.<br>For fun lang.</p>
+    <div id="lang-picker" class="segmented lang-picker" role="radiogroup" aria-label="Language / Wika">
+      <label><input type="radio" name="lang" value="taglish" checked><span>Taglish</span></label>
+      <label><input type="radio" name="lang" value="en"><span>English</span></label>
+      <label><input type="radio" name="lang" value="tl"><span>Tagalog</span></label>
+    </div>
     <button id="sound" type="button" class="sound-toggle" aria-pressed="true">🔊 Tunog: On</button>
   </header>
 
   <main id="main">
     <form id="about-you" class="about" novalidate autocomplete="off">
       <div class="about-row">
-        <label class="field"><span>Name <small>(optional)</small></span>
+        <label class="field"><span data-i18n-lead="fieldName">Name <small data-i18n="optional">(optional)</small></span>
           <input id="name" name="name" type="text" maxlength="40" spellcheck="false"></label>
-        <label class="field"><span>Age <small>(optional)</small></span>
+        <label class="field"><span data-i18n-lead="fieldAge">Age <small data-i18n="optional">(optional)</small></span>
           <input id="age" name="age" type="text" inputmode="numeric" maxlength="3"></label>
       </div>
       <fieldset class="games">
-        <legend>Anong laro?</legend>
+        <legend data-i18n="legendGame">Anong laro?</legend>
       <label><input type="radio" name="game" value="2d"><span data-ball="2D">EZ2 (2D)</span></label>
       <label><input type="radio" name="game" value="3d" checked><span data-ball="3D">Swertres (3D)</span></label>
       <label><input type="radio" name="game" value="4d"><span data-ball="4D">4D Lotto</span></label>
@@ -144,16 +149,16 @@
       <label><input type="radio" name="game" value="6-49"><span class="lotto" data-ball="49">Super Lotto 6/49</span></label>
       <label><input type="radio" name="game" value="6-55"><span class="lotto" data-ball="55">Grand Lotto 6/55</span></label>
       <label><input type="radio" name="game" value="6-58"><span class="lotto" data-ball="58">Ultra Lotto 6/58</span></label>
-      <label><input type="radio" name="game" value="1-58"><span class="lotto" data-ball="1">Isang Numero (1–58)</span></label>
+      <label><input type="radio" name="game" value="1-58"><span class="lotto" data-ball="1" data-i18n="game.1-58">Isang Numero (1–58)</span></label>
       </fieldset>
       <fieldset class="moods">
-        <legend>Kumusta ka? <small>(required)</small></legend>
-      <label><input type="radio" name="mood" value="masaya"><span data-emoji="😄">Masaya</span></label>
-      <label><input type="radio" name="mood" value="pagod"><span data-emoji="😴">Pagod</span></label>
-      <label><input type="radio" name="mood" value="stressed"><span data-emoji="😫">Stressed</span></label>
-      <label><input type="radio" name="mood" value="kinikilig"><span data-emoji="🥰">Kinikilig</span></label>
-      <label><input type="radio" name="mood" value="chill"><span data-emoji="😎">Chill</span></label>
-      <label><input type="radio" name="mood" value="ewan"><span data-emoji="🤷">Ewan ko</span></label>
+        <legend data-i18n-lead="legendMood">Kumusta ka? <small data-i18n="required">(required)</small></legend>
+      <label><input type="radio" name="mood" value="masaya"><span data-emoji="😄" data-i18n="mood.masaya">Masaya</span></label>
+      <label><input type="radio" name="mood" value="pagod"><span data-emoji="😴" data-i18n="mood.pagod">Pagod</span></label>
+      <label><input type="radio" name="mood" value="stressed"><span data-emoji="😫" data-i18n="mood.stressed">Stressed</span></label>
+      <label><input type="radio" name="mood" value="kinikilig"><span data-emoji="🥰" data-i18n="mood.kinikilig">Kinikilig</span></label>
+      <label><input type="radio" name="mood" value="chill"><span data-emoji="😎" data-i18n="mood.chill">Chill</span></label>
+      <label><input type="radio" name="mood" value="ewan"><span data-emoji="🤷" data-i18n="mood.ewan">Ewan ko</span></label>
       </fieldset>
       <p id="form-status" aria-live="polite"></p>
     </form>
@@ -196,33 +201,33 @@
     </div>
 
     <div class="actions">
-      <button id="draw">Bunot na!</button>
-      <button id="share" disabled>Share</button>
+      <button id="draw" data-i18n="draw">Bunot na!</button>
+      <button id="share" data-i18n="share" disabled>Share</button>
     </div>
-    <nav id="share-row" class="share-row" aria-label="Share to" hidden>
+    <nav id="share-row" class="share-row" aria-label="Share to" data-i18n-aria-label="shareTo" hidden>
       <a data-share="fb"><svg class="share-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg>Facebook</a>
       <a data-share="msgr"><svg class="share-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M12 0C5.24 0 0 4.952 0 11.64c0 3.499 1.434 6.521 3.769 8.61a.96.96 0 0 1 .323.683l.065 2.135a.96.96 0 0 0 1.347.85l2.381-1.053a.96.96 0 0 1 .641-.046A13 13 0 0 0 12 23.28c6.76 0 12-4.952 12-11.64S18.76 0 12 0m6.806 7.44c.522-.03.971.567.63 1.094l-4.178 6.457a.707.707 0 0 1-.977.208l-3.87-2.504a.44.44 0 0 0-.49.007l-4.363 3.01c-.637.438-1.415-.317-.995-.966l4.179-6.457a.706.706 0 0 1 .977-.21l3.87 2.505c.15.097.344.094.491-.007l4.362-3.008a.7.7 0 0 1 .364-.13"/></svg>Messenger</a>
       <a data-share="viber"><svg class="share-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.4 0C9.473.028 5.333.344 3.02 2.467 1.302 4.187.696 6.7.633 9.817.57 12.933.488 18.776 6.12 20.36h.003l-.004 2.416s-.037.977.61 1.177c.777.242 1.234-.5 1.98-1.302.407-.44.972-1.084 1.397-1.58 3.85.326 6.812-.416 7.15-.525.776-.252 5.176-.816 5.892-6.657.74-6.02-.36-9.83-2.34-11.546-.596-.55-3.006-2.3-8.375-2.323 0 0-.395-.025-1.037-.017zm.058 1.693c.545-.004.88.017.88.017 4.542.02 6.717 1.388 7.222 1.846 1.675 1.435 2.53 4.868 1.906 9.897v.002c-.604 4.878-4.174 5.184-4.832 5.395-.28.09-2.882.737-6.153.524 0 0-2.436 2.94-3.197 3.704-.12.12-.26.167-.352.144-.13-.033-.166-.188-.165-.414l.02-4.018c-4.762-1.32-4.485-6.292-4.43-8.895.054-2.604.543-4.738 1.996-6.173 1.96-1.773 5.474-2.018 7.11-2.03zm.38 2.602c-.167 0-.303.135-.304.302 0 .167.133.303.3.305 1.624.01 2.946.537 4.028 1.592 1.073 1.046 1.62 2.468 1.633 4.334.002.167.14.3.307.3.166-.002.3-.138.3-.304-.014-1.984-.618-3.596-1.816-4.764-1.19-1.16-2.692-1.753-4.447-1.765zm-3.96.695c-.19-.032-.4.005-.616.117l-.01.002c-.43.247-.816.562-1.146.932-.002.004-.006.004-.008.008-.267.323-.42.638-.46.948-.008.046-.01.093-.007.14 0 .136.022.27.065.4l.013.01c.135.48.473 1.276 1.205 2.604.42.768.903 1.5 1.446 2.186.27.344.56.673.87.984l.132.132c.31.308.64.6.984.87.686.543 1.418 1.027 2.186 1.447 1.328.733 2.126 1.07 2.604 1.206l.01.014c.13.042.265.064.402.063.046.002.092 0 .138-.008.31-.036.627-.19.948-.46.004 0 .003-.002.008-.005.37-.33.683-.72.93-1.148l.003-.01c.225-.432.15-.842-.18-1.12-.004 0-.698-.58-1.037-.83-.36-.255-.73-.492-1.113-.71-.51-.285-1.032-.106-1.248.174l-.447.564c-.23.283-.657.246-.657.246-3.12-.796-3.955-3.955-3.955-3.955s-.037-.426.248-.656l.563-.448c.277-.215.456-.737.17-1.248-.217-.383-.454-.756-.71-1.115-.25-.34-.826-1.033-.83-1.035-.137-.165-.31-.265-.502-.297zm4.49.88c-.158.002-.29.124-.3.282-.01.167.115.312.282.324 1.16.085 2.017.466 2.645 1.15.63.688.93 1.524.906 2.57-.002.168.13.306.3.31.166.003.305-.13.31-.297.025-1.175-.334-2.193-1.067-2.994-.74-.81-1.777-1.253-3.05-1.346h-.024zm.463 1.63c-.16.002-.29.127-.3.287-.008.167.12.31.288.32.523.028.875.175 1.113.422.24.245.388.62.416 1.164.01.167.15.295.318.287.167-.008.295-.15.287-.317-.03-.644-.215-1.178-.58-1.557-.367-.378-.893-.574-1.52-.607h-.018z"/></svg>Viber</a>
       <a data-share="wa"><svg class="share-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>WhatsApp</a>
       <a data-share="tg"><svg class="share-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>Telegram</a>
       <a data-share="x"><svg class="share-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg>X</a>
-      <button type="button" data-share="copy"><svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="share-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg>Copy link</button>
-      <button type="button" data-share="img" id="save-image"><svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="share-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>Save image</button>
+      <button type="button" data-share="copy"><svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="share-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg><span data-i18n="copyLink">Copy link</span></button>
+      <button type="button" data-share="img" id="save-image"><svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="share-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg><span data-i18n="saveImage">Save image</span></button>
     </nav>
     <p id="share-status" aria-live="polite"></p>
     <p id="next-draw" class="next-draw" hidden aria-live="off">
-      Next draw: <strong id="next-draw-game"></strong> <span id="next-draw-when"></span>
+      <span data-i18n="nextDraw">Next draw:</span> <strong id="next-draw-game"></strong> <span id="next-draw-when"></span>
       · <span id="next-draw-in"></span>
     </p>
     <p id="official-results" class="official-results fine-print">
-      Opisyal na resulta ng <span id="results-game">Swertres (3D)</span>:
+      <span data-i18n="officialResults">Opisyal na resulta ng</span> <span id="results-game">Swertres (3D)</span>:
       <a data-results="site" href="https://www.pcso.gov.ph/SearchLottoResult.aspx" target="_blank" rel="noopener noreferrer">PCSO website</a>
       · <a data-results="facebook" href="https://www.facebook.com/pcsoofficialsocialmedia" target="_blank" rel="noopener noreferrer">PCSO Facebook</a>
     </p>
-    <p id="not-affiliated" class="fine-print">Hindi ito official na PCSO site. Not affiliated with PCSO.</p>
+    <p id="not-affiliated" class="fine-print" data-i18n="notAffiliated">Hindi ito official na PCSO site. Not affiliated with PCSO.</p>
   </main>
 
-  <section id="about-games" class="about-games">
+  <section id="about-games" class="about-games" data-lang-block="taglish">
     <h2>Tungkol sa Lucky Number Generator</h2>
     <p class="lore">Ayon sa aming mga mapagkakatiwalaang source (wala), bawat numero rito ay ipinapadala tuwing alas-tres ng madaling-araw ng Konseho ng mga Anghel, Diwata at Isang Kapreng Naka-tsinelas, na nagpupulong sa likod ng buwan. Ibinubulong muna ito sa isang kalabaw na nakatira sa singsing ng Saturn, isinusulat ng isang retiradong bulalakaw sa dahon ng saging, binabasbasan ng isang sirena habang nagkakaraoke, at saka ipinapasa sa Wi-Fi ng kapitbahay mo. Bago lumabas sa screen, tinitikman pa ito ni Lola Diwata, na nagbabasa ng latak ng kape mula pa noong panahon ng mga dinosaur.</p>
     <p>Ang totoo: random na numero lang ito na ginagawa ng browser mo, para sa saya lang. Maaari kang pumili ayon sa mood, pangalan at edad, pero hindi ito hula sa resulta ng bola.</p>
@@ -248,8 +253,60 @@
     <details><summary>Sine-save o ipinapadala ba ang name at age ko?</summary><p>Hindi. Nananatili ang name at age sa device mo, hindi sine-save at hindi ipinapadala kahit saan.</p></details>
     <p id="privacy-note" class="fine-print">Privacy: anonymous at pinagsama-samang bilang lang ng bisita ang kinokolekta namin gamit ang GoatCounter (walang cookies). Hindi namin ipinapadala ang pangalan, edad o anumang tina-type mo. <a href="privacy/">Basahin ang privacy policy</a>.</p>
   </section>
+  <section id="about-games-en" class="about-games" data-lang-block="en" hidden>
+    <h2>About the Lucky Number Generator</h2>
+    <p class="lore">According to our totally trustworthy sources (none), every number here is dispatched at three in the morning by the Council of Angels, Fairies and One Tree Giant in Flip-Flops, who meet behind the moon. It's first whispered to a water buffalo living in Saturn's rings, written on a banana leaf by a retired shooting star, blessed by a mermaid mid-karaoke, and then passed through your neighbor's Wi-Fi. Before it reaches your screen, Grandma Fairy tastes it, the one who has been reading coffee grounds since the dinosaurs.</p>
+    <p>The truth: it's just a random number made by your browser, for fun only. You can pick by mood, name and age, but it's not a prediction of the draw results.</p>
+    <h2>Games</h2>
+    <ul>
+      <li>EZ2 (2D): 2 numbers, 1–31</li>
+      <li>Swertres (3D): 3 digits, 0–9 each</li>
+      <li>4D Lotto: 4 digits, 0–9 each</li>
+      <li>6D Lotto: 6 digits, 0–9 each</li>
+      <li>Lotto 6/42: 6 numbers, 1–42, no repeats</li>
+      <li>Mega Lotto 6/45: 6 numbers, 1–45, no repeats</li>
+      <li>Super Lotto 6/49: 6 numbers, 1–49, no repeats</li>
+      <li>Grand Lotto 6/55: 6 numbers, 1–55, no repeats</li>
+      <li>Ultra Lotto 6/58: 6 numbers, 1–58, no repeats</li>
+      <li>One Number: 1 number, 1–58 (not a PCSO game, just for fun)</li>
+    </ul>
+    <h2>FAQ</h2>
+    <details><summary>What is Lotto Lucky Numbers PH?</summary><p>A free website that makes random numbers for PCSO games like Swertres and Lotto. Pick a game and a mood, then press Draw!</p></details>
+    <details><summary>Is it free?</summary><p>Yes, it's free, with no fees and no account needed.</p></details>
+    <details><summary>Does it predict the winning numbers?</summary><p>No. The numbers are purely random and there's no way to predict a draw, so this is just for fun.</p></details>
+    <details><summary>Which games are included?</summary><p>EZ2 (2D), Swertres (3D), 4D Lotto, 6D Lotto, Lotto 6/42, Mega Lotto 6/45, Super Lotto 6/49, Grand Lotto 6/55 and Ultra Lotto 6/58. There's also "One Number", a single random number from 1 to 58 (not a PCSO game).</p></details>
+    <details><summary>Is this the official PCSO site?</summary><p>No. This is not an official PCSO site and it isn't connected to PCSO.</p></details>
+    <details><summary>Are my name and age saved or sent anywhere?</summary><p>No. Your name and age stay on your device; they're not saved and not sent anywhere.</p></details>
+    <p id="privacy-note-en" class="fine-print">Privacy: we only collect anonymous, aggregate visitor counts using GoatCounter (no cookies). We never send your name, age or anything you type. <a href="privacy/">Read the privacy policy</a>.</p>
+  </section>
+  <section id="about-games-tl" class="about-games" data-lang-block="tl" hidden>
+    <h2>Tungkol sa Lucky Number Generator</h2>
+    <p class="lore">Ayon sa aming mga mapagkakatiwalaang pinagkunan (wala), bawat numero rito ay ipinapadala tuwing alas-tres ng madaling-araw ng Konseho ng mga Anghel, Diwata at Isang Kapreng Naka-tsinelas, na nagpupulong sa likod ng buwan. Ibinubulong muna ito sa isang kalabaw na nakatira sa singsing ng Saturn, isinusulat ng isang retiradong bulalakaw sa dahon ng saging, binabasbasan ng isang sirena habang nagkakaraoke, at saka ipinapasa sa Wi-Fi ng kapitbahay mo. Bago lumabas sa screen, tinitikman pa ito ni Lola Diwata, na nagbabasa ng latak ng kape mula pa noong panahon ng mga dinosaur.</p>
+    <p>Ang totoo: random na numero lang ito na ginagawa ng browser mo, pang-aliw lang. Maaari kang pumili ayon sa nararamdaman, pangalan at edad, pero hindi ito hula sa resulta ng bola.</p>
+    <h2>Mga laro</h2>
+    <ul>
+      <li>EZ2 (2D): 2 numero, 1–31</li>
+      <li>Swertres (3D): 3 digit, 0–9 bawat isa</li>
+      <li>4D Lotto: 4 digit, 0–9 bawat isa</li>
+      <li>6D Lotto: 6 digit, 0–9 bawat isa</li>
+      <li>Lotto 6/42: 6 numero, 1–42, walang ulit</li>
+      <li>Mega Lotto 6/45: 6 numero, 1–45, walang ulit</li>
+      <li>Super Lotto 6/49: 6 numero, 1–49, walang ulit</li>
+      <li>Grand Lotto 6/55: 6 numero, 1–55, walang ulit</li>
+      <li>Ultra Lotto 6/58: 6 numero, 1–58, walang ulit</li>
+      <li>Isang Numero: 1 numero, 1–58 (hindi laro ng PCSO, pang-aliw lang)</li>
+    </ul>
+    <h2>Mga madalas itanong</h2>
+    <details><summary>Ano ang Lotto Lucky Numbers PH?</summary><p>Isang libreng website na gumagawa ng random na numero para sa mga laro ng PCSO, gaya ng Swertres at Lotto. Pumili ka ng laro at nararamdaman, tapos pindutin ang Bunot na!</p></details>
+    <details><summary>Libre ba ito?</summary><p>Oo, libre ito at walang bayad o account na kailangan.</p></details>
+    <details><summary>Hinuhulaan ba nito ang lalabas na numero?</summary><p>Hindi. Purong random ang mga numero at walang paraan para mahulaan ang resulta ng bola, kaya pang-aliw lang ito.</p></details>
+    <details><summary>Anong mga laro ang kasama?</summary><p>Kasama ang EZ2 (2D), Swertres (3D), 4D Lotto, 6D Lotto, Lotto 6/42, Mega Lotto 6/45, Super Lotto 6/49, Grand Lotto 6/55, Ultra Lotto 6/58. May "Isang Numero" din na isang random na numero mula 1 hanggang 58 (hindi ito laro ng PCSO).</p></details>
+    <details><summary>Opisyal ba ito ng PCSO?</summary><p>Hindi. Hindi ito opisyal na site ng PCSO at hindi ito konektado sa PCSO.</p></details>
+    <details><summary>Sine-save o ipinapadala ba ang pangalan at edad ko?</summary><p>Hindi. Nananatili ang pangalan at edad sa device mo, hindi sine-save at hindi ipinapadala kahit saan.</p></details>
+    <p id="privacy-note-tl" class="fine-print">Privacy: anonymous at pinagsama-samang bilang lang ng bisita ang kinokolekta namin gamit ang GoatCounter (walang cookies). Hindi namin ipinapadala ang pangalan, edad o anumang tina-type mo. <a href="privacy/">Basahin ang patakaran sa privacy</a>.</p>
+  </section>
 
-  <aside id="ad-slot" class="ad-slot" hidden aria-label="Advertisement"></aside>
+  <aside id="ad-slot" class="ad-slot" hidden aria-label="Advertisement" data-i18n-aria-label="ad"></aside>
 
   <nav class="site-links" aria-label="Site links"><a href="how-to-play/">How to play</a><a href="lucky-numbers/">Lucky numbers?</a><a href="responsible-gaming/">Responsible gaming</a><a href="about/">About</a><a href="contact/">Contact</a><a href="privacy/">Privacy</a></nav>
 
