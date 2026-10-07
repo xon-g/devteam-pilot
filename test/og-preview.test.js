@@ -24,7 +24,7 @@ function metaValues(html, attr, name) {
   return out;
 }
 
-for (const file of ['index.html', 'privacy/index.html']) {
+for (const file of ['index.html', 'privacy/index.html', 'how-to-play/index.html', 'lucky-numbers/index.html']) {
   test(`${file}: image tags are versioned to match sw.js CACHE`, () => {
     const html = read(file);
     assert.deepStrictEqual(metaValues(html, 'property', 'og:image'), [IMG]);
