@@ -6,9 +6,9 @@ import { createRequire } from 'node:module';
 import fs from 'node:fs';
 import net from 'node:net';
 import { fileURLToPath } from 'node:url';
+import { PLAYWRIGHT } from '../scripts/playwright-path.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
-const PLAYWRIGHT = '/usr/local/lib/node_modules/playwright';
 const read = (f) => fs.readFileSync(new URL(`../${f}`, import.meta.url), 'utf8');
 
 const swNum = read('sw.js').match(/const CACHE = "swertres-v(\d+)"/)[1];

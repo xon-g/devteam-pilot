@@ -12,7 +12,7 @@ repo's visibility is the owner's call.
 - Static HTML/CSS/vanilla JS (ES modules). No framework, no build step, **no npm dependencies**.
 - Randomness: `crypto.getRandomValues` with rejection sampling (no modulo bias).
 - Tests: Node's built-in `node:test` (unit) + a browser check that uses the Playwright already
-  installed on the machine (`/usr/local/lib/node_modules/playwright`), not a project dependency.
+  installed on the machine (`scripts/playwright-path.js`), not a project dependency.
 - `npm start` = tiny Node static server (`scripts/serve.js`, `node:http` only, PORT env, default 4173).
 
 ## GitHub Pages rule

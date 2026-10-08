@@ -23,8 +23,8 @@ Branch: `task/02-page-ui`. Builds on task 01. No npm dependencies. Read `PLAN.md
 
 ## Acceptance tests (`dt-test` must pass; `dt-smoke` ok:true)
 Add `test/ui.test.js`: start `scripts/serve.js` on a free port, use
-`await import("/usr/local/lib/node_modules/playwright/index.mjs")` (fall back to `createRequire`
-on `/usr/local/lib/node_modules/playwright`), Chromium, viewport 375x667, reducedMotion "reduce":
+``await import(`${PLAYWRIGHT}/index.mjs`)`` with `PLAYWRIGHT` from `scripts/playwright-path.js` (fall back to
+`createRequire` on it), Chromium, viewport 375x667, reducedMotion "reduce":
 - no console errors on load; `#draw` text is "Bunot na!".
 - `#disclaimer` text equals the exact disclaimer and is inside the viewport at load, after a
   draw, and after scrolling to the bottom.

@@ -5,11 +5,11 @@ import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import net from 'node:net';
 import { createRequire } from 'node:module';
+import { PLAYWRIGHT } from '../scripts/playwright-path.js';
 
 export const ROOT = fileURLToPath(new URL('..', import.meta.url));
 export const TEST_ID = 'pub-0000000000000000';
 export const TEST_SLOT = '1234567890';
-const PLAYWRIGHT = '/usr/local/lib/node_modules/playwright';
 const SKIP_TOP = new Set(['.git', '.smoke', 'node_modules', 'tasks']);
 
 export function readConfig(root = ROOT) {

@@ -6,9 +6,9 @@ import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
 import net from 'node:net';
 import { fileURLToPath } from 'node:url';
+import { PLAYWRIGHT } from '../scripts/playwright-path.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
-const PLAYWRIGHT = '/usr/local/lib/node_modules/playwright';
 const PNG_SIG = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 const read = (p) => fs.readFileSync(new URL(`../${p}`, import.meta.url));
 
