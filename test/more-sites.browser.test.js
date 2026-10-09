@@ -5,9 +5,9 @@ import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { PLAYWRIGHT } from '../scripts/playwright-path.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
-const PLAYWRIGHT = '/usr/local/lib/node_modules/playwright';
 const FIXTURE = fs.readFileSync(new URL('./fixtures/sites.json', import.meta.url), 'utf8');
 
 async function loadChromium() {
