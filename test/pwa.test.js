@@ -93,6 +93,10 @@ test('no absolute URLs in index.html', () => {
     if (url === PCSO_RESULTS_URL || url === PCSO_FACEBOOK_URL) {
       continue;
     }
+    // "More xonicbox tools" static fallback links (task 55) are intentionally absolute
+    if (url === 'https://leave.xonicbox.com/') {
+      continue;
+    }
     assert.ok(!url.startsWith('/'), `href should not be absolute: ${url}`);
     assert.ok(!url.startsWith('http'), `href should not be absolute: ${url}`);
   }

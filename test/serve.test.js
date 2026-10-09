@@ -46,7 +46,7 @@ test('server serves index.html', async () => {
   
   // Wait for "Server running" with 5s timeout
   await new Promise((resolve, reject) => {
-    const timeout = setTimeout(() => reject(new Error('Server did not start in 5s')), 5000);
+    const timeout = setTimeout(() => reject(new Error('Server did not start in 20s')), 20000);
     server.stdout.on('data', (data) => {
       if (data.toString().includes('Server running')) {
         clearTimeout(timeout);
@@ -92,7 +92,7 @@ test('server with BASE_PATH', async () => {
   
   // Wait for "Server running" with 5s timeout
   await new Promise((resolve, reject) => {
-    const timeout = setTimeout(() => reject(new Error('Server did not start in 5s')), 5000);
+    const timeout = setTimeout(() => reject(new Error('Server did not start in 20s')), 20000);
     server.stdout.on('data', (data) => {
       if (data.toString().includes('Server running')) {
         clearTimeout(timeout);

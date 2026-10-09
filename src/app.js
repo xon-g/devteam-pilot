@@ -5,6 +5,7 @@ import { createSound } from './sound.js';
 import { renderRoast, roastPicks } from './roast.js';
 import { eventPath, track } from './analytics.js';
 import { hireMailto } from './hire.js';
+import { initMoreSites, relabelMoreSites } from './more-sites-ui.js';
 import { PCSO_RESULTS_URL, PCSO_FACEBOOK_URL, SITE_URL } from './config.js';
 import { shareLinks, isMobileUA, copyText, shareUrl } from './share.js';
 import { nextDraw, formatCountdown, drawLabel, loadSchedule } from './schedule.js';
@@ -472,6 +473,7 @@ function applyStaticText() {
   document.querySelectorAll('[data-i18n-lead]').forEach((el) => { el.firstChild.textContent = `${tr(el.dataset.i18nLead)} `; });
   document.getElementById('disclaimer').textContent = tr('disclaimer');
   applyHire();
+  relabelMoreSites(lang);
   const siteLinks = document.querySelector('.site-links');
   siteLinks.setAttribute('aria-label', tr('siteLinks'));
   siteLinks.querySelectorAll('a').forEach((a) => {
@@ -523,6 +525,7 @@ form.addEventListener('change', (e) => {
 });
 applyGame(pickedGame());
 applyLang();
+initMoreSites();
 loadSchedule().then((s) => {
   schedule = s;
   updateNextDraw();

@@ -219,11 +219,11 @@ test('OG image exists and has correct dimensions', () => {
   assert.strictEqual(dims.height, 630, 'og-image.png height should be 630');
 });
 
-test('sw.js precaches og-image.png and CACHE is swertres-v43', () => {
+test('sw.js precaches og-image.png and CACHE is swertres-v44', () => {
   const swJs = fs.readFileSync(path.join(rootDir, 'sw.js'), 'utf8');
   
   // Check CACHE version
-  assert.ok(swJs.includes('const CACHE = "swertres-v43"'), 'CACHE should be swertres-v42');
+  assert.ok(swJs.includes('const CACHE = "swertres-v44"'), 'CACHE should be swertres-v44');
   
   // Check og-image.png in ASSETS
   assert.ok(swJs.includes('"assets/og-image.png"'), 'sw.js should precache og-image.png');
@@ -295,6 +295,10 @@ test('no absolute URLs in index.html href/src attributes (except canonical, og:u
     }
     // Official PCSO links (task 31) are intentionally absolute
     if (url === PCSO_RESULTS_URL || url === PCSO_FACEBOOK_URL) {
+      continue;
+    }
+    // "More xonicbox tools" static fallback links (task 55) are intentionally absolute
+    if (url === 'https://leave.xonicbox.com/') {
       continue;
     }
     assert.ok(!url.startsWith('/'), `href should not be absolute: ${url}`);

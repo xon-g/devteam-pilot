@@ -1043,3 +1043,31 @@ mark.check {
     font-size: 0.75rem;
   }
 }
+
+.more-sites {
+  box-sizing: border-box;
+  margin-block: var(--space-3) var(--space-1);
+  padding: var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  text-align: center;
+  color: var(--muted);
+  font-size: var(--step--1);
+  line-height: var(--lh-snug);
+  overflow-wrap: anywhere;
+}
+
+body.content-page .more-sites {
+  width: min(100% - 2rem, 65ch);
+}
+
+.more-sites p { margin: 0 0 var(--space-1); color: var(--text); font-weight: var(--w-medium); }
+.more-sites-list { list-style: none; margin: 0; padding: 0; }
+.more-sites-list li { margin: 0; }
+.more-sites-list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--text);
+}
+.more-sites-list a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
