@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "updated": "2026-10-09",
+  "sites": [
+    { "id": "lotto", "name": "Lotto Lucky Numbers PH", "tagline": "Random lucky numbers for fun, 18+", "url": "https://lotto.xonicbox.com/", "status": "live" },
+    { "id": "leave", "name": "Sulit Leave PH", "tagline": "Plan your leave around PH holidays", "url": "https://leave.xonicbox.com/", "status": "live" },
+    { "id": "kitakita", "name": "KitaKita", "tagline": "Does AI recommend your business?", "url": null, "status": "soon" },
+    { "id": "hayag", "name": "Hayag Cebu", "tagline": "Brownout and water schedules per barangay", "url": null, "status": "soon" },
+    { "id": "clara", "name": "Clara", "tagline": "Clinic booking", "url": null, "status": "soon" }
+  ]
+}

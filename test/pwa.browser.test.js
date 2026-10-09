@@ -70,6 +70,9 @@ test('PWA browser test - offline mode', { timeout: 60000 }, async () => {
     const errors = [];
     const foreignRequests = [];
     
+    // Offline, the shared tools list (task 55) legitimately fails to load and falls back to the static list.
+    let sitesFailed = false;
+    page.on('requestfailed', (req) => { if (req.url() === 'https://xonicbox.com/sites.json') sitesFailed = true; });
     page.on('console', (msg) => {
       if (msg.type() === 'error') {
         errors.push(msg.text());
@@ -79,6 +82,7 @@ test('PWA browser test - offline mode', { timeout: 60000 }, async () => {
     page.on('request', (req) => {
       const url = new URL(req.url());
       if (url.hostname === 'gc.zgo.at') return;
+      if (req.url() === 'https://xonicbox.com/sites.json') return; // shared tools list (task 55), static fallback offline
       if (req.url().startsWith('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-')) return; // AdSense head script (stubbed, task 46)
       if (url.hostname !== '127.0.0.1' && url.hostname !== 'localhost') {
         foreignRequests.push(req.url());
@@ -138,7 +142,8 @@ test('PWA browser test - offline mode', { timeout: 60000 }, async () => {
     assert.strictEqual(disclaimerText.trim(), DISCLAIMER, 'disclaimer text should be correct');
     
     // Verify no console errors
-    assert.deepStrictEqual(errors, [], `console errors: ${errors.join('; ')}`);
+    const realErrors = sitesFailed ? errors.filter((e) => !/^Failed to load resource: net::ERR_/.test(e)) : errors;
+    assert.deepStrictEqual(realErrors, [], `console errors: ${errors.join('; ')}`);
     
     // Verify no foreign requests
     assert.deepStrictEqual(foreignRequests, [], `requests to foreign hosts: ${foreignRequests.join('; ')}`);

@@ -98,10 +98,12 @@ test('page UI acceptance', { timeout: 60000 }, async () => {
     page.on('request', (req) => {
       const { hostname, port: p } = new URL(req.url());
       if (hostname === 'gc.zgo.at') return;
+      if (req.url() === 'https://xonicbox.com/sites.json') return; // shared tools list (task 55, routed to the fixture below)
       if (req.url().startsWith('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-')) return; // AdSense head script (stubbed, task 46)
       if (hostname !== 'localhost' || p !== String(port)) foreign.push(req.url());
     });
 
+    await page.route('https://xonicbox.com/sites.json', (route) => route.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: fs.readFileSync(new URL('./fixtures/sites.json', import.meta.url), 'utf8') }));
     await page.goto(`http://localhost:${port}/`, { waitUntil: 'load' });
     assert.deepStrictEqual(errors, [], 'console errors on load');
     assert.strictEqual((await page.textContent('#draw')).trim(), 'Bunot na!');

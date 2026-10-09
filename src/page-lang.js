@@ -1,6 +1,7 @@
 // Language picker for the content pages: shows one text block, translates the shared chrome.
 import { HTML_LANG, normalizeLang, t } from './i18n.js';
 import { hireMailto } from './hire.js';
+import { initMoreSites, relabelMoreSites } from './more-sites-ui.js';
 import { eventPath, track } from './analytics.js';
 
 const NAV_KEYS = {
@@ -30,6 +31,7 @@ function apply() {
   const hire = document.querySelector('.hire-link');
   hire.textContent = t(shown, 'hireCta');
   hire.href = hireMailto(shown);
+  relabelMoreSites(shown);
   const nav = document.querySelector('.site-links');
   nav.setAttribute('aria-label', t(shown, 'siteLinks'));
   nav.querySelectorAll('a').forEach((a) => { a.textContent = t(shown, navKey(a)); });
@@ -51,3 +53,4 @@ document.querySelectorAll('input[name="lang"]').forEach((radio) => {
 });
 
 apply();
+initMoreSites();
