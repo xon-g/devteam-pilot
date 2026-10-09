@@ -390,7 +390,7 @@ main {
 
 .about-row {
   display: grid;
-  grid-template-columns: 1fr 6.5rem;
+  grid-template-columns: minmax(0, 1fr) 8.5rem;
   gap: var(--space-2);
 }
 
@@ -431,6 +431,11 @@ main {
   outline: 2px solid var(--gold);
 }
 
+.games > *,
+.moods > * {
+  min-width: 0;
+}
+
 .games,
 .moods {
   border: 0;
@@ -438,7 +443,7 @@ main {
   margin: 0;
   min-width: 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.5rem;
 }
 
@@ -481,9 +486,23 @@ main {
   .games span { font-size: 0.78rem; padding-right: 0.4rem; gap: 0.25rem; }
 }
 
+/* Narrow phones: wider system fonts (San Francisco) need a little more room */
+@media (max-width: 359px) {
+  .games { gap: 0.4rem; }
+  .games span { font-size: 0.75rem; padding: 0.3rem 0.35rem 0.3rem 0.3rem; gap: 0.2rem; }
+  .games span::before { width: 1.4rem; }
+  .moods span { padding-inline: 0.25rem; gap: 0.2rem; }
+}
+
+@media (max-width: 420px) {
+  .about { padding: var(--space-2); }
+  .about-row { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); }
+  .field span { font-size: 0.75rem; letter-spacing: 0.01em; }
+}
+
 @media (max-width: 560px) {
   .games {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -743,14 +762,14 @@ body.content-page {
 }
 
 .page {
-  width: min(100% - 2rem, 65ch);
+  width: min(100% - 2rem, 62ch);
   margin-inline: auto;
   padding-bottom: var(--space-3);
 }
 
 .page p,
 .page ul {
-  max-width: 65ch;
+  max-width: 62ch;
   margin-block: 0 var(--space-2);
 }
 
@@ -1014,12 +1033,13 @@ mark.check {
 
   .games span {
     font-size: 0.8rem;
-    white-space: nowrap;
     padding-right: 0.5rem;
   }
 
   .share-row a,
   .share-row button {
-    padding: 0 var(--space-2);
+    padding: 0 0.55rem;
+    gap: 0.3rem;
+    font-size: 0.75rem;
   }
 }

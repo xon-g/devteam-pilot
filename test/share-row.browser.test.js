@@ -166,7 +166,8 @@ test('share row', { timeout: 120000 }, async () => {
     const hs = await s.page.$$eval('#share-row [data-share]', (els) => els.filter((e) => e.offsetParent).map((e) => e.getBoundingClientRect().height));
     assert.strictEqual(hs.length, 10);
     assert.ok(hs.every((h) => h >= 44), `heights ${hs}`);
-    await s.page.locator('#share-row').screenshot({ path: '/home/node/projects/swertres/.smoke/share-row-360.png' });
+    fs.mkdirSync(fileURLToPath(new URL('../.smoke/', import.meta.url)), { recursive: true });
+    await s.page.locator('#share-row').screenshot({ path: fileURLToPath(new URL('../.smoke/share-row-360.png', import.meta.url)) });
     await s.context.close();
 
     assert.deepStrictEqual(errors, []);
