@@ -74,7 +74,7 @@ test('card.js is DOM-free and cached by sw.js', () => {
   const src = read('src/card.js');
   for (const w of ['document', 'window', 'navigator', 'fetch(']) assert.ok(!src.includes(w), w);
   const sw = read('sw.js');
-  assert.ok(sw.includes('swertres-v44'));
+  assert.ok(sw.includes('swertres-v45'));
   assert.ok(sw.includes('"src/card.js"'));
 });
 
