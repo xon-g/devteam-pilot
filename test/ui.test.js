@@ -7,9 +7,9 @@ import { createRequire } from 'node:module';
 import fs from 'node:fs';
 import net from 'node:net';
 import { fileURLToPath } from 'node:url';
+import { PLAYWRIGHT } from '../scripts/playwright-path.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
-const PLAYWRIGHT = '/usr/local/lib/node_modules/playwright';
 const DISCLAIMER = "For entertainment only. Numbers are random and don't improve your odds. 18+. Play responsibly.";
 const BANNED = ['guarantee', 'sigurado', 'siguradong panalo', 'tsansa', 'odds', 'better chance', 'sure win', 'jackpot ka na', 'panalo', 'tatama', 'jackpot'];
 const VIEWPORT = { width: 375, height: 667 };

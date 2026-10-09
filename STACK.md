@@ -12,7 +12,7 @@ the owner's scope additions. No change proposed, no owner approval needed.
 | Randomness | `crypto.getRandomValues` + rejection sampling | built in |
 | Dev server | `scripts/serve.js` on `node:http` (`npm start`, `$PORT`, default 4173, `BASE_PATH`) | Node 24.21.0 (LTS) |
 | Unit tests | `node:test` (`npm test`) | Node 24.21.0 |
-| Browser check | Playwright already on the machine (`/usr/local/lib/node_modules/playwright`), not a project dependency; plus `dt-smoke` | 1.63.0, Apache-2.0 |
+| Browser check | Playwright already on the machine (`$DT_PLAYWRIGHT`, else the path in `scripts/playwright-path.js`), not a project dependency; plus `dt-smoke` | 1.63.0, Apache-2.0 |
 | Lint/format | none (no build step, no TypeScript; per team defaults) | — |
 | Runtime npm dependencies | **none** (no `package-lock.json` needed) | — |
 

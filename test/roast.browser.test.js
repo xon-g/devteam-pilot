@@ -8,7 +8,6 @@ import net from 'node:net';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
-const PLAYWRIGHT = '/usr/local/lib/node_modules/playwright';
 
 async function loadChromium() {
   try {
@@ -54,6 +53,7 @@ function startServer(port) {
 
 
 import { AGE_ROASTS } from '../src/roast.js';
+import { PLAYWRIGHT } from '../scripts/playwright-path.js';
 
 const VIEWPORT = { width: 375, height: 812 };
 const pickMood = (page) => page.locator('.moods span', { hasText: /^Chill$/ }).click();

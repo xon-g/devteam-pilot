@@ -5,7 +5,7 @@ import assert from 'node:assert';
 import fs from 'node:fs';
 
 const read = (f) => fs.readFileSync(new URL(`../${f}`, import.meta.url), 'utf8');
-const BRIEF = '/home/node/briefs/2026-10-06-swertres-copy.md';
+const BRIEF = process.env.SWERTRES_COPY_BRIEF; // optional path to the copy brief; without it the committed counts are used
 const HOME = read('index.html');
 const PAGES = {
   'responsible-gaming': { h1: 'Responsible Gaming', title: 'Responsible Gaming – Lotto Lucky Numbers PH', page: 3, checks: 3 },
@@ -50,7 +50,7 @@ for (const [slug, { h1, title, page, checks }] of Object.entries(PAGES)) {
   });
   test(`${slug}: [CHECK] marks match the copy`, () => {
     let expected = checks;
-    if (fs.existsSync(BRIEF)) {
+    if (BRIEF && fs.existsSync(BRIEF)) {
       const b = fs.readFileSync(BRIEF, 'utf8');
       const sec = b.slice(b.indexOf(`## Page ${page}:`), b.indexOf(`## Page ${page + 1}:`));
       expected = (sec.match(/\[CHECK/g) || []).length;
@@ -108,5 +108,5 @@ test('sitemap and sw list the new pages', () => {
     assert.ok(sm.includes(`<loc>https://lotto.xonicbox.com/${s}/</loc>`));
     assert.ok(sw.includes(`"${s}/"`));
   }
-  assert.ok(sw.includes('swertres-v42'));
+  assert.ok(sw.includes('swertres-v43'));
 });

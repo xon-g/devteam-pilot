@@ -6,9 +6,9 @@ import { createRequire } from 'node:module';
 import fs from 'node:fs';
 import net from 'node:net';
 import { fileURLToPath } from 'node:url';
+import { PLAYWRIGHT } from '../scripts/playwright-path.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
-const PLAYWRIGHT = '/usr/local/lib/node_modules/playwright';
 
 async function loadChromium() {
   try {
@@ -54,8 +54,8 @@ function startServer(port) {
 
 const DISCLAIMER = "For entertainment only. Numbers are random and don't improve your odds. 18+. Play responsibly.";
 
-test('sw.js contains swertres-v42', () => {
-  assert.ok(fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8').includes('swertres-v42'));
+test('sw.js contains swertres-v43', () => {
+  assert.ok(fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8').includes('swertres-v43'));
 });
 
 test('disclaimer texts are at least 12.5px and clear of the fixed footer', { timeout: 90000 }, async () => {

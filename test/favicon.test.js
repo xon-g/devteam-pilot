@@ -6,9 +6,9 @@ import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
 import net from 'node:net';
 import { fileURLToPath } from 'node:url';
+import { PLAYWRIGHT } from '../scripts/playwright-path.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
-const PLAYWRIGHT = '/usr/local/lib/node_modules/playwright';
 const PNG_SIG = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 const read = (p) => fs.readFileSync(new URL(`../${p}`, import.meta.url));
 
@@ -43,9 +43,9 @@ test('favicon.ico wraps a 32x32 PNG', () => {
   assert.ok(ico.subarray(offset, offset + 8).equals(PNG_SIG));
 });
 
-test('sw.js precaches favicons under swertres-v42', () => {
+test('sw.js precaches favicons under swertres-v43', () => {
   const sw = read('sw.js').toString('utf8');
-  assert.ok(sw.includes('swertres-v42'));
+  assert.ok(sw.includes('swertres-v43'));
   assert.ok(sw.includes('assets/icons/favicon.svg'));
   assert.ok(sw.includes('assets/icons/favicon-32.png'));
 });

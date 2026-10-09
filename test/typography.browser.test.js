@@ -5,9 +5,9 @@ import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
 import net from 'node:net';
 import { fileURLToPath } from 'node:url';
+import { PLAYWRIGHT } from '../scripts/playwright-path.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
-const PLAYWRIGHT = '/usr/local/lib/node_modules/playwright';
 // footer#disclaimer height measured on master (f9f44bb) + 1px tolerance
 const MASTER_FOOTER = { 375: 64, 1280: 40 };
 

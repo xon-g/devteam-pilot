@@ -1,4 +1,5 @@
-import { chromium } from '/usr/local/lib/node_modules/playwright/index.mjs';
+import { PLAYWRIGHT } from './playwright-path.js';
+const { chromium } = await import(`${PLAYWRIGHT}/index.mjs`);
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
