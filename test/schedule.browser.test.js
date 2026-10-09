@@ -82,16 +82,21 @@ test('next draw row', { timeout: 120000 }, async () => {
     let t = await text();
     assert.ok(t.includes('Swertres (3D)') && t.includes('ngayong 5:00 PM') && t.includes('in 1h 12m'), t);
 
+    await page.locator('input[name="game"][value="4d"]').evaluate((el) => el.scrollIntoView({ block: "center" })); // keep the chip clear of the fixed disclaimer bar
     await page.check('input[name="game"][value="4d"]', { force: true });
     // 4D draws Mon/Wed/Fri, and the fixed clock is Wednesday, so tonight's draw is next.
     assert.ok((await text()).includes('ngayong 9:00 PM'));
+    await page.locator('input[name="game"][value="6-58"]').evaluate((el) => el.scrollIntoView({ block: "center" })); // keep the chip clear of the fixed disclaimer bar
     await page.check('input[name="game"][value="6-58"]', { force: true });
     assert.ok((await text()).includes('Biyernes 9:00 PM'));
+    await page.locator('input[name="game"][value="1-58"]').evaluate((el) => el.scrollIntoView({ block: "center" })); // keep the chip clear of the fixed disclaimer bar
     await page.check('input[name="game"][value="1-58"]', { force: true });
     assert.ok(!(await page.isVisible('#next-draw')));
+    await page.locator('input[name="game"][value="6-42"]').evaluate((el) => el.scrollIntoView({ block: "center" })); // keep the chip clear of the fixed disclaimer bar
     await page.check('input[name="game"][value="6-42"]', { force: true });
     assert.ok(await page.isVisible('#next-draw'));
 
+    await page.locator('input[name="game"][value="3d"]').evaluate((el) => el.scrollIntoView({ block: "center" })); // keep the chip clear of the fixed disclaimer bar
     await page.check('input[name="game"][value="3d"]', { force: true });
     await page.clock.fastForward('31:00');
     t = await text();

@@ -40,6 +40,9 @@
   /* Tracking */
   --track-caps: 0.08em;
   --track-display: -0.02em;
+
+  /* Fixed disclaimer bar: two lines of --step--1 text + padding + border */
+  --bar-h: calc(2 * var(--step--1) * var(--lh-snug) + 0.7rem + 1px + env(safe-area-inset-bottom));
 }
 
 * {
@@ -63,6 +66,7 @@ body {
   -webkit-font-smoothing: antialiased;
   min-height: 100dvh;
   color: var(--text);
+  padding-bottom: var(--bar-h);
   display: grid;
   grid-template-areas: "header" "main" "about" "banner" "disclaimer";
   grid-template-rows: auto 1fr auto auto auto;
@@ -95,7 +99,7 @@ body::before {
   background: radial-gradient(120% 80% at 50% 0%, var(--bg-2) 0%, var(--bg) 60%);
 }
 
-header, main, .about-games, #ad-slot, .hire {
+header, main, .about-games, #ad-slot, .hire, .more-sites {
   width: min(100% - 2rem, 34rem);
   margin-inline: auto;
 }
@@ -138,7 +142,7 @@ header {
 }
 
 .sound-toggle {
-  margin-top: var(--space-2);
+  margin-top: var(--space-3);
   min-height: 44px;
   padding: 0 1rem;
   background: transparent;
@@ -165,13 +169,6 @@ main {
   flex-direction: column;
   align-items: center;
   gap: var(--space-3);
-}
-
-.games span {
-  text-align: center;
-  line-height: 1.15;
-  padding: 0.25rem 0.4rem;
-  font-size: 0.85rem;
 }
 
 .balls {
@@ -299,6 +296,7 @@ main {
 }
 
 .mini {
+  font-variant-numeric: tabular-nums;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -478,24 +476,27 @@ main {
   gap: 0.35rem;
   justify-content: flex-start;
   text-align: left;
-  line-height: 1.15;
-  padding: 0.35rem 0.75rem 0.35rem 0.4rem;
+  white-space: nowrap;
+  line-height: var(--lh-tight);
+  font-size: var(--step--1);
+  padding: 0.35rem 0.5rem 0.35rem 0.4rem;
 }
 
-@media (max-width: 359px), (min-width: 561px) {
-  .games span { font-size: 0.78rem; padding-right: 0.4rem; gap: 0.25rem; }
-}
-
-/* Narrow phones: wider system fonts (San Francisco) need a little more room */
-@media (max-width: 359px) {
+/* Narrow phones: wider system fonts (San Francisco) need a little more room; labels never wrap */
+@media (max-width: 400px) {
   .games { gap: 0.4rem; }
-  .games span { font-size: 0.75rem; padding: 0.3rem 0.35rem 0.3rem 0.3rem; gap: 0.2rem; }
-  .games span::before { width: 1.4rem; }
-  .moods span { padding-inline: 0.25rem; gap: 0.2rem; }
+  .games span { font-size: 0.75rem; padding: 0.3rem 0.25rem; gap: 0.25rem; letter-spacing: -0.02em; }
+  .games span::before { width: 1.3rem; font-size: 0.55rem; }
+  /* 10 chips, one long label: the last two take full rows so no pill is squeezed or left alone */
+  .games > label:nth-last-child(-n+2) { grid-column: 1 / -1; }
+}
+
+@media (max-width: 359px) {
+  .games span { gap: 0.2rem; letter-spacing: -0.01em; }
 }
 
 @media (max-width: 420px) {
-  .about { padding: var(--space-2); }
+  .about { padding: var(--space-2) 0.625rem; }
   .about-row { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); }
   .field span { font-size: 0.75rem; letter-spacing: 0.01em; }
 }
@@ -514,6 +515,7 @@ main {
 
 .games span::before {
   content: attr(data-ball) / "";
+  font-variant-numeric: tabular-nums;
   flex: none;
   width: 1.6rem;
   aspect-ratio: 1;
@@ -534,6 +536,14 @@ main {
 
 .moods span {
   gap: 0.35rem;
+  padding-inline: var(--space-2);
+  white-space: nowrap;
+  font-size: var(--step--1);
+  line-height: var(--lh-tight);
+}
+
+@media (max-width: 370px) {
+  .moods { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 .moods span::before {
@@ -685,6 +695,10 @@ footer#disclaimer {
   z-index: 100;
 }
 
+@media (max-width: 359px) {
+  :root { --bar-h: calc(3 * var(--step--1) * var(--lh-snug) + 0.7rem + 1px + env(safe-area-inset-bottom)); }
+}
+
 /* Desktop */
 
 .segmented[hidden] {
@@ -704,8 +718,7 @@ footer#disclaimer {
 /* Crawlable about / FAQ section (below the app, clear of the fixed footer) */
 .about-games {
   grid-area: about;
-  padding-bottom: var(--space-1);
-  padding-top: var(--space-1);
+  padding-block: var(--space-1);
   color: var(--muted);
   font-size: var(--step-0);
   line-height: var(--lh-body);
@@ -716,6 +729,7 @@ footer#disclaimer {
 .about-games ul {
   max-width: 65ch;
   margin-block: 0 var(--space-2);
+  text-wrap: pretty;
 }
 
 .about-games p.fine-print {
@@ -724,10 +738,16 @@ footer#disclaimer {
 }
 
 .about-games h2 {
-  margin: var(--space-4) 0 var(--space-1);
+  margin: var(--space-5) 0 var(--space-2);
   color: var(--text);
-  font-size: var(--step-1);
+  font-size: var(--step-2);
   line-height: var(--lh-snug);
+  letter-spacing: var(--track-display);
+  text-wrap: balance;
+}
+
+.about-games > h2:first-child {
+  margin-top: var(--space-4);
 }
 
 .about-games ul {
@@ -739,14 +759,65 @@ footer#disclaimer {
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 12px;
-  padding: var(--space-1) var(--space-3);
   margin-bottom: var(--space-1);
 }
 
+.about-games details {
+  padding: 0 var(--space-3);
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+
+.about-games details[open] {
+  padding-bottom: var(--space-2);
+}
+
 .about-games summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-height: 44px;
   cursor: pointer;
+  list-style: none;
   color: var(--text);
   font-weight: var(--w-medium);
+  line-height: var(--lh-snug);
+}
+
+.about-games summary::-webkit-details-marker {
+  display: none;
+}
+
+.about-games summary::after {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 2px solid var(--gold);
+  border-bottom: 2px solid var(--gold);
+  transform: rotate(45deg);
+  transition: transform 180ms ease;
+}
+
+.about-games details[open] > summary::after {
+  transform: rotate(-135deg);
+}
+
+.about-games details:hover {
+  border-color: var(--muted);
+}
+
+.about-games summary:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-games details,
+  .about-games summary::after {
+    transition: none;
+  }
 }
 
 .about-games details p {
@@ -754,7 +825,7 @@ footer#disclaimer {
   max-width: none;
 }
 
-.about-games .lore { font-style: italic; }
+.about-games .lore { font-style: normal; }
 
 /* Content pages (privacy etc.) */
 body.content-page {
@@ -808,7 +879,7 @@ body.content-page {
 
 .hire {
   box-sizing: border-box;
-  margin-block: var(--space-4) var(--space-1);
+  margin-block: var(--space-5) var(--space-1);
   padding: var(--space-3);
   background: var(--card);
   border: 1px solid var(--line);
@@ -820,10 +891,7 @@ body.content-page {
   overflow-wrap: anywhere;
 }
 
-body.content-page .hire {
-  width: min(100% - 2rem, 65ch);
-}
-
+body.content-page .hire,
 .hire p {
   margin: 0;
 }
@@ -857,7 +925,7 @@ body.content-page .hire {
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.25rem 1rem;
-  padding: 0.5rem 1rem calc(4.5rem + env(safe-area-inset-bottom));
+  padding: var(--space-1) var(--space-3) var(--space-3);
   font-size: var(--step--1);
   line-height: var(--lh-snug);
 }
@@ -906,6 +974,7 @@ mark.check {
 /* Next draw row */
 .next-draw {
   margin: 0;
+  font-variant-numeric: tabular-nums;
   color: var(--muted);
   font-size: var(--step--1);
   line-height: var(--lh-snug);
@@ -1031,10 +1100,7 @@ mark.check {
     max-width: none;
   }
 
-  .games span {
-    font-size: 0.8rem;
-    padding-right: 0.5rem;
-  }
+  .games > label:last-child { grid-column: 1 / -1; }
 
   .share-row a,
   .share-row button {

@@ -52,5 +52,5 @@ test('eventPath hire-click', () => {
 test('sw.js precaches src/hire.js under v40', () => {
   const sw = read('sw.js');
   assert.ok(sw.includes('"src/hire.js"'));
-  assert.ok(sw.includes('const CACHE = "swertres-v44"'));
+  assert.ok(sw.includes('const CACHE = "swertres-v45"'));
 });

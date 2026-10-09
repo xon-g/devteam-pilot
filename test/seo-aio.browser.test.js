@@ -108,7 +108,7 @@ test('SEO/AIO: content readable without JS; FAQ and app work with JS', { timeout
         };
       });
       assert.ok(r.visible, `lore visible at ${width}px`);
-      assert.ok(r.italic, `lore italic at ${width}px`);
+      assert.ok(!r.italic, `lore upright at ${width}px`);
       assert.ok(r.fits, `no horizontal scroll at ${width}px`);
       await c.close();
     }

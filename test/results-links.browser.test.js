@@ -89,12 +89,15 @@ test('official results links', { timeout: 120000 }, async () => {
     assert.strictEqual((await page.textContent('#results-game')).trim(), 'Swertres (3D)');
 
     for (const [id, name] of GAMES) {
+      await page.locator(`input[name="game"][value="${id}"]`).evaluate((el) => el.scrollIntoView({ block: "center" })); // keep the chip clear of the fixed disclaimer bar
       await page.check(`input[name="game"][value="${id}"]`, { force: true });
       assert.ok(await page.isVisible('#official-results'), id);
       assert.strictEqual((await page.textContent('#results-game')).trim(), name, id);
     }
+    await page.locator('input[name="game"][value="1-58"]').evaluate((el) => el.scrollIntoView({ block: "center" })); // keep the chip clear of the fixed disclaimer bar
     await page.check('input[name="game"][value="1-58"]', { force: true });
     assert.ok(!(await page.isVisible('#official-results')), '1-58 hidden');
+    await page.locator('input[name="game"][value="3d"]').evaluate((el) => el.scrollIntoView({ block: "center" })); // keep the chip clear of the fixed disclaimer bar
     await page.check('input[name="game"][value="3d"]', { force: true });
     assert.ok(await page.isVisible('#official-results'));
 

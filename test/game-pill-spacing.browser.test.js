@@ -85,6 +85,7 @@ test('game picker spacing at 320, 375, 412 and 1280', { timeout: 90000 }, async 
       });
       assert.strictEqual(r.columns, width === 1280 ? 3 : 2, `columns at ${width}`);
       if (width === 375) assert.strictEqual(r.moods, 3, 'moods keep 3 columns');
+      if (width <= 360) assert.strictEqual(r.moods, 2, 'moods use 2 columns on narrow phones');
       assert.ok(r.sw <= r.cw, `no horizontal scroll at ${width}`);
       assert.strictEqual(r.spans.length, 10);
       r.spans.forEach((s, i) => {

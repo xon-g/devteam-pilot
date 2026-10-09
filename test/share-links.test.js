@@ -82,6 +82,6 @@ test('share.js is DOM-free; sw.js updated', () => {
   const src = read('src/share.js');
   for (const w of ['fetch(', 'window', 'document', 'navigator']) assert.ok(!src.includes(w), w);
   const sw = read('sw.js');
-  assert.ok(sw.includes('swertres-v44'));
+  assert.ok(sw.includes('swertres-v45'));
   assert.ok(sw.includes('"src/share.js"'));
 });
